@@ -19,12 +19,19 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: var(--bg-color); color: var(--text-main); padding: 16px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
 
-    .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 16px; }
+    .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 16px; padding-bottom: 40px; }
 
-    /* Header & Status */
-    .header { text-align: center; padding: 12px 0; }
-    .header h1 { font-size: 1.5rem; font-weight: 700; color: var(--text-main); }
-    .header p { font-size: 0.875rem; color: var(--text-muted); }
+    /* Abas de Navegação */
+    .nav-tabs { display: flex; background: var(--card-bg); border-radius: 12px; padding: 4px; border: 1px solid #334155; margin-bottom: 4px; }
+    .tab-btn { flex: 1; background: transparent; border: none; color: var(--text-muted); padding: 10px; font-weight: 600; font-size: 0.875rem; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+    .tab-btn.active { background: var(--accent-blue); color: #fff; }
+
+    .tab-content { display: none; flex-direction: column; gap: 16px; }
+    .tab-content.active { display: flex; }
+
+    .header { text-align: center; padding: 4px 0; }
+    .header h1 { font-size: 1.4rem; font-weight: 700; color: var(--text-main); }
+    .header p { font-size: 0.8rem; color: var(--text-muted); }
 
     .card { background: var(--card-bg); border-radius: 16px; padding: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); border: 1px solid #334155; }
 
@@ -32,17 +39,23 @@
     .status-badge.connected { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
     .status-badge.disconnected { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
 
-    /* Cronómetro Display */
-    .timer-display { text-align: center; margin: 12px 0; }
-    .timer-time { font-size: 3.5rem; font-weight: 800; font-family: monospace; letter-spacing: -2px; color: var(--text-main); }
-    .timer-label { font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+    /* Seletor de Brinquedo Ativo */
+    .selected-toy-box { display: flex; align-items: center; gap: 12px; background: #0f172a; padding: 10px; border-radius: 12px; border: 1px solid #334155; }
+    .selected-toy-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; background: #334155; }
+    .selected-toy-info h4 { font-size: 0.95rem; color: var(--text-main); }
+    .selected-toy-info p { font-size: 0.75rem; color: var(--text-muted); }
 
-    .progress-bar-container { width: 100%; height: 10px; background: #334155; border-radius: 9999px; overflow: hidden; margin-top: 12px; }
+    /* Cronómetro */
+    .timer-display { text-align: center; margin: 8px 0; }
+    .timer-time { font-size: 3rem; font-weight: 800; font-family: monospace; letter-spacing: -2px; color: var(--text-main); }
+    .timer-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    .progress-bar-container { width: 100%; height: 8px; background: #334155; border-radius: 9999px; overflow: hidden; margin-top: 10px; }
     .progress-bar { height: 100%; width: 0%; background: var(--accent-green); transition: width 0.3s ease, background-color 0.3s ease; }
 
     /* Grid de Botões */
-    .grid-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .btn { border: none; border-radius: 12px; padding: 16px; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transition: transform 0.1s ease, filter 0.2s ease; color: #fff; }
+    .grid-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn { border: none; border-radius: 12px; padding: 14px; font-size: 0.95rem; font-weight: 700; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: transform 0.1s ease; color: #fff; }
     .btn:active { transform: scale(0.97); }
     .btn-full { grid-column: span 2; }
 
@@ -51,13 +64,26 @@
     .btn-yellow { background: var(--accent-yellow); color: #000; }
     .btn-red { background: var(--accent-red); }
 
-    /* Dashboard Financeiro (Banco de Dados Local) */
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: center; }
-    .stat-box { background: #0f172a; padding: 12px; border-radius: 12px; border: 1px solid #334155; }
-    .stat-val { font-size: 1.25rem; font-weight: 700; color: var(--accent-green); }
-    .stat-lbl { font-size: 0.75rem; color: var(--text-muted); }
+    /* Lista de Brinquedos Cadastrados */
+    .toy-form { display: flex; flex-direction: column; gap: 10px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group label { font-size: 0.8rem; color: var(--text-muted); }
+    .form-input { background: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 10px; color: #fff; font-size: 0.9rem; }
+    
+    .toys-list { display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; margin-top: 10px; }
+    .toy-item { display: flex; align-items: center; justify-content: space-between; background: #0f172a; padding: 8px 12px; border-radius: 10px; border: 1px solid #334155; }
+    .toy-item-left { display: flex; align-items: center; gap: 10px; }
+    .toy-thumb { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; background: #334155; }
+    
+    .btn-select { background: var(--accent-blue); border: none; color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+    .btn-delete { background: rgba(239, 68, 68, 0.2); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; }
 
-    .btn-reset-stats { background: transparent; border: 1px solid #334155; color: var(--text-muted); padding: 8px; border-radius: 8px; font-size: 0.75rem; margin-top: 8px; width: 100%; cursor: pointer; }
+    /* Caixa do Dia */
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: center; }
+    .stat-box { background: #0f172a; padding: 10px; border-radius: 10px; border: 1px solid #334155; }
+    .stat-val { font-size: 1.15rem; font-weight: 700; color: var(--accent-green); }
+    .stat-lbl { font-size: 0.7rem; color: var(--text-muted); }
+    .btn-reset { background: transparent; border: 1px solid #334155; color: var(--text-muted); padding: 6px; border-radius: 6px; font-size: 0.75rem; margin-top: 6px; width: 100%; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -65,68 +91,114 @@
   <div class="container">
     <div class="header">
       <h1>Loop Mídias Drift</h1>
-      <p>Gestão & Operação de Karts</p>
+      <p>Gestão Inteligente de Karts</p>
     </div>
 
-    <!-- Status de Conexão -->
-    <div style="text-align: center;">
-      <div id="statusBadge" class="status-badge disconnected">
-        <span>●</span> <span id="statusText">Desconectado</span>
+    <!-- Navegação por Abas -->
+    <div class="nav-tabs">
+      <button class="tab-btn active" onclick="mudarAba('operacao')">⚡ Operação</button>
+      <button class="tab-btn" onclick="mudarAba('brinquedos')">🏎️ Karts / Fotos</button>
+    </div>
+
+    <!-- ABA 1: OPERAÇÃO -->
+    <div id="tab-operacao" class="tab-content active">
+      <div style="text-align: center;">
+        <div id="statusBadge" class="status-badge disconnected">
+          <span>●</span> <span id="statusText">Desconectado</span>
+        </div>
+      </div>
+
+      <!-- Kart Selecionado -->
+      <div class="card" style="padding: 10px 16px;">
+        <div class="selected-toy-box">
+          <img id="currentToyImg" src="" class="selected-toy-img" alt="Kart">
+          <div class="selected-toy-info">
+            <p style="font-size: 0.7rem; color: var(--text-muted);">CARRINHO EM USO:</p>
+            <h4 id="currentToyName">Nenhum selecionado</h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cronómetro -->
+      <div class="card">
+        <div class="timer-display">
+          <div class="timer-label" id="timerStateLabel">Aguardando Início</div>
+          <div class="timer-time" id="timeDisplay">05:00</div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controlos -->
+      <div class="card">
+        <div class="grid-actions">
+          <button class="btn btn-blue btn-full" onclick="conectarBluetooth()">
+            1. Conectar Kart (BLE)
+          </button>
+
+          <button class="btn btn-green btn-full" onclick="iniciarCorrida(300)">
+            <span>Iniciar 5 Min</span>
+            <small style="font-weight:400; opacity:0.8;">+ R$ 5,00 no Caixa</small>
+          </button>
+
+          <button class="btn btn-yellow" onclick="adicionarTempo(300)">
+            <span>+5 Minutos</span>
+            <small style="font-weight:400; opacity:0.8;">Adicionar R$ 5</small>
+          </button>
+
+          <button class="btn btn-red" onclick="pararCorrida()">
+            <span>Parar / Emergência</span>
+            <small style="font-weight:400; opacity:0.8;">Corte Imediato</small>
+          </button>
+        </div>
+      </div>
+
+      <!-- Caixa do Dia -->
+      <div class="card">
+        <div style="font-weight: 600; margin-bottom: 6px; font-size: 0.8rem; color: var(--text-muted);">
+          CAIXA DO DIA
+        </div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-val" id="statRides">0</div>
+            <div class="stat-lbl">Corridas</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" id="statTotal">R$ 0,00</div>
+            <div class="stat-lbl">Faturamento</div>
+          </div>
+        </div>
+        <button class="btn-reset" onclick="zerarCaixa()">Zerar Caixa do Dia</button>
       </div>
     </div>
 
-    <!-- Card Principal: Cronómetro -->
-    <div class="card">
-      <div class="timer-display">
-        <div class="timer-label" id="timerStateLabel">Aguardando Início</div>
-        <div class="timer-time" id="timeDisplay">05:00</div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" id="progressBar"></div>
+    <!-- ABA 2: CADASTRO DE BRINQUEDOS / FOTOS -->
+    <div id="tab-brinquedos" class="tab-content">
+      <div class="card">
+        <h3 style="font-size: 1rem; margin-bottom: 10px;">Cadastrar Novo Kart</h3>
+        <div class="toy-form">
+          <div class="form-group">
+            <label>Nome / Identificação (Ex: Kart 01 - Vermelho)</label>
+            <input type="text" id="inputToyName" class="form-input" placeholder="Nome do kart...">
+          </div>
+          <div class="form-group">
+            <label>Foto do Kart (Câmera ou Galeria)</label>
+            <input type="file" id="inputToyPhoto" accept="image/*" class="form-input" style="padding: 6px;">
+          </div>
+          <button class="btn btn-blue" style="margin-top: 6px;" onclick="registarBrinquedo()">Salvar Kart</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size: 1rem; margin-bottom: 6px;">Karts Cadastrados</h3>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">Toque em "Selecionar" para operar o kart desejado.</p>
+        <div class="toys-list" id="toysListContainer">
+          <!-- Lista injetada via JavaScript -->
         </div>
       </div>
     </div>
 
-    <!-- Controlo & Ações -->
-    <div class="card">
-      <div class="grid-actions">
-        <button class="btn btn-blue btn-full" onclick="conectarBluetooth()">
-          1. Conectar Kart (BLE)
-        </button>
-
-        <button class="btn btn-green btn-full" onclick="iniciarCorrida(300)">
-          <span>Iniciar 5 Min</span>
-          <small style="font-weight:400; opacity:0.8;">+ R$ 5,00 no Caixa</small>
-        </button>
-
-        <button class="btn btn-yellow" onclick="adicionarTempo(300)">
-          <span>+5 Minutos</span>
-          <small style="font-weight:400; opacity:0.8;">Adicionar R$ 5</small>
-        </button>
-
-        <button class="btn btn-red" onclick="pararCorrida()">
-          <span>Parar / Emergência</span>
-          <small style="font-weight:400; opacity:0.8;">Corte Imediato</small>
-        </button>
-      </div>
-    </div>
-
-    <!-- Banco de Dados / Caixa do Dia -->
-    <div class="card">
-      <div style="font-weight: 600; margin-bottom: 8px; font-size: 0.875rem; color: var(--text-muted);">
-        CAIXA DO DIA (LOCAL)
-      </div>
-      <div class="stats-grid">
-        <div class="stat-box">
-          <div class="stat-val" id="statRides">0</div>
-          <div class="stat-lbl">Corridas Realizadas</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-val" id="statTotal">R$ 0,00</div>
-          <div class="stat-lbl">Faturamento Total</div>
-        </div>
-      </div>
-      <button class="btn-reset-stats" onclick="zerarCaixa()">Zerar Caixa do Dia</button>
-    </div>
   </div>
 
   <script>
@@ -139,11 +211,124 @@
     let tempoTotal = 300;
     let tempoRestante = 300;
 
-    // Carregar Banco de Dados Local ao iniciar
     window.onload = function() {
       atualizarCaixaUI();
+      carregarBrinquedos();
     };
 
+    function mudarAba(aba) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+      if (aba === 'operacao') {
+        document.getElementById('tab-operacao').classList.add('active');
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+      } else {
+        document.getElementById('tab-brinquedos').classList.add('active');
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+      }
+    }
+
+    // Gestão de Brinquedos e Fotos (LocalStorage)
+    function registarBrinquedo() {
+      const name = document.getElementById('inputToyName').value.trim();
+      const photoInput = document.getElementById('inputToyPhoto');
+
+      if (!name) {
+        alert("Por favor, digite o nome do kart.");
+        return;
+      }
+
+      if (photoInput.files && photoInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          salvarKartNoStorage(name, e.target.result);
+        };
+        reader.readAsDataURL(photoInput.files[0]);
+      } else {
+        salvarKartNoStorage(name, "");
+      }
+    }
+
+    function salvarKartNoStorage(name, photoBase64) {
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      const novoId = Date.now().toString();
+      
+      toys.push({ id: novoId, name: name, photo: photoBase64 });
+      localStorage.setItem('drift_toys', JSON.stringify(toys));
+
+      document.getElementById('inputToyName').value = '';
+      document.getElementById('inputToyPhoto').value = '';
+      
+      carregarBrinquedos();
+      if (toys.length === 1) selecionarKart(novoId);
+      mudarAba('operacao');
+    }
+
+    function carregarBrinquedos() {
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      const container = document.getElementById('toysListContainer');
+      container.innerHTML = '';
+
+      if (toys.length === 0) {
+        container.innerHTML = '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center; padding:10px;">Nenhum kart cadastrado.</p>';
+        return;
+      }
+
+      toys.forEach(toy => {
+        const item = document.createElement('div');
+        item.className = 'toy-item';
+        item.innerHTML = `
+          <div class="toy-item-left">
+            <img src="${toy.photo || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2240%22 height=%2240%22><rect width=%2240%22 height=%2240%22 fill=%22%23334155%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2394a3b8%22 font-size=%2216%22>🏎️</text></svg>'}" class="toy-thumb">
+            <span style="font-size:0.9rem; font-weight:600;">${toy.name}</span>
+          </div>
+          <div style="display:flex; gap:6px;">
+            <button class="btn-select" onclick="selecionarKart('${toy.id}')">Selecionar</button>
+            <button class="btn-delete" onclick="apagarKart('${toy.id}')">Excluir</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+
+      // Se houver selecionado ativo, atualiza o display
+      const activeId = localStorage.getItem('drift_active_toy_id');
+      if (activeId) {
+        const ativo = toys.find(t => t.id === activeId);
+        if (ativo) atualizarDisplayKartAtivo(ativo);
+      }
+    }
+
+    function selecionarKart(id) {
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      const toy = toys.find(t => t.id === id);
+      if (toy) {
+        localStorage.setItem('drift_active_toy_id', toy.id);
+        atualizarDisplayKartAtivo(toy);
+        mudarAba('operacao');
+      }
+    }
+
+    function atualizarDisplayKartAtivo(toy) {
+      document.getElementById('currentToyName').innerText = toy.name;
+      const imgEl = document.getElementById('currentToyImg');
+      if (toy.photo) {
+        imgEl.src = toy.photo;
+      } else {
+        imgEl.src = 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2250%22><rect width=%2250%22 height=%2250%22 fill=%22%23334155%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2394a3b8%22 font-size=%2220%22>🏎️</text></svg>';
+      }
+    }
+
+    function apagarKart(id) {
+      if (confirm("Deseja remover este kart?")) {
+        let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+        toys = toys.filter(t => t.id !== id);
+        localStorage.setItem('drift_toys', JSON.stringify(toys));
+        carregarBrinquedos();
+      }
+    }
+
+    // Bluetooth e Controlo
     async function conectarBluetooth() {
       try {
         atualizarStatus("Procurando...", "disconnected");
@@ -249,7 +434,6 @@
       }
     }
 
-    /* Lógica do Banco de Dados Local (LocalStorage) */
     function registarVenda(valor) {
       let rides = parseInt(localStorage.getItem('drift_rides') || '0') + 1;
       let total = parseFloat(localStorage.getItem('drift_total') || '0.0') + valor;
