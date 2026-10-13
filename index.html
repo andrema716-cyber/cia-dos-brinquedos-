@@ -2,38 +2,151 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Controle Drift via Web Bluetooth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Loop Mídias - Drift Control</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #121212; color: #fff; text-align: center; padding: 20px; }
-    button { width: 100%; max-width: 300px; padding: 15px; margin: 10px 0; font-size: 18px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
-    .btn-conn { background: #2196F3; color: white; }
-    .btn-start { background: #4CAF50; color: white; }
-    .btn-stop { background: #F44336; color: white; }
-    #status { margin: 15px 0; font-size: 20px; color: #FFC107; }
+    :root {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --accent-blue: #3b82f6;
+      --accent-green: #22c55e;
+      --accent-red: #ef4444;
+      --accent-yellow: #eab308;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg-color); color: var(--text-main); padding: 16px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+
+    .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 16px; }
+
+    /* Header & Status */
+    .header { text-align: center; padding: 12px 0; }
+    .header h1 { font-size: 1.5rem; font-weight: 700; color: var(--text-main); }
+    .header p { font-size: 0.875rem; color: var(--text-muted); }
+
+    .card { background: var(--card-bg); border-radius: 16px; padding: 16px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); border: 1px solid #334155; }
+
+    .status-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 9999px; font-weight: 600; font-size: 0.875rem; background: #334155; color: var(--text-muted); }
+    .status-badge.connected { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); border: 1px solid var(--accent-green); }
+    .status-badge.disconnected { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
+
+    /* Cronómetro Display */
+    .timer-display { text-align: center; margin: 12px 0; }
+    .timer-time { font-size: 3.5rem; font-weight: 800; font-family: monospace; letter-spacing: -2px; color: var(--text-main); }
+    .timer-label { font-size: 0.875rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    .progress-bar-container { width: 100%; height: 10px; background: #334155; border-radius: 9999px; overflow: hidden; margin-top: 12px; }
+    .progress-bar { height: 100%; width: 0%; background: var(--accent-green); transition: width 0.3s ease, background-color 0.3s ease; }
+
+    /* Grid de Botões */
+    .grid-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .btn { border: none; border-radius: 12px; padding: 16px; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transition: transform 0.1s ease, filter 0.2s ease; color: #fff; }
+    .btn:active { transform: scale(0.97); }
+    .btn-full { grid-column: span 2; }
+
+    .btn-blue { background: var(--accent-blue); }
+    .btn-green { background: var(--accent-green); }
+    .btn-yellow { background: var(--accent-yellow); color: #000; }
+    .btn-red { background: var(--accent-red); }
+
+    /* Dashboard Financeiro (Banco de Dados Local) */
+    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; text-align: center; }
+    .stat-box { background: #0f172a; padding: 12px; border-radius: 12px; border: 1px solid #334155; }
+    .stat-val { font-size: 1.25rem; font-weight: 700; color: var(--accent-green); }
+    .stat-lbl { font-size: 0.75rem; color: var(--text-muted); }
+
+    .btn-reset-stats { background: transparent; border: 1px solid #334155; color: var(--text-muted); padding: 8px; border-radius: 8px; font-size: 0.75rem; margin-top: 8px; width: 100%; cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <h1>Controle Drift (Bluetooth)</h1>
-  <div id="status">Desconectado</div>
+  <div class="container">
+    <div class="header">
+      <h1>Loop Mídias Drift</h1>
+      <p>Gestão & Operação de Karts</p>
+    </div>
 
-  <button class="btn-conn" onclick="conectarBluetooth()">1. Conectar Bluetooth</button>
-  <button class="btn-start" onclick="enviarComando('INICIAR')">Iniciar 5 Min (R$ 5)</button>
-  <button class="btn-start" onclick="enviarComando('ADICIONAR')">+5 Minutos</button>
-  <button class="btn-stop" onclick="enviarComando('PARAR')">Desligar Agora</button>
+    <!-- Status de Conexão -->
+    <div style="text-align: center;">
+      <div id="statusBadge" class="status-badge disconnected">
+        <span>●</span> <span id="statusText">Desconectado</span>
+      </div>
+    </div>
+
+    <!-- Card Principal: Cronómetro -->
+    <div class="card">
+      <div class="timer-display">
+        <div class="timer-label" id="timerStateLabel">Aguardando Início</div>
+        <div class="timer-time" id="timeDisplay">05:00</div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controlo & Ações -->
+    <div class="card">
+      <div class="grid-actions">
+        <button class="btn btn-blue btn-full" onclick="conectarBluetooth()">
+          1. Conectar Kart (BLE)
+        </button>
+
+        <button class="btn btn-green btn-full" onclick="iniciarCorrida(300)">
+          <span>Iniciar 5 Min</span>
+          <small style="font-weight:400; opacity:0.8;">+ R$ 5,00 no Caixa</small>
+        </button>
+
+        <button class="btn btn-yellow" onclick="adicionarTempo(300)">
+          <span>+5 Minutos</span>
+          <small style="font-weight:400; opacity:0.8;">Adicionar R$ 5</small>
+        </button>
+
+        <button class="btn btn-red" onclick="pararCorrida()">
+          <span>Parar / Emergência</span>
+          <small style="font-weight:400; opacity:0.8;">Corte Imediato</small>
+        </button>
+      </div>
+    </div>
+
+    <!-- Banco de Dados / Caixa do Dia -->
+    <div class="card">
+      <div style="font-weight: 600; margin-bottom: 8px; font-size: 0.875rem; color: var(--text-muted);">
+        CAIXA DO DIA (LOCAL)
+      </div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-val" id="statRides">0</div>
+          <div class="stat-lbl">Corridas Realizadas</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val" id="statTotal">R$ 0,00</div>
+          <div class="stat-lbl">Faturamento Total</div>
+        </div>
+      </div>
+      <button class="btn-reset-stats" onclick="zerarCaixa()">Zerar Caixa do Dia</button>
+    </div>
+  </div>
 
   <script>
     const SERVICE_UUID = "4fa1c201-222d-4b93-9fb6-52c1e7f32d88";
     const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
-    
+
     let bluetoothDevice;
     let caracteristicaBLE;
+    let timerInterval = null;
+    let tempoTotal = 300;
+    let tempoRestante = 300;
+
+    // Carregar Banco de Dados Local ao iniciar
+    window.onload = function() {
+      atualizarCaixaUI();
+    };
 
     async function conectarBluetooth() {
       try {
-        document.getElementById('status').innerText = "Procurando carrinho...";
-        
+        atualizarStatus("Procurando...", "disconnected");
         bluetoothDevice = await navigator.bluetooth.requestDevice({
           filters: [{ namePrefix: 'Drift' }],
           optionalServices: [SERVICE_UUID]
@@ -43,25 +156,123 @@
         const service = await server.getPrimaryService(SERVICE_UUID);
         caracteristicaBLE = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-        document.getElementById('status').innerText = "CONECTADO: " + bluetoothDevice.name;
-        document.getElementById('status').style.color = "#4CAF50";
+        atualizarStatus("Conectado: " + bluetoothDevice.name, "connected");
       } catch (error) {
         console.error(error);
-        document.getElementById('status').innerText = "Erro ao conectar.";
-        document.getElementById('status').style.color = "#F44336";
+        atualizarStatus("Erro ao Conectar", "disconnected");
       }
+    }
+
+    function atualizarStatus(texto, classe) {
+      const badge = document.getElementById('statusBadge');
+      const statusText = document.getElementById('statusText');
+      statusText.innerText = texto;
+      badge.className = "status-badge " + classe;
     }
 
     async function enviarComando(comando) {
       if (!caracteristicaBLE) {
         alert("Conecte ao Bluetooth primeiro!");
-        return;
+        return false;
       }
       try {
         const encoder = new TextEncoder();
         await caracteristicaBLE.writeValue(encoder.encode(comando));
+        return true;
       } catch (error) {
         console.error("Erro ao enviar comando:", error);
+        alert("Falha de comunicação com o Kart!");
+        return false;
+      }
+    }
+
+    async function iniciarCorrida(segundos) {
+      if (await enviarComando("INICIAR")) {
+        tempoTotal = segundos;
+        tempoRestante = segundos;
+        registarVenda(5.00);
+        iniciarCronometro();
+      }
+    }
+
+    async function adicionarTempo(segundos) {
+      if (await enviarComando("ADICIONAR")) {
+        tempoTotal += segundos;
+        tempoRestante += segundos;
+        registarVenda(5.00);
+        atualizarDisplayTimer();
+      }
+    }
+
+    async function pararCorrida() {
+      if (await enviarComando("PARAR")) {
+        clearInterval(timerInterval);
+        tempoRestante = 0;
+        atualizarDisplayTimer();
+        document.getElementById('timerStateLabel').innerText = "Corrida Interrompida";
+      }
+    }
+
+    function iniciarCronometro() {
+      clearInterval(timerInterval);
+      document.getElementById('timerStateLabel').innerText = "EM ANDAMENTO";
+      
+      atualizarDisplayTimer();
+
+      timerInterval = setInterval(() => {
+        tempoRestante--;
+        atualizarDisplayTimer();
+
+        if (tempoRestante <= 0) {
+          clearInterval(timerInterval);
+          document.getElementById('timerStateLabel').innerText = "TEMPO ENCERRADO";
+        }
+      }, 1000);
+    }
+
+    function atualizarDisplayTimer() {
+      const min = Math.floor(Math.max(0, tempoRestante) / 60);
+      const seg = Math.max(0, tempoRestante) % 60;
+      document.getElementById('timeDisplay').innerText = 
+        `${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}`;
+
+      const pct = tempoTotal > 0 ? ((tempoTotal - tempoRestante) / tempoTotal) * 100 : 0;
+      const progressBar = document.getElementById('progressBar');
+      progressBar.style.width = `${Math.min(100, pct)}%`;
+
+      if (tempoRestante <= 60 && tempoRestante > 0) {
+        progressBar.style.backgroundColor = "var(--accent-yellow)";
+      } else if (tempoRestante === 0) {
+        progressBar.style.backgroundColor = "var(--accent-red)";
+      } else {
+        progressBar.style.backgroundColor = "var(--accent-green)";
+      }
+    }
+
+    /* Lógica do Banco de Dados Local (LocalStorage) */
+    function registarVenda(valor) {
+      let rides = parseInt(localStorage.getItem('drift_rides') || '0') + 1;
+      let total = parseFloat(localStorage.getItem('drift_total') || '0.0') + valor;
+
+      localStorage.setItem('drift_rides', rides);
+      localStorage.setItem('drift_total', total);
+
+      atualizarCaixaUI();
+    }
+
+    function atualizarCaixaUI() {
+      let rides = localStorage.getItem('drift_rides') || '0';
+      let total = parseFloat(localStorage.getItem('drift_total') || '0.0');
+
+      document.getElementById('statRides').innerText = rides;
+      document.getElementById('statTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    function zerarCaixa() {
+      if (confirm("Deseja zerar o histórico de caixa do dia?")) {
+        localStorage.setItem('drift_rides', '0');
+        localStorage.setItem('drift_total', '0');
+        atualizarCaixaUI();
       }
     }
   </script>
