@@ -39,24 +39,21 @@
     .screen { display: none; flex-direction: column; gap: 16px; }
     .screen.active { display: flex; }
 
-    /* Grade de Brinquedos (Estilo Moderno da Imagem) */
-    .toys-grid { display: flex; flex-direction: column; gap: 16px; padding: 0 16px; }
-    .toy-modern-card { background: var(--card-dark); border-radius: 24px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 12px 30px rgba(10,25,47,0.3); display: flex; flex-direction: column; position: relative; }
+    /* Nova Grelha Lado a Lado (2 Colunas Compactas) */
+    .toys-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; }
+    .toy-modern-card { background: var(--card-dark); border-radius: 18px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 8px 20px rgba(10,25,47,0.25); display: flex; flex-direction: column; position: relative; cursor: pointer; transition: transform 0.1s; }
+    .toy-modern-card:active { transform: scale(0.96); }
     
-    .toy-img-container { width: 100%; height: 180px; background: #000; overflow: hidden; }
-    .toy-img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+    .toy-img-container { width: 100%; height: 110px; background: #000; overflow: hidden; }
+    .toy-img-container img { width: 100%; height: 100%; object-fit: cover; }
 
-    .toy-info-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
-    .toy-card-name { font-size: 1.15rem; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; }
-    
-    .toy-badge-row { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: #94a3b8; font-weight: 600; }
-    .toy-badge-row span { color: #ffd000; font-size: 1rem; }
+    .toy-info-body { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .toy-card-name { font-size: 0.9rem; font-weight: 900; color: #ffffff; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .btn-select-toy { background: linear-gradient(90deg, #ffd000 0%, #ffaa00 100%); border: none; border-radius: 99px; padding: 12px; font-size: 0.95rem; font-weight: 900; color: #0b2545; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(255,208,0,0.3); transition: filter 0.2s; }
-    .btn-select-toy:active { transform: scale(0.97); filter: brightness(0.9); }
+    .btn-select-toy { background: linear-gradient(90deg, #ffd000 0%, #ffaa00 100%); border: none; border-radius: 99px; padding: 6px; font-size: 0.75rem; font-weight: 900; color: #0b2545; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 2px 8px rgba(255,208,0,0.3); }
 
     /* Badge Ativa no Card */
-    .active-tag { position: absolute; top: 12px; right: 12px; background: #ff6b6b; color: white; font-size: 0.75rem; font-weight: 900; padding: 6px 12px; border-radius: 99px; box-shadow: 0 4px 12px rgba(255,107,107,0.4); z-index: 5; }
+    .active-tag { position: absolute; top: 8px; right: 8px; background: #ff6b6b; color: white; font-size: 0.65rem; font-weight: 900; padding: 4px 8px; border-radius: 99px; box-shadow: 0 2px 8px rgba(255,107,107,0.4); z-index: 5; }
 
     /* Tela de Operação */
     .container-inner { padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
@@ -98,7 +95,10 @@
 
     .footer-banner { text-align: center; padding: 16px; font-size: 0.85rem; font-weight: 800; color: #0b2545; display: flex; align-items: center; justify-content: center; gap: 6px; }
 
-    /* Menu Dropdown Corrigido com z-index alto */
+    /* Relatório Individual */
+    .report-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px 12px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 6px; font-size: 0.85rem; }
+
+    /* Menu Dropdown */
     .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
     .menu-box { position: absolute; top: 75px; right: 16px; background: #ffffff; border-radius: 20px; padding: 10px; width: 230px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); border: 2px solid #e2e8f0; z-index: 1000; }
     .menu-item { background: #f8fafc; border: 1px solid #e2e8f0; color: #0b2545; padding: 12px; font-size: 0.88rem; text-align: left; cursor: pointer; border-radius: 12px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
@@ -109,7 +109,6 @@
 
   <div class="app-container">
     
-    <!-- Topo Estilizado -->
     <div class="header-banner">
       <div class="header-logo-area">
         <div class="header-title">Cia dos Brinquedos</div>
@@ -118,7 +117,6 @@
       <button class="btn-settings" onclick="toggleMenu()">⚙️</button>
     </div>
 
-    <!-- Menu Dropdown -->
     <div id="menuOverlay" class="menu-overlay" onclick="toggleMenu()">
       <div class="menu-box" onclick="event.stopPropagation()">
         <button class="menu-item" onclick="navegarPara('screen-home')">🏠 Início (Karts)</button>
@@ -151,12 +149,12 @@
           </div>
         </div>
 
-        <div class="toy-modern-card" style="box-shadow: none;">
-          <div class="toy-img-container" style="height: 150px;">
+        <div class="toy-modern-card" style="box-shadow: none; cursor: default;">
+          <div class="toy-img-container" style="height: 130px;">
             <img id="opToyImg" src="" alt="Kart">
           </div>
-          <div class="toy-info-body" style="padding: 10px 14px;">
-            <div id="opToyName" class="toy-card-name" style="font-size: 1.1rem; text-align: center;">Nome do Kart</div>
+          <div class="toy-info-body" style="padding: 8px;">
+            <div id="opToyName" class="toy-card-name" style="font-size: 1rem;">Nome do Kart</div>
           </div>
         </div>
 
@@ -236,6 +234,12 @@
               <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Faturamento</div>
             </div>
           </div>
+
+          <h4 style="font-size:0.95rem; color:var(--header-blue); margin: 16px 0 8px 0; text-align: left;">📊 Rendimento por Brinquedo:</h4>
+          <div id="individualReportList" style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px;">
+            <!-- Preenchido via JS -->
+          </div>
+
           <button class="btn btn-red" style="font-size:0.88rem; padding:10px;" onclick="zerarCaixa()">Zerar Caixa 🔄</button>
         </div>
       </div>
@@ -287,6 +291,8 @@
         carregarKartsHome();
       } else if (screenId === 'screen-cadastrar') {
         carregarKartsGerenciador();
+      } else if (screenId === 'screen-caixa') {
+        atualizarCaixaUI();
       }
     }
 
@@ -327,7 +333,7 @@
       grid.innerHTML = '';
 
       if (toys.length === 0) {
-        grid.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:20px;">Nenhum brinquedo cadastrado.</p>';
+        grid.innerHTML = '<p style="grid-column: span 2; text-align:center; color:var(--text-muted); padding:20px;">Nenhum brinquedo cadastrado.</p>';
         return;
       }
 
@@ -347,11 +353,12 @@
         }
 
         const defaultImg = index % 2 === 0 
-          ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffd000" font-size="22" font-weight="bold">🏎️ DRIFT PRETO</text></svg>'
-          : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300b4d8" font-size="22" font-weight="bold">🏎️ DRIFT AZUL</text></svg>';
+          ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="110"><rect width="200" height="110" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffd000" font-size="16" font-weight="bold">🏎️ KART</text></svg>'
+          : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="110"><rect width="200" height="110" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300b4d8" font-size="16" font-weight="bold">🏎️ KART</text></svg>';
 
         const card = document.createElement('div');
         card.className = 'toy-modern-card';
+        card.onclick = () => abrirOperacaoKart(toy);
         card.innerHTML = `
           ${activeTagHTML}
           <div class="toy-img-container">
@@ -359,10 +366,7 @@
           </div>
           <div class="toy-info-body">
             <div class="toy-card-name">${toy.name}</div>
-            <div class="toy-badge-row">
-              <span>⚡</span> Diversão sobre rodas! Sinta a adrenalina do drift!
-            </div>
-            <button class="btn-select-toy" onclick='abrirOperacaoKart(${JSON.stringify(toy)})'>
+            <button class="btn-select-toy">
               <span>🔲</span> Selecionar ➔
             </button>
           </div>
@@ -374,7 +378,7 @@
     function abrirOperacaoKart(toy) {
       kartAtualObj = toy;
       document.getElementById('opToyName').innerText = toy.name;
-      const defaultImg = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffd000" font-size="20">🏎️ Kart</text></svg>';
+      const defaultImg = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="110"><rect width="200" height="110" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffd000" font-size="16">🏎️ Kart</text></svg>';
       document.getElementById('opToyImg').src = toy.photo || defaultImg;
       
       renderizarInterfaceKart(toy.id);
@@ -476,7 +480,7 @@
         };
 
         setCorridaKart(kartAtualObj.id, ride);
-        registarVenda(valorSelecionado);
+        registarVenda(kartAtualObj.id, valorSelecionado);
         renderizarInterfaceKart(kartAtualObj.id);
       }
     }
@@ -651,11 +655,19 @@
       }
     }
 
-    function registarVenda(valor) {
+    // Caixa e Relatório Individual por Brinquedo
+    function registarVenda(toyId, valor) {
       let rides = parseInt(localStorage.getItem('drift_rides') || '0') + 1;
       let total = parseFloat(localStorage.getItem('drift_total') || '0.0') + valor;
       localStorage.setItem('drift_rides', rides);
       localStorage.setItem('drift_total', total);
+
+      // Registo individual por ID do brinquedo
+      let statsToy = JSON.parse(localStorage.getItem('drift_stat_' + toyId) || '{"rides":0, "total":0}');
+      statsToy.rides += 1;
+      statsToy.total += valor;
+      localStorage.setItem('drift_stat_' + toyId, JSON.stringify(statsToy));
+
       atualizarCaixaUI();
     }
 
@@ -664,12 +676,41 @@
       let total = parseFloat(localStorage.getItem('drift_total') || '0.0');
       document.getElementById('statRides').innerText = rides;
       document.getElementById('statTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+
+      // Preencher lista do relatório individual
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      const reportContainer = document.getElementById('individualReportList');
+      reportContainer.innerHTML = '';
+
+      if (toys.length === 0) {
+        reportContainer.innerHTML = '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum brinquedo registado.</p>';
+        return;
+      }
+
+      toys.forEach(toy => {
+        let stats = JSON.parse(localStorage.getItem('drift_stat_' + toy.id) || '{"rides":0, "total":0}');
+        const item = document.createElement('div');
+        item.className = 'report-item';
+        item.innerHTML = `
+          <div style="font-weight: 800; color: var(--header-blue);">${toy.name}</div>
+          <div style="text-align: right; font-weight: 700; color: var(--text-dark);">
+            ${stats.rides} corr. <span style="color: #16a34a; margin-left: 6px;">R$ ${stats.total.toFixed(2).replace('.', ',')}</span>
+          </div>
+        `;
+        reportContainer.appendChild(item);
+      });
     }
 
     function zerarCaixa() {
-      if (confirm("Deseja zerar o caixa do dia?")) {
+      if (confirm("Deseja zerar o caixa e todos os relatórios individuais do dia?")) {
         localStorage.setItem('drift_rides', '0');
         localStorage.setItem('drift_total', '0');
+        
+        let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+        toys.forEach(toy => {
+          localStorage.removeItem('drift_stat_' + toy.id);
+        });
+
         atualizarCaixaUI();
       }
     }
