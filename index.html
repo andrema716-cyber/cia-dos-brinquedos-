@@ -226,3 +226,452 @@
     <!-- 5. TELA CAIXA DO DIA -->
     <div id="screen-caixa" class="screen">
       <div class="container-inner">
+        <div class="card-white" style="text-align: center;">
+          <h3 style="color:var(--header-blue); margin-bottom:14px;">💰 Caixa do Dia</h3>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+            <div style="background:#f8fafc; padding:14px; border-radius:14px; border:2px solid #e2e8f0;">
+              <div id="statRides" style="font-size:1.6rem; font-weight:900; color:#ff6b6b;">0</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Corridas</div>
+            </div>
+            <div style="background:#f8fafc; padding:14px; border-radius:14px; border:2px solid #e2e8f0;">
+              <div id="statTotal" style="font-size:1.6rem; font-weight:900; color:#16a34a;">R$ 0,00</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Faturamento</div>
+            </div>
+          </div>
+          <button class="btn btn-red" style="font-size:0.88rem; padding:10px;" onclick="zerarCaixa()">Zerar Caixa 🔄</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const SERVICE_UUID = "4fa1c201-222d-4b93-9fb6-52c1e7f32d88";
+    const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
+
+    let bluetoothDevice;
+    let caracteristicaBLE;
+    let uiTimerInterval = null;
+    let globalCheckInterval = null;
+
+    let tempoSelecionadoMinutos = 5;
+    let valorSelecionado = 5.00;
+    let kartAtualObj = null;
+
+    window.onload = function() {
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      if (toys.length === 0) {
+        toys.push({ id: 'drift_001', name: 'DRIFT PRETO 001', photo: '' });
+        toys.push({ id: 'drift_002', name: 'DRIFT AZUL 002', photo: '' });
+        localStorage.setItem('drift_toys', JSON.stringify(toys));
+      }
+
+      carregarKartsHome();
+      atualizarCaixaUI();
+
+      if (globalCheckInterval) clearInterval(globalCheckInterval);
+      globalCheckInterval = setInterval(verificarTodasCorridas, 1000);
+    };
+
+    function toggleMenu() {
+      const menu = document.getElementById('menuOverlay');
+      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function navegarPara(screenId) {
+      if (uiTimerInterval) clearInterval(uiTimerInterval);
+
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+      document.getElementById('menuOverlay').style.display = 'none';
+
+      if (screenId === 'screen-home') {
+        carregarKartsHome();
+      } else if (screenId === 'screen-cadastrar') {
+        carregarKartsGerenciador();
+      }
+    }
+
+    function voltarParaHome() {
+      if (uiTimerInterval) clearInterval(uiTimerInterval);
+      kartAtualObj = null;
+      navegarPara('screen-home');
+    }
+
+    // Gerador de Som de Alarme (Alerta Sonoro)
+    function tocarAlarmeFim() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let beepCount = 0;
+        const interval = setInterval(() => {
+          if (beepCount >= 4) {
+            clearInterval(interval);
+            return;
+          }
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(880, audioCtx.currentTime); // Tom agudo
+          gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + 0.25);
+          beepCount++;
+        }, 350);
+      } catch (e) {
+        console.log("Áudio bloqueado pelo navegador até haver toque na tela.");
+      }
+    }
+
+    // Carregar Karts com o Novo Layout Moderno
+    function carregarKartsHome() {
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      const grid = document.getElementById('toysGrid');
+      grid.innerHTML = '';
+
+      toys.forEach((toy, index) => {
+        const rideData = getCorridaKart(toy.id);
+        let activeTagHTML = '';
+
+        if (rideData && rideData.status === 'RUNNING') {
+          const tempoRestanteSec = Math.max(0, Math.floor((rideData.endTime - Date.now()) / 1000));
+          if (tempoRestanteSec > 0) {
+            const min = Math.floor(tempoRestanteSec / 60);
+            const seg = tempoRestanteSec % 60;
+            activeTagHTML = `<div class="active-tag">⏱️ ${String(min).padStart(2,'0')}:${String(seg).padStart(2,'0')}</div>`;
+          }
+        } else if (rideData && rideData.status === 'PAUSED') {
+          activeTagHTML = `<div class="active-tag" style="background:#ffd000; color:#000;">⏸️ PAUSADO</div>`;
+        }
+
+        const defaultImg = index % 2 === 0 
+          ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffd000" font-size="22" font-family="sans-serif" font-weight="bold">🏎️ DRIFT PRETO</text></svg>'
+          : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300b4d8" font-size="22" font-family="sans-serif" font-weight="bold">🏎️ DRIFT AZUL</text></svg>';
+
+        const card = document.createElement('div');
+        card.className = 'toy-modern-card';
+        card.innerHTML = `
+          ${activeTagHTML}
+          <div class="toy-img-container">
+            <img src="${toy.photo || defaultImg}" alt="${toy.name}">
+          </div>
+          <div class="toy-info-body">
+            <div class="toy-card-name">${toy.name}</div>
+            <div class="toy-badge-row">
+              <span>⚡</span> Diversão sobre rodas! Sinta a adrenalina do drift!
+            </div>
+            <button class="btn-select-toy" onclick='abrirOperacaoKart(${JSON.stringify(toy)})'>
+              <span>🔲</span> Selecionar ➔
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function abrirOperacaoKart(toy) {
+      kartAtualObj = toy;
+      document.getElementById('opToyName').innerText = toy.name;
+      document.getElementById('opToyImg').src = toy.photo || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffd000" font-size="20">🏎️ Kart</text></svg>';
+      
+      renderizarInterfaceKart(toy.id);
+      navegarPara('screen-operacao');
+    }
+
+    function selecionarTempo(minutos, valor, btn) {
+      document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+
+      tempoSelecionadoMinutos = minutos;
+      valorSelecionado = valor;
+
+      document.getElementById('priceTag').innerText = `Valor: R$ ${valor.toFixed(2).replace('.', ',')}`;
+      document.getElementById('timeDisplay').innerText = `${String(minutos).padStart(2, '0')}:00`;
+    }
+
+    function getCorridaKart(toyId) {
+      const data = localStorage.getItem('drift_ride_' + toyId);
+      return data ? JSON.parse(data) : null;
+    }
+
+    function setCorridaKart(toyId, rideObj) {
+      if (rideObj === null) {
+        localStorage.removeItem('drift_ride_' + toyId);
+      } else {
+        localStorage.setItem('drift_ride_' + toyId, JSON.stringify(rideObj));
+      }
+    }
+
+    function renderizarInterfaceKart(toyId) {
+      if (uiTimerInterval) clearInterval(uiTimerInterval);
+      const ride = getCorridaKart(toyId);
+
+      if (!ride || ride.status === 'STOPPED') {
+        document.getElementById('setupArea').style.display = 'block';
+        document.getElementById('controlArea').style.display = 'none';
+        document.getElementById('timerStateLabel').innerText = "Pronto para a Aventura!";
+        document.getElementById('timeDisplay').innerText = `${String(tempoSelecionadoMinutos).padStart(2, '0')}:00`;
+        document.getElementById('progressBar').style.width = '0%';
+        return;
+      }
+
+      document.getElementById('setupArea').style.display = 'none';
+      document.getElementById('controlArea').style.display = 'grid';
+
+      atualizarCronometroKartUI(toyId);
+      uiTimerInterval = setInterval(() => atualizarCronometroKartUI(toyId), 1000);
+    }
+
+    function atualizarCronometroKartUI(toyId) {
+      const ride = getCorridaKart(toyId);
+      if (!ride) {
+        renderizarInterfaceKart(toyId);
+        return;
+      }
+
+      let restanteSec = 0;
+      if (ride.status === 'RUNNING') {
+        restanteSec = Math.max(0, Math.floor((ride.endTime - Date.now()) / 1000));
+        document.getElementById('timerStateLabel').innerText = "🏁 CORRIDA A DECORRER!";
+        
+        const btnPause = document.getElementById('btnPause');
+        btnPause.innerText = "⏸️ PAUSAR";
+        btnPause.className = "btn btn-yellow";
+
+        if (restanteSec <= 0) {
+          finalizarCorridaComAlarme(toyId);
+          return;
+        }
+      } else if (ride.status === 'PAUSED') {
+        restanteSec = ride.remainingSecOnPause;
+        document.getElementById('timerStateLabel').innerText = "⏸️ PAUSADO";
+        
+        const btnPause = document.getElementById('btnPause');
+        btnPause.innerText = "▶️ RETOMAR";
+        btnPause.className = "btn btn-green";
+      }
+
+      const min = Math.floor(restanteSec / 60);
+      const seg = restanteSec % 60;
+      document.getElementById('timeDisplay').innerText = `${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}`;
+
+      const totalSec = ride.totalDurationSec;
+      const pct = totalSec > 0 ? ((totalSec - restanteSec) / totalSec) * 100 : 0;
+      document.getElementById('progressBar').style.width = `${Math.min(100, pct)}%`;
+    }
+
+    async function iniciarCorrida() {
+      if (!kartAtualObj) return;
+      if (await enviarComando("INICIAR")) {
+        const durationSec = tempoSelecionadoMinutos * 60;
+        const ride = {
+          toyId: kartAtualObj.id,
+          status: 'RUNNING',
+          endTime: Date.now() + (durationSec * 1000),
+          totalDurationSec: durationSec,
+          remainingSecOnPause: 0
+        };
+
+        setCorridaKart(kartAtualObj.id, ride);
+        registarVenda(valorSelecionado);
+        renderizarInterfaceKart(kartAtualObj.id);
+      }
+    }
+
+    async function pausarOuRetomar() {
+      if (!kartAtualObj) return;
+      const toyId = kartAtualObj.id;
+      const ride = getCorridaKart(toyId);
+      if (!ride) return;
+
+      if (ride.status === 'RUNNING') {
+        if (await enviarComando("PARAR")) {
+          const restanteSec = Math.max(0, Math.floor((ride.endTime - Date.now()) / 1000));
+          ride.status = 'PAUSED';
+          ride.remainingSecOnPause = restanteSec;
+          setCorridaKart(toyId, ride);
+          renderizarInterfaceKart(toyId);
+        }
+      } else if (ride.status === 'PAUSED') {
+        if (await enviarComando("INICIAR")) {
+          ride.status = 'RUNNING';
+          ride.endTime = Date.now() + (ride.remainingSecOnPause * 1000);
+          setCorridaKart(toyId, ride);
+          renderizarInterfaceKart(toyId);
+        }
+      }
+    }
+
+    async function pararEmergencia() {
+      if (!kartAtualObj) return;
+      await enviarComando("PARAR");
+      finalizarCorridaComAlarme(kartAtualObj.id);
+    }
+
+    function finalizarCorridaComAlarme(toyId) {
+      tocarAlarmeFim();
+      setCorridaKart(toyId, null);
+      if (kartAtualObj && kartAtualObj.id === toyId) {
+        document.getElementById('timerStateLabel').innerText = "⏰ TEMPO ESGOTADO!";
+        renderizarInterfaceKart(toyId);
+      }
+    }
+
+    function verificarTodasCorridas() {
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      let houveAlarme = false;
+
+      toys.forEach(toy => {
+        const ride = getCorridaKart(toy.id);
+        if (ride && ride.status === 'RUNNING') {
+          const restante = Math.floor((ride.endTime - Date.now()) / 1000);
+          if (restante <= 0) {
+            tocarAlarmeFim();
+            setCorridaKart(toy.id, null);
+            houveAlarme = true;
+          }
+        }
+      });
+
+      const currentScreen = document.querySelector('.screen.active');
+      if (currentScreen && currentScreen.id === 'screen-home') {
+        carregarKartsHome();
+      }
+    }
+
+    // Bluetooth
+    async function conectarBluetooth() {
+      try {
+        actualizarStatusBLE("Procurando ESP32...", false);
+        bluetoothDevice = await navigator.bluetooth.requestDevice({
+          filters: [{ namePrefix: 'Drift' }],
+          optionalServices: [SERVICE_UUID]
+        });
+
+        const server = await bluetoothDevice.gatt.connect();
+        const service = await server.getPrimaryService(SERVICE_UUID);
+        caracteristicaBLE = await service.getCharacteristic(CHARACTERISTIC_UUID);
+
+        actualizarStatusBLE("Conectado ao ESP32!", true);
+        alert("Bluetooth conectado com sucesso!");
+        navegarPara('screen-home');
+      } catch (error) {
+        console.error(error);
+        actualizarStatusBLE("Modo Simulação", false);
+        alert("Modo Simulação ativo! O alarme e cronômetro funcionam perfeitamente.");
+      }
+    }
+
+    function actualizarStatusBLE(texto, conectado) {
+      const badge = document.getElementById('statusBadge');
+      const statusText = document.getElementById('statusText');
+      if (statusText) statusText.innerText = texto;
+      if (badge) {
+        if (conectado) {
+          badge.className = "status-badge connected";
+          badge.innerHTML = '<span>🟢</span> <span id="statusText">' + texto + '</span>';
+        } else {
+          badge.className = "status-badge";
+          badge.innerHTML = '<span>⚠️</span> <span id="statusText">' + texto + '</span>';
+        }
+      }
+    }
+
+    async function enviarComando(comando) {
+      if (!caracteristicaBLE) return true;
+      try {
+        const encoder = new TextEncoder();
+        await caracteristicaBLE.writeValue(encoder.encode(comando));
+        return true;
+      } catch (error) {
+        console.error("Erro BLE:", error);
+        return false;
+      }
+    }
+
+    // Cadastro
+    function salvarKart() {
+      const name = document.getElementById('inputToyName').value.trim();
+      const photoInput = document.getElementById('inputToyPhoto');
+
+      if (!name) return alert("Digite o nome do carrinho!");
+
+      if (photoInput.files && photoInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          guardarStorage(name, e.target.result);
+        };
+        reader.readAsDataURL(photoInput.files[0]);
+      } else {
+        guardarStorage(name, "");
+      }
+    }
+
+    function guardarStorage(name, photoBase64) {
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      toys.push({ id: 'drift_' + Date.now(), name: name, photo: photoBase64 });
+      localStorage.setItem('drift_toys', JSON.stringify(toys));
+
+      document.getElementById('inputToyName').value = '';
+      document.getElementById('inputToyPhoto').value = '';
+      carregarKartsGerenciador();
+      alert("Carrinho cadastrado com sucesso! 🎉");
+      navegarPara('screen-home');
+    }
+
+    function carregarKartsGerenciador() {
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      const container = document.getElementById('toysManageList');
+      container.innerHTML = '';
+
+      toys.forEach(toy => {
+        const item = document.createElement('div');
+        item.className = 'toy-manage-item';
+        item.innerHTML = `
+          <div style="display:flex; align-items:center; gap:10px;">
+            <img src="${toy.photo || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2245%22 height=%2245%22><rect width=%2245%22 height=%2245%22 fill=%22%230a192f%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23ffd000%22 font-size=%2216%22>🏎️</text></svg>'}" class="toy-thumb">
+            <span style="font-size:0.9rem; font-weight:800; color:#0b2545;">${toy.name}</span>
+          </div>
+          <button class="btn btn-red" style="padding:6px 10px; font-size:0.75rem; border-radius:8px; width:auto;" onclick="excluirKart('${toy.id}')">Excluir</button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function excluirKart(id) {
+      if (confirm("Deseja apagar este carrinho?")) {
+        let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+        toys = toys.filter(t => t.id !== id);
+        localStorage.setItem('drift_toys', JSON.stringify(toys));
+        setCorridaKart(id, null);
+        carregarKartsGerenciador();
+      }
+    }
+
+    // Caixa
+    function registarVenda(valor) {
+      let rides = parseInt(localStorage.getItem('drift_rides') || '0') + 1;
+      let total = parseFloat(localStorage.getItem('drift_total') || '0.0') + valor;
+      localStorage.setItem('drift_rides', rides);
+      localStorage.setItem('drift_total', total);
+      atualizarCaixaUI();
+    }
+
+    function atualizarCaixaUI() {
+      let rides = localStorage.getItem('drift_rides') || '0';
+      let total = parseFloat(localStorage.getItem('drift_total') || '0.0');
+      document.getElementById('statRides').innerText = rides;
+      document.getElementById('statTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    function zerarCaixa() {
+      if (confirm("Deseja zerar o caixa do dia?")) {
+        localStorage.setItem('drift_rides', '0');
+        localStorage.setItem('drift_total', '0');
+        atualizarCaixaUI();
+      }
+    }
+  </script>
+</body>
+</html>
