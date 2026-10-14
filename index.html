@@ -39,7 +39,7 @@
     .screen { display: none; flex-direction: column; gap: 16px; }
     .screen.active { display: flex; }
 
-    /* Nova Grelha Lado a Lado (2 Colunas Compactas) */
+    /* Grelha Compacta Lado a Lado */
     .toys-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; }
     .toy-modern-card { background: var(--card-dark); border-radius: 18px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 8px 20px rgba(10,25,47,0.25); display: flex; flex-direction: column; position: relative; cursor: pointer; transition: transform 0.1s; }
     .toy-modern-card:active { transform: scale(0.96); }
@@ -65,6 +65,13 @@
     .timer-display { text-align: center; margin: 4px 0 10px 0; }
     .timer-time { font-size: 3.5rem; font-weight: 900; font-family: monospace; color: #0b2545; letter-spacing: -2px; }
     .timer-label { font-size: 0.8rem; color: #ff6b6b; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Animação de Alerta Pisca-Pisca para o Nome da Criança */
+    .alarm-blinking { animation: alertaPiscar 0.6s infinite alternate; background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #b91c1c !important; }
+    @keyframes alertaPiscar {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0.4; transform: scale(1.02); }
+    }
 
     .progress-bar-container { width: 100%; height: 10px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin-top: 8px; }
     .progress-bar { height: 100%; width: 0%; background: #16a34a; transition: width 0.3s ease; }
@@ -95,7 +102,6 @@
 
     .footer-banner { text-align: center; padding: 16px; font-size: 0.85rem; font-weight: 800; color: #0b2545; display: flex; align-items: center; justify-content: center; gap: 6px; }
 
-    /* Relatório Individual */
     .report-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px 12px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 6px; font-size: 0.85rem; }
 
     /* Menu Dropdown */
@@ -150,7 +156,7 @@
         </div>
 
         <div class="toy-modern-card" style="box-shadow: none; cursor: default;">
-          <div class="toy-img-container" style="height: 130px;">
+          <div class="toy-img-container" style="height: 120px;">
             <img id="opToyImg" src="" alt="Kart">
           </div>
           <div class="toy-info-body" style="padding: 8px;">
@@ -168,6 +174,11 @@
           </div>
 
           <div id="setupArea">
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label>Nome da Criança (Piloto):</label>
+              <input type="text" id="inputChildName" class="form-input" placeholder="Ex: Joãozinho">
+            </div>
+
             <div class="time-selector">
               <button class="time-btn selected" onclick="selecionarTempo(5, 5.00, this)">5 Min</button>
               <button class="time-btn" onclick="selecionarTempo(10, 10.00, this)">10 Min</button>
@@ -177,9 +188,13 @@
             <button class="btn btn-green" onclick="iniciarCorrida()">🚀 INICIAR CORRIDA</button>
           </div>
 
-          <div id="controlArea" style="display:none;" class="btn-grid">
-            <button class="btn btn-yellow" id="btnPause" onclick="pausarOuRetomar()">⏸️ PAUSAR</button>
-            <button class="btn btn-red" onclick="pararEmergencia()">🛑 PARAR AGORA</button>
+          <!-- Controles durante a corrida (Com botão +1 Minuto) -->
+          <div id="controlArea" style="display:none; display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn btn-blue" onclick="adicionarMaisUmMinuto()" style="background: var(--accent-cyan); color: #0b2545;">⏱️ +1 Minuto</button>
+            <div class="btn-grid">
+              <button class="btn btn-yellow" id="btnPause" onclick="pausarOuRetomar()">⏸️ PAUSAR</button>
+              <button class="btn btn-red" onclick="pararEmergencia()">🛑 PARAR AGORA</button>
+            </div>
           </div>
         </div>
       </div>
@@ -236,9 +251,7 @@
           </div>
 
           <h4 style="font-size:0.95rem; color:var(--header-blue); margin: 16px 0 8px 0; text-align: left;">📊 Rendimento por Brinquedo:</h4>
-          <div id="individualReportList" style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px;">
-            <!-- Preenchido via JS -->
-          </div>
+          <div id="individualReportList" style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px;"></div>
 
           <button class="btn btn-red" style="font-size:0.88rem; padding:10px;" onclick="zerarCaixa()">Zerar Caixa 🔄</button>
         </div>
@@ -307,21 +320,21 @@
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let beepCount = 0;
         const interval = setInterval(() => {
-          if (beepCount >= 4) {
+          if (beepCount >= 6) {
             clearInterval(interval);
             return;
           }
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'square';
-          osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-          gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+          osc.frequency.setValueAtTime(950, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
           osc.start();
           osc.stop(audioCtx.currentTime + 0.25);
           beepCount++;
-        }, 350);
+        }, 300);
       } catch (e) {
         console.log("Áudio aguardando interação.");
       }
@@ -346,10 +359,15 @@
           if (tempoRestanteSec > 0) {
             const min = Math.floor(tempoRestanteSec / 60);
             const seg = tempoRestanteSec % 60;
-            activeTagHTML = `<div class="active-tag">⏱️ ${String(min).padStart(2,'0')}:${String(seg).padStart(2,'0')}</div>`;
+            const displayLabel = rideData.childName ? `${rideData.childName}` : `${String(min).padStart(2,'0')}:${String(seg).padStart(2,'0')}`;
+            activeTagHTML = `<div class="active-tag">⏱️ ${displayLabel}</div>`;
           }
         } else if (rideData && rideData.status === 'PAUSED') {
           activeTagHTML = `<div class="active-tag" style="background:#ffd000; color:#000;">⏸️ PAUSADO</div>`;
+        } else if (rideData && rideData.status === 'FINISHED') {
+          // Nome piscando por 10 segundos no card da home
+          const nomeAlerta = rideData.childName ? rideData.childName : toy.name;
+          activeTagHTML = `<div class="active-tag alarm-blinking">🚨 ${nomeAlerta}</div>`;
         }
 
         const defaultImg = index % 2 === 0 
@@ -413,17 +431,22 @@
       if (uiTimerInterval) clearInterval(uiTimerInterval);
       const ride = getCorridaKart(toyId);
 
+      const cardWhiteBox = document.querySelector('#screen-operacao .card-white');
+      cardWhiteBox.classList.remove('alarm-blinking');
+
       if (!ride || ride.status === 'STOPPED') {
         document.getElementById('setupArea').style.display = 'block';
         document.getElementById('controlArea').style.display = 'none';
         document.getElementById('timerStateLabel').innerText = "Pronto para a Aventura!";
+        document.getElementById('inputChildName').value = '';
         document.getElementById('timeDisplay').innerText = `${String(tempoSelecionadoMinutos).padStart(2, '0')}:00`;
         document.getElementById('progressBar').style.width = '0%';
         return;
       }
 
       document.getElementById('setupArea').style.display = 'none';
-      document.getElementById('controlArea').style.display = 'grid';
+      document.getElementById('controlArea').style.display = 'flex';
+      document.getElementById('inputChildName').value = ride.childName || '';
 
       atualizarCronometroKartUI(toyId);
       uiTimerInterval = setInterval(() => atualizarCronometroKartUI(toyId), 1000);
@@ -437,25 +460,43 @@
       }
 
       let restanteSec = 0;
+      const cardWhiteBox = document.querySelector('#screen-operacao .card-white');
+
       if (ride.status === 'RUNNING') {
         restanteSec = Math.max(0, Math.floor((ride.endTime - Date.now()) / 1000));
-        document.getElementById('timerStateLabel').innerText = "🏁 CORRIDA A DECORRER!";
+        cardWhiteBox.classList.remove('alarm-blinking');
+        
+        const labelText = ride.childName ? `🏁 ${ride.childName}` : "🏁 CORRIDA A DECORRER!";
+        document.getElementById('timerStateLabel').innerText = labelText;
         
         const btnPause = document.getElementById('btnPause');
         btnPause.innerText = "⏸️ PAUSAR";
         btnPause.className = "btn btn-yellow";
 
         if (restanteSec <= 0) {
-          finalizarCorridaComAlarme(toyId);
+          ativarTerminoCorrida(toyId);
           return;
         }
       } else if (ride.status === 'PAUSED') {
         restanteSec = ride.remainingSecOnPause;
+        cardWhiteBox.classList.remove('alarm-blinking');
         document.getElementById('timerStateLabel').innerText = "⏸️ PAUSADO";
         
         const btnPause = document.getElementById('btnPause');
         btnPause.innerText = "▶️ RETOMAR";
         btnPause.className = "btn btn-green";
+      } else if (ride.status === 'FINISHED') {
+        restanteSec = 0;
+        cardWhiteBox.classList.add('alarm-blinking');
+        const nomeAlerta = ride.childName ? ride.childName : "TEMPO ESGOTADO";
+        document.getElementById('timerStateLabel').innerText = `🚨 FINALIZADO: ${nomeAlerta} 🚨`;
+        
+        // Verifica se já passaram 10 segundos do término para limpar automaticamente
+        if (Date.now() > ride.finishedUntil) {
+          setCorridaKart(toyId, null);
+          renderizarInterfaceKart(toyId);
+          return;
+        }
       }
 
       const min = Math.floor(restanteSec / 60);
@@ -469,6 +510,8 @@
 
     async function iniciarCorrida() {
       if (!kartAtualObj) return;
+      const childName = document.getElementById('inputChildName').value.trim();
+
       if (await enviarComando("INICIAR")) {
         const durationSec = tempoSelecionadoMinutos * 60;
         const ride = {
@@ -476,12 +519,32 @@
           status: 'RUNNING',
           endTime: Date.now() + (durationSec * 1000),
           totalDurationSec: durationSec,
-          remainingSecOnPause: 0
+          remainingSecOnPause: 0,
+          childName: childName
         };
 
         setCorridaKart(kartAtualObj.id, ride);
         registarVenda(kartAtualObj.id, valorSelecionado);
         renderizarInterfaceKart(kartAtualObj.id);
+      }
+    }
+
+    // Botão para adicionar mais 1 minuto a qualquer momento
+    function adicionarMaisUmMinuto() {
+      if (!kartAtualObj) return;
+      const ride = getCorridaKart(kartAtualObj.id);
+      if (!ride) return;
+
+      if (ride.status === 'RUNNING') {
+        ride.endTime += 60 * 1000; // Adiciona 60 segundos
+        ride.totalDurationSec += 60;
+        setCorridaKart(kartAtualObj.id, ride);
+        atualizarCronometroKartUI(kartAtualObj.id);
+      } else if (ride.status === 'PAUSED') {
+        ride.remainingSecOnPause += 60;
+        ride.totalDurationSec += 60;
+        setCorridaKart(kartAtualObj.id, ride);
+        atualizarCronometroKartUI(kartAtualObj.id);
       }
     }
 
@@ -512,14 +575,19 @@
     async function pararEmergencia() {
       if (!kartAtualObj) return;
       await enviarComando("PARAR");
-      finalizarCorridaComAlarme(kartAtualObj.id);
+      setCorridaKart(kartAtualObj.id, null);
+      renderizarInterfaceKart(kartAtualObj.id);
     }
 
-    function finalizarCorridaComAlarme(toyId) {
+    function ativarTerminoCorrida(toyId) {
       tocarAlarmeFim();
-      setCorridaKart(toyId, null);
+      const ride = getCorridaKart(toyId);
+      if (ride) {
+        ride.status = 'FINISHED';
+        ride.finishedUntil = Date.now() + (10 * 1000); // Pisca por 10 segundos
+        setCorridaKart(toyId, ride);
+      }
       if (kartAtualObj && kartAtualObj.id === toyId) {
-        document.getElementById('timerStateLabel').innerText = "⏰ TEMPO ESGOTADO!";
         renderizarInterfaceKart(toyId);
       }
     }
@@ -528,11 +596,16 @@
       let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
       toys.forEach(toy => {
         const ride = getCorridaKart(toy.id);
-        if (ride && ride.status === 'RUNNING') {
-          const restante = Math.floor((ride.endTime - Date.now()) / 1000);
-          if (restante <= 0) {
-            tocarAlarmeFim();
-            setCorridaKart(toy.id, null);
+        if (ride) {
+          if (ride.status === 'RUNNING') {
+            const restante = Math.floor((ride.endTime - Date.now()) / 1000);
+            if (restante <= 0) {
+              ativarTerminoCorrida(toy.id);
+            }
+          } else if (ride.status === 'FINISHED') {
+            if (Date.now() > ride.finishedUntil) {
+              setCorridaKart(toy.id, null);
+            }
           }
         }
       });
@@ -561,7 +634,7 @@
       } catch (error) {
         console.error(error);
         actualizarStatusBLE("Modo Simulação", false);
-        alert("Modo Simulação ativo! O alarme e cronômetro funcionam perfeitamente.");
+        alert("Modo Simulação ativo! Alarme e cronômetro funcionam perfeitamente.");
       }
     }
 
@@ -655,14 +728,12 @@
       }
     }
 
-    // Caixa e Relatório Individual por Brinquedo
     function registarVenda(toyId, valor) {
       let rides = parseInt(localStorage.getItem('drift_rides') || '0') + 1;
       let total = parseFloat(localStorage.getItem('drift_total') || '0.0') + valor;
       localStorage.setItem('drift_rides', rides);
       localStorage.setItem('drift_total', total);
 
-      // Registo individual por ID do brinquedo
       let statsToy = JSON.parse(localStorage.getItem('drift_stat_' + toyId) || '{"rides":0, "total":0}');
       statsToy.rides += 1;
       statsToy.total += valor;
@@ -677,7 +748,6 @@
       document.getElementById('statRides').innerText = rides;
       document.getElementById('statTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
 
-      // Preencher lista do relatório individual
       let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
       const reportContainer = document.getElementById('individualReportList');
       reportContainer.innerHTML = '';
