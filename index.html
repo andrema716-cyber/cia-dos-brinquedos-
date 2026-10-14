@@ -3,96 +3,124 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Cia dos Brinquedos - Controle de Karts</title>
+  <title>Cia dos Brinquedos - Aluguel de Brinquedos</title>
   <style>
     :root {
-      --bg-color: #fdf498;
-      --card-bg: #ffffff;
+      --bg-cream: #fffdf5;
+      --header-blue: #0b2545;
+      --card-dark: #0a192f;
+      --accent-yellow: #ffd000;
+      --accent-cyan: #00b4d8;
       --accent-orange: #ff6b6b;
-      --accent-yellow: #ffd93d;
-      --accent-green: #6bcb77;
-      --accent-blue: #4d96ff;
-      --text-main: #2d3436;
-      --text-muted: #636e72;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', Roboto, sans-serif; }
-    body { background: linear-gradient(135deg, #a8ff78 0%, #78ffd6 100%); color: var(--text-main); min-height: 100vh; display: flex; justify-content: center; padding: 12px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; }
+    body { background-color: var(--bg-cream); color: var(--text-dark); min-height: 100vh; display: flex; justify-content: center; padding: 0 0 40px 0; }
 
-    .app-container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 14px; }
+    .app-container { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; }
 
-    .top-bar { display: flex; justify-content: space-between; align-items: center; background: #ffffff; padding: 12px 16px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border: 3px solid #ff6b6b; }
-    .top-bar h1 { font-size: 1.1rem; font-weight: 800; color: #ff6b6b; text-transform: uppercase; }
-    .top-bar p { font-size: 0.75rem; color: var(--text-muted); font-weight: bold; }
+    /* Topo Moderno Temático */
+    .header-banner { background: linear-gradient(135deg, #0b2545 0%, #134074 100%); padding: 20px 16px; border-bottom-left-radius: 28px; border-bottom-right-radius: 28px; box-shadow: 0 10px 25px rgba(11,37,69,0.25); display: flex; justify-content: space-between; align-items: center; position: relative; }
+    .header-logo-area { display: flex; flex-direction: column; gap: 2px; }
+    .header-title { font-size: 1.4rem; font-weight: 900; color: #ffd000; text-transform: uppercase; text-shadow: 2px 2px 0px #ff6b6b; letter-spacing: 0.5px; }
+    .header-subtitle { font-size: 0.8rem; color: #90e0ef; font-weight: 700; letter-spacing: 1px; }
     
-    .btn-icon { background: #ffd93d; border: 2px solid #ff6b6b; color: #2d3436; font-size: 1.3rem; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .btn-settings { background: #ffd000; border: none; color: #0b2545; font-size: 1.2rem; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(255,208,0,0.4); transition: transform 0.1s; }
+    .btn-settings:active { transform: scale(0.92); }
 
-    .screen { display: none; flex-direction: column; gap: 14px; }
+    /* Seção Título de Seleção */
+    .section-header { text-align: center; padding: 8px 16px 0 16px; }
+    .section-title { font-size: 1.35rem; font-weight: 900; color: var(--header-blue); }
+    .section-desc { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+
+    /* Telas / Views */
+    .screen { display: none; flex-direction: column; gap: 16px; }
     .screen.active { display: flex; }
 
-    .card { background: var(--card-bg); border-radius: 20px; padding: 16px; border: 3px solid #4d96ff; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+    /* Grade de Brinquedos (Estilo Moderno da Imagem) */
+    .toys-grid { display: flex; flex-direction: column; gap: 16px; padding: 0 16px; }
+    .toy-modern-card { background: var(--card-dark); border-radius: 24px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 12px 30px rgba(10,25,47,0.3); display: flex; flex-direction: column; position: relative; }
+    
+    .toy-img-container { width: 100%; height: 180px; position: background; background: #000; overflow: hidden; }
+    .toy-img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
+    .toy-modern-card:hover img { transform: scale(1.03); }
 
-    .toys-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .toy-card { position: relative; background: #ffffff; border: 3px solid #ff6b6b; border-radius: 20px; padding: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; cursor: pointer; transition: transform 0.1s ease; box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
-    .toy-card:active { transform: scale(0.95); }
-    .toy-card-img { width: 100%; height: 110px; border-radius: 14px; object-fit: cover; background: #dfe6e9; border: 2px dashed #b2bec3; }
-    .toy-card-title { font-size: 0.95rem; font-weight: 800; color: #2d3436; }
+    .toy-info-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+    .toy-card-name { font-size: 1.15rem; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; }
+    
+    .toy-badge-row { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; color: #94a3b8; font-weight: 600; }
+    .toy-badge-row span { color: #ffd000; font-size: 1rem; }
 
-    /* Badge de Corrida Ativa no Card */
-    .active-ride-badge { position: absolute; top: -8px; right: -8px; background: #ff6b6b; color: #fff; font-size: 0.7rem; font-weight: 900; padding: 4px 8px; border-radius: 12px; border: 2px solid #ffffff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    .btn-select-toy { background: linear-gradient(90deg, #ffd000 0%, #ffaa00 100%); border: none; border-radius: 99px; padding: 12px; font-size: 0.95rem; font-weight: 900; color: #0b2545; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(255,208,0,0.3); transition: filter 0.2s; }
+    .btn-select-toy:active { transform: scale(0.97); filter: brightness(0.9); }
 
-    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; font-weight: 800; font-size: 0.75rem; background: #ffeaa7; color: #d63031; border: 2px solid #fab1a0; }
-    .status-badge.connected { background: #55efc4; color: #00b894; border: 2px solid #00b894; }
+    /* Badge Ativa no Card */
+    .active-tag { position: absolute; top: 12px; right: 12px; background: #ff6b6b; color: white; font-size: 0.75rem; font-weight: 900; padding: 6px 12px; border-radius: 99px; box-shadow: 0 4px 12px rgba(255,107,107,0.4); z-index: 5; }
 
-    .timer-display { text-align: center; margin: 8px 0; }
-    .timer-time { font-size: 3.2rem; font-weight: 900; font-family: monospace; color: #2d3436; letter-spacing: -2px; }
-    .timer-label { font-size: 0.85rem; color: #e17055; font-weight: 800; text-transform: uppercase; }
+    /* Tela de Operação */
+    .container-inner { padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
+    .card-white { background: #ffffff; border-radius: 20px; padding: 16px; border: 2px solid #e2e8f0; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
 
-    .progress-bar-container { width: 100%; height: 12px; background: #dfe6e9; border-radius: 9999px; overflow: hidden; margin-top: 10px; border: 2px solid #b2bec3; }
-    .progress-bar { height: 100%; width: 0%; background: #00b894; transition: width 0.3s ease, background-color 0.3s ease; }
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 99px; font-weight: 800; font-size: 0.75rem; background: #e2e8f0; color: #475569; }
+    .status-badge.connected { background: #dcfce7; color: #16a34a; border: 1px solid #16a34a; }
+
+    .timer-display { text-align: center; margin: 4px 0 10px 0; }
+    .timer-time { font-size: 3.5rem; font-weight: 900; font-family: monospace; color: #0b2545; letter-spacing: -2px; }
+    .timer-label { font-size: 0.8rem; color: #ff6b6b; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+
+    .progress-bar-container { width: 100%; height: 10px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin-top: 8px; }
+    .progress-bar { height: 100%; width: 0%; background: #16a34a; transition: width 0.3s ease; }
 
     .time-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0; }
-    .time-btn { background: #dfe6e9; border: 2px solid #b2bec3; color: #2d3436; padding: 10px; border-radius: 12px; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-align: center; }
-    .time-btn.selected { background: #ff6b6b; border-color: #d63031; color: #fff; }
+    .time-btn { background: #f1f5f9; border: 2px solid #cbd5e1; color: #334155; padding: 10px; border-radius: 12px; font-weight: 800; font-size: 0.85rem; cursor: pointer; text-align: center; }
+    .time-btn.selected { background: #0b2545; border-color: #0b2545; color: #ffd000; }
 
-    .price-tag { text-align: center; font-size: 1.3rem; font-weight: 900; color: #00b894; margin-bottom: 10px; }
+    .price-tag { text-align: center; font-size: 1.25rem; font-weight: 900; color: #16a34a; margin-bottom: 12px; }
 
-    .btn { border: none; border-radius: 14px; padding: 14px; font-size: 1rem; font-weight: 900; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: #fff; width: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    /* Botões Gerais */
+    .btn { border: none; border-radius: 14px; padding: 14px; font-size: 1rem; font-weight: 900; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: #fff; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     .btn:active { transform: scale(0.97); }
 
-    .btn-blue { background: #4d96ff; border: 2px solid #2e86de; }
-    .btn-green { background: #6bcb77; border: 2px solid #00b894; }
-    .btn-yellow { background: #ffd93d; color: #2d3436; border: 2px solid #f1c40f; }
-    .btn-red { background: #ff6b6b; border: 2px solid #ee5253; }
-
+    .btn-blue { background: #0b2545; }
+    .btn-green { background: #16a34a; }
+    .btn-yellow { background: #ffd000; color: #0b2545; }
+    .btn-red { background: #ff6b6b; }
     .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
+    /* Formulários e Listas */
     .form-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-    .form-group label { font-size: 0.85rem; color: #2d3436; font-weight: 700; }
-    .form-input { background: #f1f2f6; border: 2px solid #dfe6e9; border-radius: 10px; padding: 10px; color: #2d3436; font-size: 0.9rem; font-weight: bold; }
+    .form-group label { font-size: 0.85rem; color: #334155; font-weight: 700; }
+    .form-input { background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 10px; padding: 10px; color: #1e293b; font-size: 0.9rem; font-weight: bold; }
 
-    .toy-manage-item { display: flex; align-items: center; justify-content: space-between; background: #f1f2f6; padding: 8px 12px; border-radius: 12px; border: 2px solid #dfe6e9; margin-bottom: 8px; }
-    .toy-thumb { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; border: 2px solid #b2bec3; }
+    .toy-manage-item { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 8px 12px; border-radius: 12px; border: 2px solid #e2e8f0; margin-bottom: 8px; }
+    .toy-thumb { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
 
-    .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; }
-    .menu-box { position: absolute; top: 75px; right: 16px; background: #ffffff; border: 3px solid #ff6b6b; border-radius: 16px; padding: 10px; width: 220px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
-    .menu-item { background: #f1f2f6; border: 2px solid #dfe6e9; color: #2d3436; padding: 10px; font-size: 0.85rem; text-align: left; cursor: pointer; border-radius: 10px; font-weight: 800; display: flex; align-items: center; gap: 8px; }
-    .menu-item:hover { background: #ffeaa7; }
+    /* Rodapé Temático */
+    .footer-banner { text-align: center; padding: 16px; font-size: 0.85rem; font-weight: 800; color: #0b2545; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+    /* Menu Dropdown */
+    .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 100; }
+    .menu-box { position: absolute; top: 75px; right: 16px; background: #ffffff; border-radius: 20px; padding: 10px; width: 230px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); border: 2px solid #e2e8f0; }
+    .menu-item { background: #f8fafc; border: 1px solid #e2e8f0; color: #0b2545; padding: 12px; font-size: 0.88rem; text-align: left; cursor: pointer; border-radius: 12px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+    .menu-item:hover { background: #eff6ff; }
   </style>
 </head>
 <body>
 
   <div class="app-container">
     
-    <div class="top-bar">
-      <div>
-        <h1>Cia dos Brinquedos 🎈</h1>
-        <p id="topSubtitle">Selecione um Kart 🏎️</p>
+    <!-- Topo Estilizado -->
+    <div class="header-banner">
+      <div class="header-logo-area">
+        <div class="header-title">Cia dos Brinquedos</div>
+        <div class="header-subtitle">Aluguel de Brinquedos 🎈</div>
       </div>
-      <button class="btn-icon" onclick="toggleMenu()">⚙️</button>
+      <button class="btn-settings" onclick="toggleMenu()">⚙️</button>
     </div>
 
+    <!-- Menu Dropdown -->
     <div id="menuOverlay" class="menu-overlay" onclick="toggleMenu()">
       <div class="menu-box" onclick="event.stopPropagation()">
         <button class="menu-item" onclick="navegarPara('screen-home')">🏠 Início (Karts)</button>
@@ -104,514 +132,97 @@
 
     <!-- 1. TELA INICIAL -->
     <div id="screen-home" class="screen active">
+      <div class="section-header">
+        <div class="section-title">Selecione um Brinquedo</div>
+        <div class="section-desc">Escolha o brinquedo que deseja alugar</div>
+      </div>
       <div id="toysGrid" class="toys-grid"></div>
+      
+      <div class="footer-banner">
+        <span>⚡ Aqui a diversão não tem hora! 🎮</span>
+      </div>
     </div>
 
     <!-- 2. TELA DE OPERAÇÃO -->
     <div id="screen-operacao" class="screen">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <button class="btn btn-blue" style="width:auto; padding:8px 14px; font-size:0.8rem;" onclick="voltarParaHome()">⬅ Voltar</button>
-        <div id="statusBadge" class="status-badge">
-          <span>⚠️</span> <span id="statusText">Modo Simulação</span>
-        </div>
-      </div>
-
-      <div class="card" style="text-align:center; padding:12px;">
-        <img id="opToyImg" src="" style="width:100%; height:130px; object-fit:cover; border-radius:14px; margin-bottom:8px; border: 2px solid #ff6b6b;">
-        <h2 id="opToyName" style="font-size:1.3rem; color:#ff6b6b;">Nome do Kart</h2>
-      </div>
-
-      <div class="card">
-        <div class="timer-display">
-          <div class="timer-label" id="timerStateLabel">Pronto para Diversão!</div>
-          <div class="timer-time" id="timeDisplay">05:00</div>
-          <div class="progress-bar-container">
-            <div class="progress-bar" id="progressBar"></div>
+      <div class="container-inner">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <button class="btn btn-blue" style="width:auto; padding:8px 16px; font-size:0.85rem;" onclick="voltarParaHome()">⬅ Voltar</button>
+          <div id="statusBadge" class="status-badge">
+            <span>⚠️</span> <span id="statusText">Modo Simulação</span>
           </div>
         </div>
 
-        <div id="setupArea">
-          <div class="time-selector">
-            <button class="time-btn selected" onclick="selecionarTempo(5, 5.00, this)">5 Min</button>
-            <button class="time-btn" onclick="selecionarTempo(10, 10.00, this)">10 Min</button>
-            <button class="time-btn" onclick="selecionarTempo(15, 15.00, this)">15 Min</button>
+        <div class="toy-modern-card" style="box-shadow: none;">
+          <div class="toy-img-container" style="height: 150px;">
+            <img id="opToyImg" src="" alt="Kart">
           </div>
-          <div class="price-tag" id="priceTag">Preço: R$ 5,00</div>
-          <button class="btn btn-green" onclick="iniciarCorrida()">🚀 INICIAR DIVERSÃO!</button>
+          <div class="toy-info-body" style="padding: 10px 14px;">
+            <div id="opToyName" class="toy-card-name" style="font-size: 1.1rem; text-align: center;">Nome do Kart</div>
+          </div>
         </div>
 
-        <div id="controlArea" style="display:none;" class="btn-grid">
-          <button class="btn btn-yellow" id="btnPause" onclick="pausarOuRetomar()">⏸️ PAUSAR</button>
-          <button class="btn btn-red" onclick="pararEmergencia()">🛑 PARAR AGORA</button>
+        <div class="card-white">
+          <div class="timer-display">
+            <div class="timer-label" id="timerStateLabel">Pronto para a Aventura!</div>
+            <div class="timer-time" id="timeDisplay">05:00</div>
+            <div class="progress-bar-container">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
+          </div>
+
+          <div id="setupArea">
+            <div class="time-selector">
+              <button class="time-btn selected" onclick="selecionarTempo(5, 5.00, this)">5 Min</button>
+              <button class="time-btn" onclick="selecionarTempo(10, 10.00, this)">10 Min</button>
+              <button class="time-btn" onclick="selecionarTempo(15, 15.00, this)">15 Min</button>
+            </div>
+            <div class="price-tag" id="priceTag">Valor: R$ 5,00</div>
+            <button class="btn btn-green" onclick="iniciarCorrida()">🚀 INICIAR CORRIDA</button>
+          </div>
+
+          <div id="controlArea" style="display:none;" class="btn-grid">
+            <button class="btn btn-yellow" id="btnPause" onclick="pausarOuRetomar()">⏸️ PAUSAR</button>
+            <button class="btn btn-red" onclick="pararEmergencia()">🛑 PARAR AGORA</button>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- 3. TELA DE GERENCIAR KARTS -->
     <div id="screen-cadastrar" class="screen">
-      <div class="card">
-        <h3 style="font-size:1.1rem; margin-bottom:10px; color:#ff6b6b;">🎨 Adicionar Novo Kart</h3>
-        <div class="form-group">
-          <label>Nome do Carrinho</label>
-          <input type="text" id="inputToyName" class="form-input" placeholder="Ex: DRIFT AZUL 002">
+      <div class="container-inner">
+        <div class="card-white">
+          <h3 style="font-size:1.1rem; margin-bottom:12px; color:var(--header-blue);">🎨 Cadastrar Novo Brinquedo</h3>
+          <div class="form-group">
+            <label>Nome / Identificação</label>
+            <input type="text" id="inputToyName" class="form-input" placeholder="Ex: DRIFT AZUL 002">
+          </div>
+          <div class="form-group">
+            <label>Foto do Brinquedo</label>
+            <input type="file" id="inputToyPhoto" accept="image/*" class="form-input">
+          </div>
+          <button class="btn btn-blue" onclick="salvarKart()">Salvar Carrinho 🏎️</button>
         </div>
-        <div class="form-group">
-          <label>Foto Colorida</label>
-          <input type="file" id="inputToyPhoto" accept="image/*" class="form-input">
-        </div>
-        <button class="btn btn-green" onclick="salvarKart()">Salvar Carrinho 🏎️</button>
-      </div>
 
-      <div class="card">
-        <h3 style="font-size:1.1rem; margin-bottom:10px; color:#4d96ff;">📋 Carrinhos Cadastrados</h3>
-        <div id="toysManageList"></div>
+        <div class="card-white">
+          <h3 style="font-size:1.1rem; margin-bottom:10px; color:var(--header-blue);">📋 Carrinhos Cadastrados</h3>
+          <div id="toysManageList"></div>
+        </div>
       </div>
     </div>
 
     <!-- 4. TELA BLUETOOTH -->
     <div id="screen-bluetooth" class="screen">
-      <div class="card" style="text-align: center;">
-        <h3 style="color:#4d96ff; margin-bottom:8px;">Conexão Bluetooth ESP32</h3>
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:16px;">Toque abaixo para parear com o ESP32 do carrinho via Web Bluetooth (BLE).</p>
-        <button class="btn btn-blue" onclick="conectarBluetooth()">Conectar ao ESP32 📡</button>
+      <div class="container-inner">
+        <div class="card-white" style="text-align: center; padding: 24px;">
+          <h3 style="color:var(--header-blue); margin-bottom:8px;">Conexão Bluetooth ESP32</h3>
+          <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:20px;">Pareie com o hardware ESP32 do carrinho via Web Bluetooth (BLE).</p>
+          <button class="btn btn-blue" onclick="conectarBluetooth()">Conectar ao ESP32 📡</button>
+        </div>
       </div>
     </div>
 
     <!-- 5. TELA CAIXA DO DIA -->
     <div id="screen-caixa" class="screen">
-      <div class="card" style="text-align: center;">
-        <h3 style="color:#00b894; margin-bottom:12px;">💰 Caixa do Dia</h3>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
-          <div style="background:#f1f2f6; padding:12px; border-radius:12px; border:2px solid #dfe6e9;">
-            <div id="statRides" style="font-size:1.5rem; font-weight:900; color:#ff6b6b;">0</div>
-            <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Corridas</div>
-          </div>
-          <div style="background:#f1f2f6; padding:12px; border-radius:12px; border:2px solid #dfe6e9;">
-            <div id="statTotal" style="font-size:1.5rem; font-weight:900; color:#00b894;">R$ 0,00</div>
-            <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Faturamento</div>
-          </div>
-        </div>
-        <button class="btn btn-red" style="font-size:0.85rem; padding:10px;" onclick="zerarCaixa()">Zerar Caixa 🔄</button>
-      </div>
-    </div>
-
-  </div>
-
-  <script>
-    const SERVICE_UUID = "4fa1c201-222d-4b93-9fb6-52c1e7f32d88";
-    const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
-
-    let bluetoothDevice;
-    let caracteristicaBLE;
-    let uiTimerInterval = null;
-    let globalCheckInterval = null;
-
-    let tempoSelecionadoMinutos = 5;
-    let valorSelecionado = 5.00;
-    let kartAtualObj = null;
-
-    window.onload = function() {
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      if (toys.length === 0) {
-        toys.push({ id: 'drift_002', name: 'DRIFT AZUL 002', photo: '' });
-        localStorage.setItem('drift_toys', JSON.stringify(toys));
-      }
-
-      carregarKartsHome();
-      atualizarCaixaUI();
-
-      // Atualizador Global para monitorizar o fim de qualquer corrida mesmo em segundo plano
-      if (globalCheckInterval) clearInterval(globalCheckInterval);
-      globalCheckInterval = setInterval(verificarTodasCorridas, 1000);
-    };
-
-    function toggleMenu() {
-      const menu = document.getElementById('menuOverlay');
-      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-    }
-
-    function navegarPara(screenId) {
-      if (uiTimerInterval) clearInterval(uiTimerInterval);
-
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(screenId).classList.add('active');
-      document.getElementById('menuOverlay').style.display = 'none';
-
-      if (screenId === 'screen-home') {
-        document.getElementById('topSubtitle').innerText = "Selecione um Kart 🏎️";
-        carregarKartsHome();
-      } else if (screenId === 'screen-cadastrar') {
-        document.getElementById('topSubtitle').innerText = "Cadastrar Karts 🎨";
-        carregarKartsGerenciador();
-      } else if (screenId === 'screen-caixa') {
-        document.getElementById('topSubtitle').innerText = "Caixa do Dia 💰";
-      } else if (screenId === 'screen-bluetooth') {
-        document.getElementById('topSubtitle').innerText = "Conexão BLE 📡";
-      }
-    }
-
-    function voltarParaHome() {
-      if (uiTimerInterval) clearInterval(uiTimerInterval);
-      kartAtualObj = null;
-      navegarPara('screen-home');
-    }
-
-    // Carregar Karts e calcular status em tempo real
-    function carregarKartsHome() {
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      const grid = document.getElementById('toysGrid');
-      grid.innerHTML = '';
-
-      toys.forEach(toy => {
-        const rideData = getCorridaKart(toy.id);
-        let badgeHTML = '';
-
-        if (rideData && rideData.status === 'RUNNING') {
-          const tempoRestanteSec = Math.max(0, Math.floor((rideData.endTime - Date.now()) / 1000));
-          if (tempoRestanteSec > 0) {
-            const min = Math.floor(tempoRestanteSec / 60);
-            const seg = tempoRestanteSec % 60;
-            const textTime = `${String(min).padStart(2,'0')}:${String(seg).padStart(2,'0')}`;
-            badgeHTML = `<div class="active-ride-badge">⏱️ ${textTime}</div>`;
-          }
-        } else if (rideData && rideData.status === 'PAUSED') {
-          badgeHTML = `<div class="active-ride-badge" style="background:#ffd93d; color:#000;">⏸️ PAUSADO</div>`;
-        }
-
-        const card = document.createElement('div');
-        card.className = 'toy-card';
-        card.onclick = () => abrirOperacaoKart(toy);
-        card.innerHTML = `
-          ${badgeHTML}
-          <img src="${toy.photo || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ffeaa7%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2235%22>🏎️</text></svg>'}" class="toy-card-img">
-          <div class="toy-card-title">${toy.name}</div>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function abrirOperacaoKart(toy) {
-      kartAtualObj = toy;
-      document.getElementById('opToyName').innerText = toy.name;
-      document.getElementById('opToyImg').src = toy.photo || '';
-      document.getElementById('topSubtitle').innerText = "Operação: " + toy.name;
-      
-      renderizarInterfaceKart(toy.id);
-      navegarPara('screen-operacao');
-    }
-
-    function selecionarTempo(minutos, valor, btn) {
-      document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-
-      tempoSelecionadoMinutos = minutos;
-      valorSelecionado = valor;
-
-      document.getElementById('priceTag').innerText = `Preço: R$ ${valor.toFixed(2).replace('.', ',')}`;
-      
-      const minStr = String(minutos).padStart(2, '0');
-      document.getElementById('timeDisplay').innerText = `${minStr}:00`;
-    }
-
-    // Estrutura de armazenamento persistente individual por Kart
-    function getCorridaKart(toyId) {
-      const data = localStorage.getItem('drift_ride_' + toyId);
-      return data ? JSON.parse(data) : null;
-    }
-
-    function setCorridaKart(toyId, rideObj) {
-      if (rideObj === null) {
-        localStorage.removeItem('drift_ride_' + toyId);
-      } else {
-        localStorage.setItem('drift_ride_' + toyId, JSON.stringify(rideObj));
-      }
-    }
-
-    // Renderiza o estado correto da tela para o Kart ativo
-    function renderizarInterfaceKart(toyId) {
-      if (uiTimerInterval) clearInterval(uiTimerInterval);
-
-      const ride = getCorridaKart(toyId);
-
-      if (!ride || ride.status === 'STOPPED') {
-        document.getElementById('setupArea').style.display = 'block';
-        document.getElementById('controlArea').style.display = 'none';
-        document.getElementById('timerStateLabel').innerText = "Pronto para Diversão!";
-        
-        const minStr = String(tempoSelecionadoMinutos).padStart(2, '0');
-        document.getElementById('timeDisplay').innerText = `${minStr}:00`;
-        document.getElementById('progressBar').style.width = '0%';
-        return;
-      }
-
-      document.getElementById('setupArea').style.display = 'none';
-      document.getElementById('controlArea').style.display = 'grid';
-
-      atualizarCronometroKartUI(toyId);
-      uiTimerInterval = setInterval(() => atualizarCronometroKartUI(toyId), 1000);
-    }
-
-    function atualizarCronometroKartUI(toyId) {
-      const ride = getCorridaKart(toyId);
-      if (!ride) {
-        renderizarInterfaceKart(toyId);
-        return;
-      }
-
-      let restanteSec = 0;
-
-      if (ride.status === 'RUNNING') {
-        restanteSec = Math.max(0, Math.floor((ride.endTime - Date.now()) / 1000));
-        document.getElementById('timerStateLabel').innerText = "🏁 CORRIDA A DECORRER!";
-        
-        const btnPause = document.getElementById('btnPause');
-        btnPause.innerText = "⏸️ PAUSAR";
-        btnPause.className = "btn btn-yellow";
-
-        if (restanteSec <= 0) {
-          finalizarCorrida(toyId);
-          return;
-        }
-      } else if (ride.status === 'PAUSED') {
-        restanteSec = ride.remainingSecOnPause;
-        document.getElementById('timerStateLabel').innerText = "⏸️ PAUSADO";
-        
-        const btnPause = document.getElementById('btnPause');
-        btnPause.innerText = "▶️ RETOMAR";
-        btnPause.className = "btn btn-green";
-      }
-
-      const min = Math.floor(restanteSec / 60);
-      const seg = restanteSec % 60;
-      document.getElementById('timeDisplay').innerText = `${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}`;
-
-      const totalSec = ride.totalDurationSec;
-      const pct = totalSec > 0 ? ((totalSec - restanteSec) / totalSec) * 100 : 0;
-      document.getElementById('progressBar').style.width = `${Math.min(100, pct)}%`;
-    }
-
-    // Ações da Corrida
-    async function iniciarCorrida() {
-      if (!kartAtualObj) return;
-
-      if (await enviarComando("INICIAR")) {
-        const durationSec = tempoSelecionadoMinutos * 60;
-        const ride = {
-          toyId: kartAtualObj.id,
-          status: 'RUNNING',
-          endTime: Date.now() + (durationSec * 1000),
-          totalDurationSec: durationSec,
-          remainingSecOnPause: 0
-        };
-
-        setCorridaKart(kartAtualObj.id, ride);
-        registarVenda(valorSelecionado);
-        renderizarInterfaceKart(kartAtualObj.id);
-      }
-    }
-
-    async function pausarOuRetomar() {
-      if (!kartAtualObj) return;
-      const toyId = kartAtualObj.id;
-      const ride = getCorridaKart(toyId);
-
-      if (!ride) return;
-
-      if (ride.status === 'RUNNING') {
-        if (await enviarComando("PARAR")) {
-          const restanteSec = Math.max(0, Math.floor((ride.endTime - Date.now()) / 1000));
-          ride.status = 'PAUSED';
-          ride.remainingSecOnPause = restanteSec;
-          setCorridaKart(toyId, ride);
-          renderizarInterfaceKart(toyId);
-        }
-      } else if (ride.status === 'PAUSED') {
-        if (await enviarComando("INICIAR")) {
-          ride.status = 'RUNNING';
-          ride.endTime = Date.now() + (ride.remainingSecOnPause * 1000);
-          setCorridaKart(toyId, ride);
-          renderizarInterfaceKart(toyId);
-        }
-      }
-    }
-
-    async function pararEmergencia() {
-      if (!kartAtualObj) return;
-      await enviarComando("PARAR");
-      finalizarCorrida(kartAtualObj.id);
-    }
-
-    function finalizarCorrida(toyId) {
-      setCorridaKart(toyId, null);
-      if (kartAtualObj && kartAtualObj.id === toyId) {
-        document.getElementById('timerStateLabel').innerText = "⏰ TEMPO ESGOTADO!";
-        renderizarInterfaceKart(toyId);
-      }
-    }
-
-    // Monitora encerramento das corridas de todos os brinquedos
-    function verificarTodasCorridas() {
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      let houveAlteracao = false;
-
-      toys.forEach(toy => {
-        const ride = getCorridaKart(toy.id);
-        if (ride && ride.status === 'RUNNING') {
-          const restante = Math.floor((ride.endTime - Date.now()) / 1000);
-          if (restante <= 0) {
-            finalizarCorrida(toy.id);
-            houveAlteracao = true;
-          }
-        }
-      });
-
-      const currentScreen = document.querySelector('.screen.active');
-      if (currentScreen && currentScreen.id === 'screen-home') {
-        carregarKartsHome();
-      }
-    }
-
-    // Bluetooth
-    async function conectarBluetooth() {
-      try {
-        actualizarStatusBLE("Procurando ESP32...", false);
-        bluetoothDevice = await navigator.bluetooth.requestDevice({
-          filters: [{ namePrefix: 'Drift' }],
-          optionalServices: [SERVICE_UUID]
-        });
-
-        const server = await bluetoothDevice.gatt.connect();
-        const service = await server.getPrimaryService(SERVICE_UUID);
-        caracteristicaBLE = await service.getCharacteristic(CHARACTERISTIC_UUID);
-
-        actualizarStatusBLE("Conectado ao ESP32!", true);
-        alert("Bluetooth conectado com sucesso!");
-        navegarPara('screen-home');
-      } catch (error) {
-        console.error(error);
-        actualizarStatusBLE("Modo Simulação", false);
-        alert("Modo Simulação ativo! O cronômetro funcionará em segundo plano perfeitamente.");
-      }
-    }
-
-    function actualizarStatusBLE(texto, conectado) {
-      const badge = document.getElementById('statusBadge');
-      const statusText = document.getElementById('statusText');
-      if (statusText) statusText.innerText = texto;
-      if (badge) {
-        if (conectado) {
-          badge.className = "status-badge connected";
-          badge.innerHTML = '<span>🟢</span> <span id="statusText">' + texto + '</span>';
-        } else {
-          badge.className = "status-badge";
-          badge.innerHTML = '<span>⚠️</span> <span id="statusText">' + texto + '</span>';
-        }
-      }
-    }
-
-    async function enviarComando(comando) {
-      if (!caracteristicaBLE) {
-        console.log("Comando enviado (Simulação): " + comando);
-        return true;
-      }
-      try {
-        const encoder = new TextEncoder();
-        await caracteristicaBLE.writeValue(encoder.encode(comando));
-        return true;
-      } catch (error) {
-        console.error("Erro BLE:", error);
-        alert("Falha de envio para o ESP32!");
-        return false;
-      }
-    }
-
-    // Cadastro
-    function salvarKart() {
-      const name = document.getElementById('inputToyName').value.trim();
-      const photoInput = document.getElementById('inputToyPhoto');
-
-      if (!name) return alert("Digite o nome do carrinho!");
-
-      if (photoInput.files && photoInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          guardarStorage(name, e.target.result);
-        };
-        reader.readAsDataURL(photoInput.files[0]);
-      } else {
-        guardarStorage(name, "");
-      }
-    }
-
-    function guardarStorage(name, photoBase64) {
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      toys.push({ id: 'drift_' + Date.now(), name: name, photo: photoBase64 });
-      localStorage.setItem('drift_toys', JSON.stringify(toys));
-
-      document.getElementById('inputToyName').value = '';
-      document.getElementById('inputToyPhoto').value = '';
-      carregarKartsGerenciador();
-      alert("Carrinho cadastrado com sucesso! 🎉");
-      navegarPara('screen-home');
-    }
-
-    function carregarKartsGerenciador() {
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      const container = document.getElementById('toysManageList');
-      container.innerHTML = '';
-
-      if (toys.length === 0) {
-        container.innerHTML = '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum carrinho cadastrado.</p>';
-        return;
-      }
-
-      toys.forEach(toy => {
-        const item = document.createElement('div');
-        item.className = 'toy-manage-item';
-        item.innerHTML = `
-          <div style="display:flex; align-items:center; gap:10px;">
-            <img src="${toy.photo || ''}" class="toy-thumb">
-            <span style="font-size:0.9rem; font-weight:800; color:#2d3436;">${toy.name}</span>
-          </div>
-          <button class="btn btn-red" style="padding:6px 10px; font-size:0.75rem; border-radius:8px; width:auto;" onclick="excluirKart('${toy.id}')">Excluir</button>
-        `;
-        container.appendChild(item);
-      });
-    }
-
-    function excluirKart(id) {
-      if (confirm("Deseja apagar este carrinho?")) {
-        let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-        toys = toys.filter(t => t.id !== id);
-        localStorage.setItem('drift_toys', JSON.stringify(toys));
-        setCorridaKart(id, null);
-        carregarKartsGerenciador();
-      }
-    }
-
-    // Caixa
-    function registarVenda(valor) {
-      let rides = parseInt(localStorage.getItem('drift_rides') || '0') + 1;
-      let total = parseFloat(localStorage.getItem('drift_total') || '0.0') + valor;
-      localStorage.setItem('drift_rides', rides);
-      localStorage.setItem('drift_total', total);
-      atualizarCaixaUI();
-    }
-
-    function atualizarCaixaUI() {
-      let rides = localStorage.getItem('drift_rides') || '0';
-      let total = parseFloat(localStorage.getItem('drift_total') || '0.0');
-      document.getElementById('statRides').innerText = rides;
-      document.getElementById('statTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-    }
-
-    function zerarCaixa() {
-      if (confirm("Deseja zerar o caixa do dia?")) {
-        localStorage.setItem('drift_rides', '0');
-        localStorage.setItem('drift_total', '0');
-        atualizarCaixaUI();
-      }
-    }
-  </script>
-</body>
-</html>
+      <div class="container-inner">
