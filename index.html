@@ -19,10 +19,10 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; }
     body { background-color: var(--bg-cream); color: var(--text-dark); min-height: 100vh; display: flex; justify-content: center; padding: 0 0 40px 0; }
 
-    .app-container { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; }
+    .app-container { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; position: relative; }
 
     /* Topo Moderno Temático */
-    .header-banner { background: linear-gradient(135deg, #0b2545 0%, #134074 100%); padding: 20px 16px; border-bottom-left-radius: 28px; border-bottom-right-radius: 28px; box-shadow: 0 10px 25px rgba(11,37,69,0.25); display: flex; justify-content: space-between; align-items: center; position: relative; }
+    .header-banner { background: linear-gradient(135deg, #0b2545 0%, #134074 100%); padding: 20px 16px; border-bottom-left-radius: 28px; border-bottom-right-radius: 28px; box-shadow: 0 10px 25px rgba(11,37,69,0.25); display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 10; }
     .header-logo-area { display: flex; flex-direction: column; gap: 2px; }
     .header-title { font-size: 1.4rem; font-weight: 900; color: #ffd000; text-transform: uppercase; text-shadow: 2px 2px 0px #ff6b6b; letter-spacing: 0.5px; }
     .header-subtitle { font-size: 0.8rem; color: #90e0ef; font-weight: 700; letter-spacing: 1px; }
@@ -43,9 +43,8 @@
     .toys-grid { display: flex; flex-direction: column; gap: 16px; padding: 0 16px; }
     .toy-modern-card { background: var(--card-dark); border-radius: 24px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 12px 30px rgba(10,25,47,0.3); display: flex; flex-direction: column; position: relative; }
     
-    .toy-img-container { width: 100%; height: 180px; position: background; background: #000; overflow: hidden; }
+    .toy-img-container { width: 100%; height: 180px; background: #000; overflow: hidden; }
     .toy-img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-    .toy-modern-card:hover img { transform: scale(1.03); }
 
     .toy-info-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
     .toy-card-name { font-size: 1.15rem; font-weight: 900; color: #ffffff; letter-spacing: 0.5px; }
@@ -97,12 +96,11 @@
     .toy-manage-item { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 8px 12px; border-radius: 12px; border: 2px solid #e2e8f0; margin-bottom: 8px; }
     .toy-thumb { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
 
-    /* Rodapé Temático */
     .footer-banner { text-align: center; padding: 16px; font-size: 0.85rem; font-weight: 800; color: #0b2545; display: flex; align-items: center; justify-content: center; gap: 6px; }
 
-    /* Menu Dropdown */
-    .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 100; }
-    .menu-box { position: absolute; top: 75px; right: 16px; background: #ffffff; border-radius: 20px; padding: 10px; width: 230px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); border: 2px solid #e2e8f0; }
+    /* Menu Dropdown Corrigido com z-index alto */
+    .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+    .menu-box { position: absolute; top: 75px; right: 16px; background: #ffffff; border-radius: 20px; padding: 10px; width: 230px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); border: 2px solid #e2e8f0; z-index: 1000; }
     .menu-item { background: #f8fafc; border: 1px solid #e2e8f0; color: #0b2545; padding: 12px; font-size: 0.88rem; text-align: left; cursor: pointer; border-radius: 12px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
     .menu-item:hover { background: #eff6ff; }
   </style>
@@ -298,7 +296,6 @@
       navegarPara('screen-home');
     }
 
-    // Gerador de Som de Alarme (Alerta Sonoro)
     function tocarAlarmeFim() {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -311,7 +308,7 @@
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.type = 'square';
-          osc.frequency.setValueAtTime(880, audioCtx.currentTime); // Tom agudo
+          osc.frequency.setValueAtTime(880, audioCtx.currentTime);
           gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
@@ -320,15 +317,19 @@
           beepCount++;
         }, 350);
       } catch (e) {
-        console.log("Áudio bloqueado pelo navegador até haver toque na tela.");
+        console.log("Áudio aguardando interação.");
       }
     }
 
-    // Carregar Karts com o Novo Layout Moderno
     function carregarKartsHome() {
       let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
       const grid = document.getElementById('toysGrid');
       grid.innerHTML = '';
+
+      if (toys.length === 0) {
+        grid.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:20px;">Nenhum brinquedo cadastrado.</p>';
+        return;
+      }
 
       toys.forEach((toy, index) => {
         const rideData = getCorridaKart(toy.id);
@@ -346,8 +347,8 @@
         }
 
         const defaultImg = index % 2 === 0 
-          ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffd000" font-size="22" font-family="sans-serif" font-weight="bold">🏎️ DRIFT PRETO</text></svg>'
-          : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300b4d8" font-size="22" font-family="sans-serif" font-weight="bold">🏎️ DRIFT AZUL</text></svg>';
+          ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffd000" font-size="22" font-weight="bold">🏎️ DRIFT PRETO</text></svg>'
+          : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%2300b4d8" font-size="22" font-weight="bold">🏎️ DRIFT AZUL</text></svg>';
 
         const card = document.createElement('div');
         card.className = 'toy-modern-card';
@@ -373,7 +374,8 @@
     function abrirOperacaoKart(toy) {
       kartAtualObj = toy;
       document.getElementById('opToyName').innerText = toy.name;
-      document.getElementById('opToyImg').src = toy.photo || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffd000" font-size="20">🏎️ Kart</text></svg>';
+      const defaultImg = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="180"><rect width="300" height="180" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffd000" font-size="20">🏎️ Kart</text></svg>';
+      document.getElementById('opToyImg').src = toy.photo || defaultImg;
       
       renderizarInterfaceKart(toy.id);
       navegarPara('screen-operacao');
@@ -520,8 +522,6 @@
 
     function verificarTodasCorridas() {
       let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      let houveAlarme = false;
-
       toys.forEach(toy => {
         const ride = getCorridaKart(toy.id);
         if (ride && ride.status === 'RUNNING') {
@@ -529,7 +529,6 @@
           if (restante <= 0) {
             tocarAlarmeFim();
             setCorridaKart(toy.id, null);
-            houveAlarme = true;
           }
         }
       });
@@ -540,7 +539,6 @@
       }
     }
 
-    // Bluetooth
     async function conectarBluetooth() {
       try {
         actualizarStatusBLE("Procurando ESP32...", false);
@@ -590,7 +588,6 @@
       }
     }
 
-    // Cadastro
     function salvarKart() {
       const name = document.getElementById('inputToyName').value.trim();
       const photoInput = document.getElementById('inputToyPhoto');
@@ -625,6 +622,11 @@
       const container = document.getElementById('toysManageList');
       container.innerHTML = '';
 
+      if (toys.length === 0) {
+        container.innerHTML = '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum carrinho cadastrado.</p>';
+        return;
+      }
+
       toys.forEach(toy => {
         const item = document.createElement('div');
         item.className = 'toy-manage-item';
@@ -649,7 +651,6 @@
       }
     }
 
-    // Caixa
     function registarVenda(valor) {
       let rides = parseInt(localStorage.getItem('drift_rides') || '0') + 1;
       let total = parseFloat(localStorage.getItem('drift_total') || '0.0') + valor;
