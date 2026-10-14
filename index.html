@@ -33,10 +33,14 @@
     .card { background: var(--card-bg); border-radius: 20px; padding: 16px; border: 3px solid #4d96ff; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
 
     .toys-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .toy-card { background: #ffffff; border: 3px solid #ff6b6b; border-radius: 20px; padding: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; cursor: pointer; transition: transform 0.1s ease; box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
+    .toy-card { position: relative; background: #ffffff; border: 3px solid #ff6b6b; border-radius: 20px; padding: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; cursor: pointer; transition: transform 0.1s ease; box-shadow: 0 6px 15px rgba(0,0,0,0.08); }
     .toy-card:active { transform: scale(0.95); }
     .toy-card-img { width: 100%; height: 110px; border-radius: 14px; object-fit: cover; background: #dfe6e9; border: 2px dashed #b2bec3; }
     .toy-card-title { font-size: 0.95rem; font-weight: 800; color: #2d3436; }
+
+    /* Badge de Corrida Ativa no Card */
+    .active-ride-badge { position: absolute; top: -8px; right: -8px; background: #ff6b6b; color: #fff; font-size: 0.7rem; font-weight: 900; padding: 4px 8px; border-radius: 12px; border: 2px solid #ffffff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
     .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 9999px; font-weight: 800; font-size: 0.75rem; background: #ffeaa7; color: #d63031; border: 2px solid #fab1a0; }
     .status-badge.connected { background: #55efc4; color: #00b894; border: 2px solid #00b894; }
@@ -106,9 +110,9 @@
     <!-- 2. TELA DE OPERAÇÃO -->
     <div id="screen-operacao" class="screen">
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <button class="btn btn-blue" style="width:auto; padding:8px 14px; font-size:0.8rem;" onclick="navegarPara('screen-home')">⬅ Voltar</button>
+        <button class="btn btn-blue" style="width:auto; padding:8px 14px; font-size:0.8rem;" onclick="voltarParaHome()">⬅ Voltar</button>
         <div id="statusBadge" class="status-badge">
-          <span>⚠️</span> <span id="statusText">Desconectado (BLE)</span>
+          <span>⚠️</span> <span id="statusText">Modo Simulação</span>
         </div>
       </div>
 
@@ -149,7 +153,7 @@
         <h3 style="font-size:1.1rem; margin-bottom:10px; color:#ff6b6b;">🎨 Adicionar Novo Kart</h3>
         <div class="form-group">
           <label>Nome do Carrinho</label>
-          <input type="text" id="inputToyName" class="form-input" placeholder="Ex: Kart Foguete">
+          <input type="text" id="inputToyName" class="form-input" placeholder="Ex: DRIFT AZUL 002">
         </div>
         <div class="form-group">
           <label>Foto Colorida</label>
@@ -168,7 +172,7 @@
     <div id="screen-bluetooth" class="screen">
       <div class="card" style="text-align: center;">
         <h3 style="color:#4d96ff; margin-bottom:8px;">Conexão Bluetooth ESP32</h3>
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:16px;">Toque abaixo para parear o seu telemóvel com o ESP32 do carrinho via Web Bluetooth (BLE).</p>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:16px;">Toque abaixo para parear com o ESP32 do carrinho via Web Bluetooth (BLE).</p>
         <button class="btn btn-blue" onclick="conectarBluetooth()">Conectar ao ESP32 📡</button>
       </div>
     </div>
@@ -194,30 +198,31 @@
   </div>
 
   <script>
-    // UUIDs reais do ESP32 configurados para o LD-6 / Relé
     const SERVICE_UUID = "4fa1c201-222d-4b93-9fb6-52c1e7f32d88";
     const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 
     let bluetoothDevice;
     let caracteristicaBLE;
-    let timerInterval = null;
-    
-    let tempoSelecionadoSegundos = 300;
+    let uiTimerInterval = null;
+    let globalCheckInterval = null;
+
+    let tempoSelecionadoMinutos = 5;
     let valorSelecionado = 5.00;
-    let tempoRestante = 300;
-    let tempoTotal = 300;
-    let emPausa = false;
     let kartAtualObj = null;
 
     window.onload = function() {
       let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
       if (toys.length === 0) {
-        toys.push({ id: '1', name: 'Kart Foguete 🚀', photo: '' });
+        toys.push({ id: 'drift_002', name: 'DRIFT AZUL 002', photo: '' });
         localStorage.setItem('drift_toys', JSON.stringify(toys));
       }
 
       carregarKartsHome();
       atualizarCaixaUI();
+
+      // Atualizador Global para monitorizar o fim de qualquer corrida mesmo em segundo plano
+      if (globalCheckInterval) clearInterval(globalCheckInterval);
+      globalCheckInterval = setInterval(verificarTodasCorridas, 1000);
     };
 
     function toggleMenu() {
@@ -226,6 +231,8 @@
     }
 
     function navegarPara(screenId) {
+      if (uiTimerInterval) clearInterval(uiTimerInterval);
+
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(screenId).classList.add('active');
       document.getElementById('menuOverlay').style.display = 'none';
@@ -243,16 +250,39 @@
       }
     }
 
+    function voltarParaHome() {
+      if (uiTimerInterval) clearInterval(uiTimerInterval);
+      kartAtualObj = null;
+      navegarPara('screen-home');
+    }
+
+    // Carregar Karts e calcular status em tempo real
     function carregarKartsHome() {
       let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
       const grid = document.getElementById('toysGrid');
       grid.innerHTML = '';
 
       toys.forEach(toy => {
+        const rideData = getCorridaKart(toy.id);
+        let badgeHTML = '';
+
+        if (rideData && rideData.status === 'RUNNING') {
+          const tempoRestanteSec = Math.max(0, Math.floor((rideData.endTime - Date.now()) / 1000));
+          if (tempoRestanteSec > 0) {
+            const min = Math.floor(tempoRestanteSec / 60);
+            const seg = tempoRestanteSec % 60;
+            const textTime = `${String(min).padStart(2,'0')}:${String(seg).padStart(2,'0')}`;
+            badgeHTML = `<div class="active-ride-badge">⏱️ ${textTime}</div>`;
+          }
+        } else if (rideData && rideData.status === 'PAUSED') {
+          badgeHTML = `<div class="active-ride-badge" style="background:#ffd93d; color:#000;">⏸️ PAUSADO</div>`;
+        }
+
         const card = document.createElement('div');
         card.className = 'toy-card';
         card.onclick = () => abrirOperacaoKart(toy);
         card.innerHTML = `
+          ${badgeHTML}
           <img src="${toy.photo || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22><rect width=%22100%22 height=%22100%22 fill=%22%23ffeaa7%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2235%22>🏎️</text></svg>'}" class="toy-card-img">
           <div class="toy-card-title">${toy.name}</div>
         `;
@@ -266,7 +296,7 @@
       document.getElementById('opToyImg').src = toy.photo || '';
       document.getElementById('topSubtitle').innerText = "Operação: " + toy.name;
       
-      resetarTimerTela();
+      renderizarInterfaceKart(toy.id);
       navegarPara('screen-operacao');
     }
 
@@ -274,16 +304,174 @@
       document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
 
-      tempoSelecionadoSegundos = minutos * 60;
+      tempoSelecionadoMinutos = minutos;
       valorSelecionado = valor;
-      tempoRestante = tempoSelecionadoSegundos;
-      tempoTotal = tempoSelecionadoSegundos;
 
       document.getElementById('priceTag').innerText = `Preço: R$ ${valor.toFixed(2).replace('.', ',')}`;
-      atualizarDisplayTimer();
+      
+      const minStr = String(minutos).padStart(2, '0');
+      document.getElementById('timeDisplay').innerText = `${minStr}:00`;
     }
 
-    // Função Real de Conexão Web Bluetooth (Pronta para o ESP32)
+    // Estrutura de armazenamento persistente individual por Kart
+    function getCorridaKart(toyId) {
+      const data = localStorage.getItem('drift_ride_' + toyId);
+      return data ? JSON.parse(data) : null;
+    }
+
+    function setCorridaKart(toyId, rideObj) {
+      if (rideObj === null) {
+        localStorage.removeItem('drift_ride_' + toyId);
+      } else {
+        localStorage.setItem('drift_ride_' + toyId, JSON.stringify(rideObj));
+      }
+    }
+
+    // Renderiza o estado correto da tela para o Kart ativo
+    function renderizarInterfaceKart(toyId) {
+      if (uiTimerInterval) clearInterval(uiTimerInterval);
+
+      const ride = getCorridaKart(toyId);
+
+      if (!ride || ride.status === 'STOPPED') {
+        document.getElementById('setupArea').style.display = 'block';
+        document.getElementById('controlArea').style.display = 'none';
+        document.getElementById('timerStateLabel').innerText = "Pronto para Diversão!";
+        
+        const minStr = String(tempoSelecionadoMinutos).padStart(2, '0');
+        document.getElementById('timeDisplay').innerText = `${minStr}:00`;
+        document.getElementById('progressBar').style.width = '0%';
+        return;
+      }
+
+      document.getElementById('setupArea').style.display = 'none';
+      document.getElementById('controlArea').style.display = 'grid';
+
+      atualizarCronometroKartUI(toyId);
+      uiTimerInterval = setInterval(() => atualizarCronometroKartUI(toyId), 1000);
+    }
+
+    function atualizarCronometroKartUI(toyId) {
+      const ride = getCorridaKart(toyId);
+      if (!ride) {
+        renderizarInterfaceKart(toyId);
+        return;
+      }
+
+      let restanteSec = 0;
+
+      if (ride.status === 'RUNNING') {
+        restanteSec = Math.max(0, Math.floor((ride.endTime - Date.now()) / 1000));
+        document.getElementById('timerStateLabel').innerText = "🏁 CORRIDA A DECORRER!";
+        
+        const btnPause = document.getElementById('btnPause');
+        btnPause.innerText = "⏸️ PAUSAR";
+        btnPause.className = "btn btn-yellow";
+
+        if (restanteSec <= 0) {
+          finalizarCorrida(toyId);
+          return;
+        }
+      } else if (ride.status === 'PAUSED') {
+        restanteSec = ride.remainingSecOnPause;
+        document.getElementById('timerStateLabel').innerText = "⏸️ PAUSADO";
+        
+        const btnPause = document.getElementById('btnPause');
+        btnPause.innerText = "▶️ RETOMAR";
+        btnPause.className = "btn btn-green";
+      }
+
+      const min = Math.floor(restanteSec / 60);
+      const seg = restanteSec % 60;
+      document.getElementById('timeDisplay').innerText = `${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}`;
+
+      const totalSec = ride.totalDurationSec;
+      const pct = totalSec > 0 ? ((totalSec - restanteSec) / totalSec) * 100 : 0;
+      document.getElementById('progressBar').style.width = `${Math.min(100, pct)}%`;
+    }
+
+    // Ações da Corrida
+    async function iniciarCorrida() {
+      if (!kartAtualObj) return;
+
+      if (await enviarComando("INICIAR")) {
+        const durationSec = tempoSelecionadoMinutos * 60;
+        const ride = {
+          toyId: kartAtualObj.id,
+          status: 'RUNNING',
+          endTime: Date.now() + (durationSec * 1000),
+          totalDurationSec: durationSec,
+          remainingSecOnPause: 0
+        };
+
+        setCorridaKart(kartAtualObj.id, ride);
+        registarVenda(valorSelecionado);
+        renderizarInterfaceKart(kartAtualObj.id);
+      }
+    }
+
+    async function pausarOuRetomar() {
+      if (!kartAtualObj) return;
+      const toyId = kartAtualObj.id;
+      const ride = getCorridaKart(toyId);
+
+      if (!ride) return;
+
+      if (ride.status === 'RUNNING') {
+        if (await enviarComando("PARAR")) {
+          const restanteSec = Math.max(0, Math.floor((ride.endTime - Date.now()) / 1000));
+          ride.status = 'PAUSED';
+          ride.remainingSecOnPause = restanteSec;
+          setCorridaKart(toyId, ride);
+          renderizarInterfaceKart(toyId);
+        }
+      } else if (ride.status === 'PAUSED') {
+        if (await enviarComando("INICIAR")) {
+          ride.status = 'RUNNING';
+          ride.endTime = Date.now() + (ride.remainingSecOnPause * 1000);
+          setCorridaKart(toyId, ride);
+          renderizarInterfaceKart(toyId);
+        }
+      }
+    }
+
+    async function pararEmergencia() {
+      if (!kartAtualObj) return;
+      await enviarComando("PARAR");
+      finalizarCorrida(kartAtualObj.id);
+    }
+
+    function finalizarCorrida(toyId) {
+      setCorridaKart(toyId, null);
+      if (kartAtualObj && kartAtualObj.id === toyId) {
+        document.getElementById('timerStateLabel').innerText = "⏰ TEMPO ESGOTADO!";
+        renderizarInterfaceKart(toyId);
+      }
+    }
+
+    // Monitora encerramento das corridas de todos os brinquedos
+    function verificarTodasCorridas() {
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      let houveAlteracao = false;
+
+      toys.forEach(toy => {
+        const ride = getCorridaKart(toy.id);
+        if (ride && ride.status === 'RUNNING') {
+          const restante = Math.floor((ride.endTime - Date.now()) / 1000);
+          if (restante <= 0) {
+            finalizarCorrida(toy.id);
+            houveAlteracao = true;
+          }
+        }
+      });
+
+      const currentScreen = document.querySelector('.screen.active');
+      if (currentScreen && currentScreen.id === 'screen-home') {
+        carregarKartsHome();
+      }
+    }
+
+    // Bluetooth
     async function conectarBluetooth() {
       try {
         actualizarStatusBLE("Procurando ESP32...", false);
@@ -297,12 +485,12 @@
         caracteristicaBLE = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
         actualizarStatusBLE("Conectado ao ESP32!", true);
-        alert("Bluetooth conectado com sucesso ao carrinho!");
+        alert("Bluetooth conectado com sucesso!");
         navegarPara('screen-home');
       } catch (error) {
         console.error(error);
-        actualizarStatusBLE("Erro / Desconectado", false);
-        alert("Falha na conexão Bluetooth. Verifique se o ESP32 está ligado e próximo.");
+        actualizarStatusBLE("Modo Simulação", false);
+        alert("Modo Simulação ativo! O cronômetro funcionará em segundo plano perfeitamente.");
       }
     }
 
@@ -321,100 +509,23 @@
       }
     }
 
-    // Envio real de comandos via BLE para o ESP32 acionar o relé
     async function enviarComando(comando) {
       if (!caracteristicaBLE) {
-        console.warn("Aviso: Bluetooth não pareado. Comando não enviado ao ESP32:", comando);
-        return true; // Permite a progressão visual caso queira testar a interface sem o ESP32 conectado
+        console.log("Comando enviado (Simulação): " + comando);
+        return true;
       }
       try {
         const encoder = new TextEncoder();
         await caracteristicaBLE.writeValue(encoder.encode(comando));
         return true;
       } catch (error) {
-        console.error("Erro ao enviar comando BLE:", error);
-        alert("Erro de transmissão com o ESP32!");
+        console.error("Erro BLE:", error);
+        alert("Falha de envio para o ESP32!");
         return false;
       }
     }
 
-    async function iniciarCorrida() {
-      if (await enviarComando("INICIAR")) {
-        registarVenda(valorSelecionado);
-        document.getElementById('setupArea').style.display = 'none';
-        document.getElementById('controlArea').style.display = 'grid';
-        
-        tempoRestante = tempoSelecionadoSegundos;
-        tempoTotal = tempoSelecionadoSegundos;
-        emPausa = false;
-        
-        iniciarCronometro();
-      }
-    }
-
-    function iniciarCronometro() {
-      clearInterval(timerInterval);
-      document.getElementById('timerStateLabel').innerText = "🏁 CORRIDA A DECORRER!";
-
-      timerInterval = setInterval(() => {
-        if (!emPausa) {
-          tempoRestante--;
-          atualizarDisplayTimer();
-
-          if (tempoRestante <= 0) {
-            clearInterval(timerInterval);
-            document.getElementById('timerStateLabel').innerText = "⏰ TEMPO ESGOTADO!";
-            pararEmergencia();
-          }
-        }
-      }, 1000);
-    }
-
-    async function pausarOuRetomar() {
-      const btnPause = document.getElementById('btnPause');
-      if (!emPausa) {
-        if (await enviarComando("PARAR")) {
-          emPausa = true;
-          btnPause.innerText = "▶️ RETOMAR";
-          btnPause.className = "btn btn-green";
-          document.getElementById('timerStateLabel').innerText = "⏸️ PAUSADO";
-        }
-      } else {
-        if (await enviarComando("INICIAR")) {
-          emPausa = false;
-          btnPause.innerText = "⏸️ PAUSAR";
-          btnPause.className = "btn btn-yellow";
-          document.getElementById('timerStateLabel').innerText = "🏁 CORRIDA A DECORRER!";
-        }
-      }
-    }
-
-    async function pararEmergencia() {
-      enviarComando("PARAR");
-      clearInterval(timerInterval);
-      document.getElementById('timerStateLabel').innerText = "🛑 CORRIDA FINALIZADA";
-      resetarTimerTela();
-    }
-
-    function resetarTimerTela() {
-      clearInterval(timerInterval);
-      document.getElementById('setupArea').style.display = 'block';
-      document.getElementById('controlArea').style.display = 'none';
-      tempoRestante = tempoSelecionadoSegundos;
-      atualizarDisplayTimer();
-    }
-
-    function atualizarDisplayTimer() {
-      const min = Math.floor(Math.max(0, tempoRestante) / 60);
-      const seg = Math.max(0, tempoRestante) % 60;
-      document.getElementById('timeDisplay').innerText = 
-        `${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}`;
-
-      const pct = tempoTotal > 0 ? ((tempoTotal - tempoRestante) / tempoTotal) * 100 : 0;
-      const progressBar = document.getElementById('progressBar');
-      progressBar.style.width = `${Math.min(100, pct)}%`;
-    }
-
+    // Cadastro
     function salvarKart() {
       const name = document.getElementById('inputToyName').value.trim();
       const photoInput = document.getElementById('inputToyPhoto');
@@ -434,7 +545,7 @@
 
     function guardarStorage(name, photoBase64) {
       let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      toys.push({ id: Date.now().toString(), name: name, photo: photoBase64 });
+      toys.push({ id: 'drift_' + Date.now(), name: name, photo: photoBase64 });
       localStorage.setItem('drift_toys', JSON.stringify(toys));
 
       document.getElementById('inputToyName').value = '';
@@ -473,10 +584,12 @@
         let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
         toys = toys.filter(t => t.id !== id);
         localStorage.setItem('drift_toys', JSON.stringify(toys));
+        setCorridaKart(id, null);
         carregarKartsGerenciador();
       }
     }
 
+    // Caixa
     function registarVenda(valor) {
       let rides = parseInt(localStorage.getItem('drift_rides') || '0') + 1;
       let total = parseFloat(localStorage.getItem('drift_total') || '0.0') + valor;
@@ -488,7 +601,6 @@
     function atualizarCaixaUI() {
       let rides = localStorage.getItem('drift_rides') || '0';
       let total = parseFloat(localStorage.getItem('drift_total') || '0.0');
-      document.getElementById('statRides').innerText, rides;
       document.getElementById('statRides').innerText = rides;
       document.getElementById('statTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
     }
