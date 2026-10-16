@@ -44,13 +44,14 @@
     .toy-modern-card { background: var(--card-dark); border-radius: 18px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 8px 20px rgba(10,25,47,0.25); display: flex; flex-direction: column; position: relative; cursor: pointer; transition: transform 0.1s; }
     .toy-modern-card:active { transform: scale(0.96); }
     
-    .toy-img-container { width: 100%; height: 110px; background: #000; overflow: hidden; }
-    .toy-img-container img { width: 100%; height: 100%; object-fit: cover; }
+    /* Proporção 4x2 exata para os cartões */
+    .toy-img-container { width: 100%; aspect-ratio: 4 / 2; background: radial-gradient(circle, #1e293b 0%, #0a192f 100%); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px; }
+    .toy-img-container img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.3)); }
 
-    .toy-info-body { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
-    .toy-card-name { font-size: 0.9rem; font-weight: 900; color: #ffffff; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .toy-info-body { padding: 8px 10px 10px 10px; display: flex; flex-direction: column; gap: 6px; background: #0a192f; }
+    .toy-card-name { font-size: 0.85rem; font-weight: 900; color: #ffffff; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .btn-select-toy { background: linear-gradient(90deg, #ffd000 0%, #ffaa00 100%); border: none; border-radius: 99px; padding: 6px; font-size: 0.75rem; font-weight: 900; color: #0b2545; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 2px 8px rgba(255,208,0,0.3); }
+    .btn-select-toy { background: linear-gradient(90deg, #ffd000 0%, #ffaa00 100%); border: none; border-radius: 99px; padding: 5px; font-size: 0.72rem; font-weight: 900; color: #0b2545; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 2px 8px rgba(255,208,0,0.3); }
 
     /* Badges Dinâmicas nos Cards da Home */
     .active-tag { position: absolute; top: 8px; right: 8px; background: #ff6b6b; color: white; font-size: 0.65rem; font-weight: 900; padding: 4px 8px; border-radius: 99px; box-shadow: 0 2px 8px rgba(255,107,107,0.4); z-index: 5; text-align: center; max-width: 85%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -96,11 +97,11 @@
     .form-input { background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 10px; padding: 10px; color: #1e293b; font-size: 0.9rem; font-weight: bold; }
 
     .toy-manage-item { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 8px 12px; border-radius: 12px; border: 2px solid #e2e8f0; margin-bottom: 8px; }
-    .toy-thumb { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
+    .toy-thumb { width: 50px; aspect-ratio: 4 / 2; border-radius: 6px; object-fit: contain; background: #0a192f; }
 
     .footer-banner { text-align: center; padding: 16px; font-size: 0.85rem; font-weight: 800; color: #0b2545; display: flex; align-items: center; justify-content: center; gap: 6px; }
 
-    .report-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px 12px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 6px; font-size: 0.85rem; }
+    .report-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px 12px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 6px; font-size: 0.82rem; }
 
     /* Menu Dropdown */
     .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
@@ -126,7 +127,7 @@
         <button class="menu-item" onclick="navegarPara('screen-home')">🏠 Início (Karts)</button>
         <button class="menu-item" onclick="navegarPara('screen-cadastrar')">🎨 Cadastrar Karts</button>
         <button class="menu-item" onclick="navegarPara('screen-bluetooth')">📡 Conectar Bluetooth</button>
-        <button class="menu-item" onclick="navegarPara('screen-caixa')">💰 Caixa do Dia</button>
+        <button class="menu-item" onclick="navegarPara('screen-caixa')">💰 Caixa e Relatório ROI</button>
       </div>
     </div>
 
@@ -154,7 +155,7 @@
         </div>
 
         <div class="toy-modern-card" style="box-shadow: none; cursor: default;">
-          <div class="toy-img-container" style="height: 120px;">
+          <div class="toy-img-container" style="height: 130px;">
             <img id="opToyImg" src="" alt="Kart">
           </div>
           <div class="toy-info-body" style="padding: 8px;">
@@ -182,6 +183,13 @@
               <button class="time-btn" onclick="selecionarTempo(10, 10.00, this)">10 Min</button>
               <button class="time-btn" onclick="selecionarTempo(15, 15.00, this)">15 Min</button>
             </div>
+
+            <!-- Campo de Minutos Personalizado -->
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label>Ou digite os Minutos Personalizados:</label>
+              <input type="number" id="inputCustomMinutes" class="form-input" placeholder="Ex: 7, 12, 20..." min="1" oninput="definirTempoPersonalizado(this.value)">
+            </div>
+
             <div class="price-tag" id="priceTag">Valor: R$ 5,00</div>
             <button class="btn btn-green" onclick="iniciarCorrida()">🚀 INICIAR CORRIDA</button>
           </div>
@@ -197,19 +205,33 @@
       </div>
     </div>
 
-    <!-- 3. TELA DE GERENCIAR KARTS -->
+    <!-- 3. TELA DE GERENCIAR KARTS (Com sugestão automática ao digitar DRIFT) -->
     <div id="screen-cadastrar" class="screen">
       <div class="container-inner">
         <div class="card-white">
           <h3 style="font-size:1.1rem; margin-bottom:12px; color:var(--header-blue);">🎨 Cadastrar Novo Brinquedo</h3>
           <div class="form-group">
-            <label>Nome / Identificação</label>
-            <input type="text" id="inputToyName" class="form-input" placeholder="Ex: DRIFT AZUL 002">
+            <label>Nome / Identificação (Digite DRIFT para ver opções)</label>
+            <input type="text" id="inputToyName" class="form-input" placeholder="Ex: DRIFT AZUL 002" oninput="sugerirModelosDrift(this.value)">
           </div>
+
+          <!-- Caixa de Sugestões de Modelos Drift -->
+          <div id="driftSuggestions" style="display: none; display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; background: #f1f5f9; padding: 8px; border-radius: 10px; border: 1px solid #cbd5e1;">
+            <span style="font-size: 0.75rem; font-weight: 800; color: var(--header-blue);">💡 Escolha um modelo Drift da lista:</span>
+            <div id="driftListContainer" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;"></div>
+          </div>
+
           <div class="form-group">
-            <label>Foto do Brinquedo</label>
-            <input type="file" id="inputToyPhoto" accept="image/*" class="form-input">
+            <label>Ou Envie Foto do Telemóvel</label>
+            <input type="file" id="inputToyPhoto" accept="image/*" class="form-input" onchange="selecionarFotoManual(this)">
           </div>
+          
+          <!-- Pré-visualização da foto selecionada (Proporção 4x2) -->
+          <div id="previewContainer" style="display: none; margin-bottom: 10px; text-align: center;">
+            <span style="font-size: 0.75rem; font-weight: bold; color: var(--text-muted);">Pré-visualização (4x2):</span>
+            <img id="imgPreview" style="width: 100%; aspect-ratio: 4/2; object-fit: contain; background: #0a192f; border-radius: 8px; margin-top: 4px;">
+          </div>
+
           <button class="btn btn-blue" onclick="salvarKart()">Salvar Carrinho 🏎️</button>
         </div>
 
@@ -231,7 +253,7 @@
       </div>
     </div>
 
-    <!-- 5. TELA CAIXA DO DIA -->
+    <!-- 5. TELA CAIXA DO DIA E RELATÓRIO VITALÍCIO ROI -->
     <div id="screen-caixa" class="screen">
       <div class="container-inner">
         <div class="card-white" style="text-align: center;">
@@ -239,18 +261,20 @@
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
             <div style="background:#f8fafc; padding:14px; border-radius:14px; border:2px solid #e2e8f0;">
               <div id="statRides" style="font-size:1.6rem; font-weight:900; color:#ff6b6b;">0</div>
-              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Corridas</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Corridas Hoje</div>
             </div>
             <div style="background:#f8fafc; padding:14px; border-radius:14px; border:2px solid #e2e8f0;">
               <div id="statTotal" style="font-size:1.6rem; font-weight:900; color:#16a34a;">R$ 0,00</div>
-              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Faturamento</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Faturamento Hoje</div>
             </div>
           </div>
 
-          <h4 style="font-size:0.95rem; color:var(--header-blue); margin: 16px 0 8px 0; text-align: left;">📊 Rendimento por Brinquedo:</h4>
-          <div id="individualReportList" style="max-height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px;"></div>
+          <button class="btn btn-red" style="font-size:0.85rem; padding:10px; margin-bottom: 16px;" onclick="zerarCaixaDiario()">Zerar Apenas Caixa do Dia 🔄</button>
 
-          <button class="btn btn-red" style="font-size:0.88rem; padding:10px;" onclick="zerarCaixa()">Zerar Caixa 🔄</button>
+          <h3 style="color:var(--header-blue); margin-bottom:8px; border-top: 2px dashed #cbd5e1; padding-top: 14px;">📈 Relatório Vitalício (Retorno / ROI)</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">Faturamento histórico acumulado de cada carrinho desde o primeiro dia:</p>
+          
+          <div id="lifetimeReportList" style="max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;"></div>
         </div>
       </div>
     </div>
@@ -268,12 +292,24 @@
     let tempoSelecionadoMinutos = 5;
     let valorSelecionado = 5.00;
     let kartAtualObj = null;
+    let fotoBase64Temporaria = "";
+
+    // Biblioteca de cores de Karts Drift para autocomplete 4x2
+    const galeriaDrift = [
+      { name: "DRIFT PRETO 001", color: "#0a192f", accent: "#ffd000" },
+      { name: "DRIFT AZUL 002", color: "#0b2545", accent: "#00b4d8" },
+      { name: "DRIFT VERDE 003", color: "#14532d", accent: "#4ade80" },
+      { name: "DRIFT VERMELHO 004", color: "#7f1d1d", accent: "#f87171" },
+      { name: "DRIFT GRAFITE 005", color: "#334155", accent: "#cbd5e1" },
+      { name: "DRIFT ROSA 006", color: "#831843", accent: "#f472b6" },
+      { name: "DRIFT AMARELO 007", color: "#78350f", accent: "#facc15" }
+    ];
 
     window.onload = function() {
       let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
       if (toys.length === 0) {
-        toys.push({ id: 'drift_001', name: 'DRIFT PRETO 001', photo: '' });
-        toys.push({ id: 'drift_002', name: 'DRIFT AZUL 002', photo: '' });
+        toys.push({ id: 'drift_001', name: 'DRIFT PRETO 001', photo: gerarSvgDrift('#0a192f', '#ffd000', 'DRIFT PRETO 001') });
+        toys.push({ id: 'drift_002', name: 'DRIFT AZUL 002', photo: gerarSvgDrift('#0b2545', '#00b4d8', 'DRIFT AZUL 002') });
         localStorage.setItem('drift_toys', JSON.stringify(toys));
       }
 
@@ -281,8 +317,12 @@
       atualizarCaixaUI();
 
       if (globalLoopInterval) clearInterval(globalLoopInterval);
-      globalLoopInterval = setInterval(cicloGlobalAtualizacao, 500); // Executa a cada 0.5s para extrema fluidez em tempo real
+      globalLoopInterval = setInterval(cicloGlobalAtualizacao, 500);
     };
+
+    function gerarSvgDrift(bgCor, textoCor, nomeKart) {
+      return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect width="400" height="200" fill="${bgCor}"/><circle cx="200" cy="100" r="70" fill="${textoCor}" opacity="0.15"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="${textoCor}" font-size="24" font-weight="900" font-family="sans-serif">🏎️ DRIFT</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" fill="%23ffffff" font-size="16" font-weight="bold" font-family="sans-serif">${nomeKart}</text></svg>`;
+    }
 
     function toggleMenu() {
       const menu = document.getElementById('menuOverlay');
@@ -335,7 +375,7 @@
       }
     }
 
-    // Carregar Karts na Home com Nome da Criança e Tempo Real
+    // Carregar Karts na Home com Proporção 4x2
     function carregarKartsHome() {
       let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
       const grid = document.getElementById('toysGrid');
@@ -346,7 +386,7 @@
         return;
       }
 
-      toys.forEach((toy, index) => {
+      toys.forEach((toy) => {
         const rideData = getCorridaKart(toy.id);
         let activeTagHTML = '';
 
@@ -367,17 +407,13 @@
           activeTagHTML = `<div class="active-tag alarm-blinking">🚨 ${nomeAlerta}</div>`;
         }
 
-        const defaultImg = index % 2 === 0 
-          ? 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="110"><rect width="200" height="110" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffd000" font-size="16" font-weight="bold">🏎️ KART</text></svg>'
-          : 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="110"><rect width="200" height="110" fill="%2300b4d8"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffffff" font-size="16" font-weight="bold">🏎️ KART</text></svg>';
-
         const card = document.createElement('div');
         card.className = 'toy-modern-card';
         card.onclick = () => abrirOperacaoKart(toy);
         card.innerHTML = `
           ${activeTagHTML}
           <div class="toy-img-container">
-            <img src="${toy.photo || defaultImg}" alt="${toy.name}">
+            <img src="${toy.photo || gerarSvgDrift('#0a192f', '#ffd000', toy.name)}" alt="${toy.name}">
           </div>
           <div class="toy-info-body">
             <div class="toy-card-name">${toy.name}</div>
@@ -393,8 +429,7 @@
     function abrirOperacaoKart(toy) {
       kartAtualObj = toy;
       document.getElementById('opToyName').innerText = toy.name;
-      const defaultImg = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="110"><rect width="200" height="110" fill="%230a192f"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23ffd000" font-size="16">🏎️ Kart</text></svg>';
-      document.getElementById('opToyImg').src = toy.photo || defaultImg;
+      document.getElementById('opToyImg').src = toy.photo || gerarSvgDrift('#0a192f', '#ffd000', toy.name);
       
       renderizarInterfaceKart(toy.id);
       navegarPara('screen-operacao');
@@ -402,13 +437,28 @@
 
     function selecionarTempo(minutos, valor, btn) {
       document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
+      if (btn) btn.classList.add('selected');
+      document.getElementById('inputCustomMinutes').value = '';
 
       tempoSelecionadoMinutos = minutos;
       valorSelecionado = valor;
 
       document.getElementById('priceTag').innerText = `Valor: R$ ${valor.toFixed(2).replace('.', ',')}`;
       document.getElementById('timeDisplay').innerText = `${String(minutos).padStart(2, '0')}:00`;
+    }
+
+    // Função para tempo personalizado em minutos
+    function definirTempoPersonalizado(val) {
+      const min = parseInt(val);
+      if (!isNaN(min) && min > 0) {
+        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+        tempoSelecionadoMinutos = min;
+        // Calcula o preço proporcional (ex: R$ 1,00 por minuto ou base 5min = R$ 5)
+        valorSelecionado = min * 1.00; 
+
+        document.getElementById('priceTag').innerText = `Valor: R$ ${valorSelecionado.toFixed(2).replace('.', ',')}`;
+        document.getElementById('timeDisplay').innerText = `${String(min).padStart(2, '0')}:00`;
+      }
     }
 
     function getCorridaKart(toyId) {
@@ -434,6 +484,7 @@
         document.getElementById('controlArea').style.display = 'none';
         document.getElementById('timerStateLabel').innerText = "Pronto para a Aventura!";
         document.getElementById('inputChildName').value = '';
+        document.getElementById('inputCustomMinutes').value = '';
         document.getElementById('timeDisplay').innerText = `${String(tempoSelecionadoMinutos).padStart(2, '0')}:00`;
         document.getElementById('progressBar').style.width = '0%';
         return;
@@ -581,7 +632,6 @@
       }
     }
 
-    // Loop global de atualização contínua em tempo real
     function cicloGlobalAtualizacao() {
       let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
       toys.forEach(toy => {
@@ -605,6 +655,170 @@
         carregarKartsHome();
       } else if (currentScreen && currentScreen.id === 'screen-operacao' && kartAtualObj) {
         atualizarCronometroKartUI(kartAtualObj.id);
+      }
+    }
+
+    // Sugestão de modelos Drift ao digitar no cadastro
+    function sugerirModelosDrift(val) {
+      const box = document.getElementById('driftSuggestions');
+      const container = document.getElementById('driftListContainer');
+      container.innerHTML = '';
+
+      if (val.toUpperCase().includes('DRIFT')) {
+        box.style.display = 'flex';
+        galeriaDrift.forEach(item => {
+          const svgData = gerarSvgDrift(item.color, item.accent, item.name);
+          const thumb = document.createElement('div');
+          thumb.style.cssText = "min-width: 70px; cursor: pointer; text-align: center;";
+          thumb.onclick = () => selecionarModeloSugerido(item.name, svgData);
+          thumb.innerHTML = `
+            <img src="${svgData}" style="width: 70px; aspect-ratio: 4/2; object-fit: contain; border-radius: 4px; background: #0a192f; border: 1px solid #cbd5e1;">
+            <div style="font-size: 0.65rem; font-weight: bold; color: var(--header-blue); white-space: nowrap;">${item.name.replace('DRIFT ', '')}</div>
+          `;
+          container.appendChild(thumb);
+        });
+      } else {
+        box.style.display = 'none';
+      }
+    }
+
+    function selecionarModeloSugerido(nome, svgData) {
+      document.getElementById('inputToyName').value = nome;
+      fotoBase64Temporaria = svgData;
+      document.getElementById('imgPreview').src = svgData;
+      document.getElementById('previewContainer').style.display = 'block';
+      document.getElementById('driftSuggestions').style.display = 'none';
+    }
+
+    function selecionarFotoManual(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          fotoBase64Temporaria = e.target.result;
+          document.getElementById('imgPreview').src = e.target.result;
+          document.getElementById('previewContainer').style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function salvarKart() {
+      const name = document.getElementById('inputToyName').value.trim();
+      if (!name) return alert("Digite o nome do carrinho!");
+
+      const photo = fotoBase64Temporaria || gerarSvgDrift('#0a192f', '#ffd000', name);
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      toys.push({ id: 'drift_' + Date.now(), name: name, photo: photo });
+      localStorage.setItem('drift_toys', JSON.stringify(toys));
+
+      document.getElementById('inputToyName').value = '';
+      document.getElementById('inputToyPhoto').value = '';
+      fotoBase64Temporaria = "";
+      document.getElementById('previewContainer').style.display = 'none';
+      document.getElementById('driftSuggestions').style.display = 'none';
+
+      carregarKartsGerenciador();
+      alert("Carrinho cadastrado com sucesso! 🎉");
+      navegarPara('screen-home');
+    }
+
+    function carregarKartsGerenciador() {
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      const container = document.getElementById('toysManageList');
+      container.innerHTML = '';
+
+      if (toys.length === 0) {
+        container.innerHTML = '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum carrinho cadastrado.</p>';
+        return;
+      }
+
+      toys.forEach(toy => {
+        const item = document.createElement('div');
+        item.className = 'toy-manage-item';
+        item.innerHTML = `
+          <div style="display:flex; align-items:center; gap:10px;">
+            <img src="${toy.photo || gerarSvgDrift('#0a192f', '#ffd000', toy.name)}" class="toy-thumb">
+            <span style="font-size:0.9rem; font-weight:800; color:#0b2545;">${toy.name}</span>
+          </div>
+          <button class="btn btn-red" style="padding:6px 10px; font-size:0.75rem; border-radius:8px; width:auto;" onclick="excluirKart('${toy.id}')">Excluir</button>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function excluirKart(id) {
+      if (confirm("Deseja apagar este carrinho?")) {
+        let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+        toys = toys.filter(t => t.id !== id);
+        localStorage.setItem('drift_toys', JSON.stringify(toys));
+        setCorridaKart(id, null);
+        carregarKartsGerenciador();
+      }
+    }
+
+    // Registo de Vendas (Caixa Diário + Histórico Vitalício ROI)
+    function registarVenda(toyId, valor) {
+      let rides = parseInt(localStorage.getItem('drift_rides') || '0') + 1;
+      let total = parseFloat(localStorage.getItem('drift_total') || '0.0') + valor;
+      localStorage.setItem('drift_rides', rides);
+      localStorage.setItem('drift_total', total);
+
+      // Caixa diário individual do brinquedo
+      let statsToy = JSON.parse(localStorage.getItem('drift_stat_' + toyId) || '{"rides":0, "total":0}');
+      statsToy.rides += 1;
+      statsToy.total += valor;
+      localStorage.setItem('drift_stat_' + toyId, JSON.stringify(statsToy));
+
+      // Histórico Vitalício / ROI (Nunca zera)
+      let lifeToy = JSON.parse(localStorage.getItem('drift_life_' + toyId) || '{"rides":0, "total":0}');
+      lifeToy.rides += 1;
+      lifeToy.total += valor;
+      localStorage.setItem('drift_life_' + toyId, JSON.stringify(lifeToy));
+
+      atualizarCaixaUI();
+    }
+
+    function atualizarCaixaUI() {
+      let rides = localStorage.getItem('drift_rides') || '0';
+      let total = parseFloat(localStorage.getItem('drift_total') || '0.0');
+      document.getElementById('statRides').innerText = rides;
+      document.getElementById('statTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      const lifetimeContainer = document.getElementById('lifetimeReportList');
+      lifetimeContainer.innerHTML = '';
+
+      if (toys.length === 0) {
+        lifetimeContainer.innerHTML = '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum brinquedo registado.</p>';
+        return;
+      }
+
+      toys.forEach(toy => {
+        let lifeStats = JSON.parse(localStorage.getItem('drift_life_' + toy.id) || '{"rides":0, "total":0}');
+        const item = document.createElement('div');
+        item.className = 'report-item';
+        item.innerHTML = `
+          <div style="font-weight: 800; color: var(--header-blue);">${toy.name}</div>
+          <div style="text-align: right; font-weight: 700; color: var(--text-dark);">
+            ${lifeStats.rides} total <span style="color: #16a34a; margin-left: 6px;">R$ ${lifeStats.total.toFixed(2).replace('.', ',')}</span>
+          </div>
+        `;
+        lifetimeContainer.appendChild(item);
+      });
+    }
+
+    function zerarCaixaDiario() {
+      if (confirm("Deseja zerar apenas o caixa e as estatísticas do dia atual? O histórico vitalício de retorno dos karts será mantido.")) {
+        localStorage.setItem('drift_rides', '0');
+        localStorage.setItem('drift_total', '0');
+        
+        let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+        toys.forEach(toy => {
+          localStorage.removeItem('drift_stat_' + toy.id);
+        });
+
+        atualizarCaixaUI();
+        alert("Caixa do dia reiniciado com sucesso!");
       }
     }
 
@@ -654,126 +868,6 @@
       } catch (error) {
         console.error("Erro BLE:", error);
         return false;
-      }
-    }
-
-    function salvarKart() {
-      const name = document.getElementById('inputToyName').value.trim();
-      const photoInput = document.getElementById('inputToyPhoto');
-
-      if (!name) return alert("Digite o nome do carrinho!");
-
-      if (photoInput.files && photoInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          guardarStorage(name, e.target.result);
-        };
-        reader.readAsDataURL(photoInput.files[0]);
-      } else {
-        guardarStorage(name, "");
-      }
-    }
-
-    function guardarStorage(name, photoBase64) {
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      toys.push({ id: 'drift_' + Date.now(), name: name, photo: photoBase64 });
-      localStorage.setItem('drift_toys', JSON.stringify(toys));
-
-      document.getElementById('inputToyName').value = '';
-      document.getElementById('inputToyPhoto').value = '';
-      carregarKartsGerenciador();
-      alert("Carrinho cadastrado com sucesso! 🎉");
-      navegarPara('screen-home');
-    }
-
-    function carregarKartsGerenciador() {
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      const container = document.getElementById('toysManageList');
-      container.innerHTML = '';
-
-      if (toys.length === 0) {
-        container.innerHTML = '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum carrinho cadastrado.</p>';
-        return;
-      }
-
-      toys.forEach(toy => {
-        const item = document.createElement('div');
-        item.className = 'toy-manage-item';
-        item.innerHTML = `
-          <div style="display:flex; align-items:center; gap:10px;">
-            <img src="${toy.photo || 'data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2245%22 height=%2245%22><rect width=%2245%22 height=%2245%22 fill=%22%230a192f%22/><text x=%2250%%22 y=%2250%%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%23ffd000%22 font-size=%2216%22>🏎️</text></svg>'}" class="toy-thumb">
-            <span style="font-size:0.9rem; font-weight:800; color:#0b2545;">${toy.name}</span>
-          </div>
-          <button class="btn btn-red" style="padding:6px 10px; font-size:0.75rem; border-radius:8px; width:auto;" onclick="excluirKart('${toy.id}')">Excluir</button>
-        `;
-        container.appendChild(item);
-      });
-    }
-
-    function excluirKart(id) {
-      if (confirm("Deseja apagar este carrinho?")) {
-        let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-        toys = toys.filter(t => t.id !== id);
-        localStorage.setItem('drift_toys', JSON.stringify(toys));
-        setCorridaKart(id, null);
-        carregarKartsGerenciador();
-      }
-    }
-
-    function registarVenda(toyId, valor) {
-      let rides = parseInt(localStorage.getItem('drift_rides') || '0') + 1;
-      let total = parseFloat(localStorage.getItem('drift_total') || '0.0') + valor;
-      localStorage.setItem('drift_rides', rides);
-      localStorage.setItem('drift_total', total);
-
-      let statsToy = JSON.parse(localStorage.getItem('drift_stat_' + toyId) || '{"rides":0, "total":0}');
-      statsToy.rides += 1;
-      statsToy.total += valor;
-      localStorage.setItem('drift_stat_' + toyId, JSON.stringify(statsToy));
-
-      atualizarCaixaUI();
-    }
-
-    function atualizarCaixaUI() {
-      let rides = localStorage.getItem('drift_rides') || '0';
-      let total = parseFloat(localStorage.getItem('drift_total') || '0.0');
-      document.getElementById('statRides').innerText = rides;
-      document.getElementById('statTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      const reportContainer = document.getElementById('individualReportList');
-      reportContainer.innerHTML = '';
-
-      if (toys.length === 0) {
-        reportContainer.innerHTML = '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum brinquedo registado.</p>';
-        return;
-      }
-
-      toys.forEach(toy => {
-        let stats = JSON.parse(localStorage.getItem('drift_stat_' + toy.id) || '{"rides":0, "total":0}');
-        const item = document.createElement('div');
-        item.className = 'report-item';
-        item.innerHTML = `
-          <div style="font-weight: 800; color: var(--header-blue);">${toy.name}</div>
-          <div style="text-align: right; font-weight: 700; color: var(--text-dark);">
-            ${stats.rides} corr. <span style="color: #16a34a; margin-left: 6px;">R$ ${stats.total.toFixed(2).replace('.', ',')}</span>
-          </div>
-        `;
-        reportContainer.appendChild(item);
-      });
-    }
-
-    function zerarCaixa() {
-      if (confirm("Deseja zerar o caixa e todos os relatórios individuais do dia?")) {
-        localStorage.setItem('drift_rides', '0');
-        localStorage.setItem('drift_total', '0');
-        
-        let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-        toys.forEach(toy => {
-          localStorage.removeItem('drift_stat_' + toy.id);
-        });
-
-        atualizarCaixaUI();
       }
     }
   </script>
