@@ -8,16 +8,13 @@
     :root {
       --navy: #0a2447;
       --navy-dark: #061830;
-      --navy-light: #163b6d;
       --yellow: #ffcc00;
-      --yellow-dark: #e6b300;
       --cyan: #00c4f4;
       --cyan-dark: #009bc4;
       --green: #16a34a;
       --green-dark: #15803d;
       --red: #dc2626;
       --red-dark: #b91c1c;
-      --blue-ble: #2563eb;
       --cream: #fffdf5;
       --card-bg: #ffffff;
       --text: #0f172a;
@@ -36,19 +33,18 @@
       background-color: var(--cream);
       color: var(--text);
       min-height: 100vh;
-      padding-bottom: 110px;
-      position: relative;
+      padding-bottom: 92px;
       overflow-x: hidden;
     }
 
     /* Topo Curvo Azul */
     .top-banner {
       background: linear-gradient(180deg, #092244 0%, #123666 100%);
-      padding: 16px 20px 32px;
+      padding: 14px 18px 26px;
       position: relative;
-      border-bottom-left-radius: 50% 24px;
-      border-bottom-right-radius: 50% 24px;
-      box-shadow: 0 6px 18px rgba(9, 34, 68, 0.22);
+      border-bottom-left-radius: 50% 22px;
+      border-bottom-right-radius: 50% 22px;
+      box-shadow: 0 5px 14px rgba(9, 34, 68, 0.2);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -59,18 +55,12 @@
       position: absolute;
       left: 0;
       right: 0;
-      bottom: -5px;
-      height: 10px;
+      bottom: -4px;
+      height: 8px;
       background: var(--yellow);
-      border-bottom-left-radius: 50% 10px;
-      border-bottom-right-radius: 50% 10px;
+      border-bottom-left-radius: 50% 8px;
+      border-bottom-right-radius: 50% 8px;
       z-index: -1;
-    }
-
-    .logo-area {
-      display: flex;
-      align-items: center;
-      gap: 10px;
     }
 
     .logo-main {
@@ -78,15 +68,15 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-weight: 900;
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       letter-spacing: 0.4px;
-      filter: drop-shadow(0 2px 0 #05162e) drop-shadow(0 3px 4px rgba(0, 0, 0, 0.45));
+      filter: drop-shadow(0 2px 0 #05162e) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
       line-height: 1.05;
     }
 
     .logo-sub {
       color: #ffffff;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 700;
       font-style: italic;
       margin-top: 2px;
@@ -96,18 +86,18 @@
     }
 
     .btn-gear {
-      width: 48px;
-      height: 48px;
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #ffe66d, var(--yellow));
       border: 3px solid #ffffff;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      font-size: 1.45rem;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28);
+      font-size: 1.35rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.15s ease;
+      transition: transform 0.12s ease;
       flex-shrink: 0;
     }
 
@@ -115,91 +105,78 @@
       transform: scale(0.92);
     }
 
-    /* Título da Seção */
+    /* Cabeçalho da Tela Principal */
     .section-header {
-      max-width: 680px;
-      margin: 20px auto 14px;
-      padding: 0 16px;
+      max-width: 760px;
+      margin: 14px auto 12px;
+      padding: 0 14px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .section-icon {
-      font-size: 2rem;
+      font-size: 1.65rem;
       line-height: 1;
     }
 
     .section-title {
-      font-size: 1.45rem;
+      font-size: 1.28rem;
       font-weight: 900;
       color: var(--navy);
       line-height: 1.15;
     }
 
     .section-subtitle {
-      font-size: 0.92rem;
+      font-size: 0.84rem;
       color: var(--muted);
       font-weight: 600;
       margin-top: 2px;
     }
 
-    /* Grade de Brinquedos */
+    /* Grade Compacta de Brinquedos */
     .karts-grid {
-      max-width: 680px;
+      max-width: 760px;
       margin: 0 auto;
-      padding: 0 16px;
+      padding: 0 14px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
+      gap: 14px;
     }
 
     .kart-card {
       background: var(--card-bg);
-      border-radius: 24px;
-      padding: 14px;
-      border: 3px solid var(--navy);
-      box-shadow: 0 7px 0 var(--navy), 0 12px 22px rgba(10, 36, 71, 0.12);
+      border-radius: 20px;
+      padding: 11px;
+      border: 2.5px solid var(--navy);
+      box-shadow: 0 5px 0 var(--navy), 0 8px 16px rgba(10, 36, 71, 0.1);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: transform 0.15s ease;
     }
 
     .kart-card.theme-cyan {
       border-color: var(--cyan-dark);
-      box-shadow: 0 7px 0 var(--cyan-dark), 0 12px 22px rgba(0, 155, 196, 0.14);
+      box-shadow: 0 5px 0 var(--cyan-dark), 0 8px 16px rgba(0, 155, 196, 0.12);
     }
 
     .kart-card.running {
       border-color: var(--green);
-      box-shadow: 0 7px 0 var(--green-dark), 0 12px 22px rgba(22, 163, 74, 0.18);
+      box-shadow: 0 5px 0 var(--green-dark), 0 8px 16px rgba(22, 163, 74, 0.16);
       background: #f4fdf7;
-    }
-
-    .kart-card.finished {
-      border-color: var(--red);
-      box-shadow: 0 7px 0 var(--red-dark), 0 12px 22px rgba(220, 38, 38, 0.22);
-      background: #fef2f2;
-      animation: alertPulse 0.9s infinite;
-    }
-
-    @keyframes alertPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.015); }
     }
 
     .kart-photo-box {
       width: 100%;
-      height: 175px;
-      border-radius: 18px;
+      height: 118px;
+      border-radius: 14px;
       overflow: hidden;
       background: linear-gradient(135deg, #facc15 0%, #f97316 100%);
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px solid rgba(10, 36, 71, 0.12);
+      border: 1.5px solid rgba(10, 36, 71, 0.12);
     }
 
     .kart-card.theme-cyan .kart-photo-box {
@@ -215,20 +192,20 @@
 
     .ble-pill {
       position: absolute;
-      top: 10px;
-      right: 10px;
+      top: 7px;
+      right: 7px;
       background: rgba(255, 255, 255, 0.94);
       color: var(--navy);
-      border: 2px solid var(--navy);
+      border: 1.5px solid var(--navy);
       border-radius: 999px;
-      padding: 5px 11px;
-      font-size: 0.75rem;
+      padding: 4px 9px;
+      font-size: 0.7rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 5px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      gap: 4px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
 
     .ble-pill.connected {
@@ -238,15 +215,15 @@
     }
 
     .kart-badge-name {
-      margin-top: 12px;
+      margin-top: 8px;
       background: var(--navy);
       color: #ffffff;
       text-align: center;
-      padding: 9px 12px;
-      border-radius: 14px;
+      padding: 6px 10px;
+      border-radius: 11px;
       font-weight: 900;
-      font-size: 1.05rem;
-      letter-spacing: 0.5px;
+      font-size: 0.94rem;
+      letter-spacing: 0.4px;
       text-transform: uppercase;
     }
 
@@ -256,43 +233,93 @@
 
     .kart-tagline {
       text-align: center;
-      font-size: 0.84rem;
+      font-size: 0.76rem;
       font-weight: 700;
       color: #334155;
-      margin: 9px 0 6px;
+      margin: 6px 0 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .timer-box {
       text-align: center;
-      font-size: 2.35rem;
+      font-size: 1.95rem;
       font-weight: 900;
       font-variant-numeric: tabular-nums;
       color: var(--navy);
-      margin: 4px 0 10px;
-      letter-spacing: 1px;
+      line-height: 1.15;
+      margin: 2px 0 7px;
     }
 
     .running .timer-box {
       color: var(--green-dark);
     }
 
-    .finished .timer-box {
-      color: var(--red);
+    /* Faixa do Nome do Cliente + Mini-Quadros Lado a Lado */
+    .client-banner {
+      background: #dcfce7;
+      border: 1.5px solid #4ade80;
+      color: #14532d;
+      border-radius: 10px;
+      padding: 5px 8px;
+      font-size: 0.82rem;
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .micro-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+
+    .micro-box {
+      background: #ffffff;
+      border: 1.5px solid #bbf7d0;
+      border-radius: 9px;
+      padding: 5px 4px;
+      text-align: center;
+    }
+
+    .micro-label {
+      font-size: 0.64rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      display: block;
+    }
+
+    .micro-value {
+      font-size: 0.78rem;
+      font-weight: 900;
+      color: var(--navy);
+      display: block;
+      margin-top: 1px;
+    }
+
+    .micro-value.green {
+      color: var(--green-dark);
     }
 
     .presets-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-bottom: 10px;
+      gap: 5px;
+      margin-bottom: 7px;
     }
 
     .preset-btn {
       background: #f1f5f9;
       border: 1.5px solid #cbd5e1;
-      border-radius: 10px;
-      padding: 7px 4px;
-      font-size: 0.76rem;
+      border-radius: 9px;
+      padding: 6px 3px;
+      font-size: 0.72rem;
       font-weight: 800;
       color: var(--navy);
       cursor: pointer;
@@ -304,17 +331,17 @@
 
     .inputs-row {
       display: grid;
-      grid-template-columns: 1.4fr 0.75fr 0.85fr;
-      gap: 7px;
-      margin-bottom: 11px;
+      grid-template-columns: 1.45fr 0.72fr 0.83fr;
+      gap: 6px;
+      margin-bottom: 8px;
     }
 
     .input-field {
       width: 100%;
-      padding: 9px 8px;
-      border-radius: 11px;
+      padding: 7px 6px;
+      border-radius: 10px;
       border: 1.5px solid #cbd5e1;
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       font-weight: 700;
       color: var(--text);
       background: #ffffff;
@@ -323,27 +350,28 @@
 
     .input-field.name-input {
       text-align: left;
+      padding-left: 8px;
     }
 
     .btn-primary-action {
       width: 100%;
       border: 2px solid var(--navy);
-      border-radius: 16px;
-      padding: 13px 14px;
-      font-size: 1.05rem;
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 0.96rem;
       font-weight: 900;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 0 var(--navy);
+      gap: 6px;
+      box-shadow: 0 3px 0 var(--navy);
       transition: transform 0.1s ease;
     }
 
     .btn-primary-action:active {
       transform: translateY(2px);
-      box-shadow: 0 2px 0 var(--navy);
+      box-shadow: 0 1px 0 var(--navy);
     }
 
     .btn-start-yellow {
@@ -355,43 +383,23 @@
       background: linear-gradient(180deg, #38e2ff 0%, #00b4e6 100%);
       color: #052238;
       border-color: #052238;
-      box-shadow: 0 4px 0 #052238;
-    }
-
-    .active-ride-panel {
-      background: #ffffff;
-      border: 2px solid #86efac;
-      border-radius: 14px;
-      padding: 10px;
-      margin-bottom: 10px;
-      font-size: 0.84rem;
-    }
-
-    .active-ride-line {
-      display: flex;
-      justify-content: space-between;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .active-ride-line:last-child {
-      margin-bottom: 0;
+      box-shadow: 0 3px 0 #052238;
     }
 
     .running-btns {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
+      gap: 7px;
     }
 
     .btn-plus1 {
       background: #0284c7;
       color: #ffffff;
       border: none;
-      border-radius: 13px;
-      padding: 12px 8px;
+      border-radius: 11px;
+      padding: 10px 6px;
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 0.84rem;
       cursor: pointer;
     }
 
@@ -399,14 +407,14 @@
       background: var(--red);
       color: #ffffff;
       border: none;
-      border-radius: 13px;
-      padding: 12px 8px;
+      border-radius: 11px;
+      padding: 10px 6px;
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 0.84rem;
       cursor: pointer;
     }
 
-    /* Rodapé Decorativo */
+    /* Rodapé */
     .bottom-wave {
       position: fixed;
       left: 0;
@@ -414,21 +422,21 @@
       bottom: 0;
       background: var(--navy);
       color: var(--yellow);
-      padding: 12px 18px;
-      border-top-left-radius: 50% 18px;
-      border-top-right-radius: 50% 18px;
-      border-top: 4px solid var(--yellow);
+      padding: 10px 16px;
+      border-top-left-radius: 50% 16px;
+      border-top-right-radius: 50% 16px;
+      border-top: 3px solid var(--yellow);
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-weight: 900;
       font-style: italic;
-      font-size: 1rem;
+      font-size: 0.92rem;
       z-index: 40;
-      box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.18);
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.16);
     }
 
-    /* Modais (Parada Obrigatória e Painel da Engrenagem) */
+    /* Modais */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -436,7 +444,7 @@
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 14px;
+      padding: 12px;
       z-index: 200;
       overflow-y: auto;
     }
@@ -448,11 +456,11 @@
     .modal-box {
       background: #ffffff;
       width: 100%;
-      max-width: 540px;
+      max-width: 560px;
       max-height: 90vh;
       overflow-y: auto;
-      border-radius: 22px;
-      padding: 20px;
+      border-radius: 20px;
+      padding: 18px;
       border: 3px solid var(--navy);
       box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
     }
@@ -461,13 +469,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
-      padding-bottom: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 9px;
       border-bottom: 2px solid #e2e8f0;
     }
 
     .modal-title {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 900;
       color: var(--navy);
     }
@@ -476,32 +484,32 @@
       background: #e2e8f0;
       color: var(--navy);
       border: none;
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       font-weight: 900;
-      font-size: 1rem;
+      font-size: 0.95rem;
       cursor: pointer;
     }
 
     .form-group {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .form-label {
       display: block;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 800;
       color: var(--navy);
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
     .form-control {
       width: 100%;
-      padding: 10px;
-      border-radius: 11px;
+      padding: 9px 10px;
+      border-radius: 10px;
       border: 1.5px solid #cbd5e1;
-      font-size: 0.9rem;
+      font-size: 0.86rem;
       font-weight: 600;
     }
 
@@ -509,27 +517,27 @@
       background: #f0fdf4;
       border: 1.5px solid #86efac;
       color: #14532d;
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-size: 0.85rem;
+      padding: 9px 11px;
+      border-radius: 11px;
+      font-size: 0.82rem;
       font-weight: 700;
-      line-height: 1.45;
+      line-height: 1.4;
       margin-top: 8px;
     }
 
     .modal-footer-btns {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 16px;
+      gap: 8px;
+      margin-top: 14px;
     }
 
     .btn-gray {
       background: #94a3b8;
       color: #ffffff;
       border: none;
-      border-radius: 12px;
-      padding: 12px;
+      border-radius: 11px;
+      padding: 10px;
       font-weight: 800;
       cursor: pointer;
     }
@@ -538,8 +546,8 @@
       background: var(--red);
       color: #ffffff;
       border: none;
-      border-radius: 12px;
-      padding: 12px;
+      border-radius: 11px;
+      padding: 10px;
       font-weight: 800;
       cursor: pointer;
     }
@@ -548,28 +556,28 @@
       background: var(--green);
       color: #ffffff;
       border: none;
-      border-radius: 12px;
-      padding: 12px;
+      border-radius: 11px;
+      padding: 10px;
       font-weight: 800;
       cursor: pointer;
     }
 
-    /* Abas Dentro da Engrenagem */
+    /* Abas da Engrenagem */
     .gear-tabs {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 6px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .gear-tab-btn {
-      padding: 9px 6px;
-      border-radius: 11px;
+      padding: 8px 5px;
+      border-radius: 10px;
       border: 1.5px solid #cbd5e1;
       background: #f8fafc;
       color: var(--navy);
       font-weight: 800;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       cursor: pointer;
     }
 
@@ -590,20 +598,20 @@
     .caixa-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
+      gap: 8px;
+      margin-bottom: 10px;
     }
 
     .caixa-card {
       background: #f8fafc;
       border: 1.5px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 12px;
+      border-radius: 12px;
+      padding: 10px;
       text-align: center;
     }
 
     .caixa-val {
-      font-size: 1.45rem;
+      font-size: 1.35rem;
       font-weight: 900;
     }
 
@@ -611,10 +619,10 @@
     .caixa-val.green { color: var(--green); }
 
     .caixa-lbl {
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       color: var(--muted);
       font-weight: 700;
-      margin-top: 3px;
+      margin-top: 2px;
     }
 
     .btn-zerar-caixa {
@@ -622,12 +630,12 @@
       background: #ef4444;
       color: #ffffff;
       border: none;
-      border-radius: 12px;
-      padding: 11px;
+      border-radius: 11px;
+      padding: 10px;
       font-weight: 800;
-      font-size: 0.88rem;
+      font-size: 0.84rem;
       cursor: pointer;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .roi-row {
@@ -636,10 +644,10 @@
       align-items: center;
       background: #f8fafc;
       border: 1px solid #e2e8f0;
-      padding: 10px 12px;
-      border-radius: 11px;
-      margin-bottom: 7px;
-      font-size: 0.86rem;
+      padding: 9px 11px;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      font-size: 0.83rem;
     }
 
     .audit-card {
@@ -649,9 +657,9 @@
       border-right: 1px solid #e2e8f0;
       border-bottom: 1px solid #e2e8f0;
       border-radius: 10px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      font-size: 0.8rem;
+      padding: 9px 11px;
+      margin-bottom: 7px;
+      font-size: 0.78rem;
     }
 
     .audit-card.stopped {
@@ -660,20 +668,82 @@
     }
 
     .audit-reason-tag {
-      margin-top: 5px;
+      margin-top: 4px;
       background: #fee2e2;
       color: #991b1b;
-      padding: 5px 8px;
-      border-radius: 7px;
+      padding: 4px 7px;
+      border-radius: 6px;
       font-weight: 700;
     }
 
-    .kart-photo-edit {
+    /* Gerenciador de Brinquedos (Adicionar / Editar / Remover) */
+    .fleet-box {
       background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 13px;
+      padding: 11px;
+      margin-top: 10px;
+    }
+
+    .fleet-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      background: #ffffff;
       border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 10px;
-      margin-bottom: 10px;
+      border-radius: 10px;
+      padding: 7px 9px;
+      margin-bottom: 7px;
+    }
+
+    .fleet-thumb {
+      width: 44px;
+      height: 32px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid #cbd5e1;
+      flex-shrink: 0;
+    }
+
+    .fleet-actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .btn-mini-edit {
+      background: #0284c7;
+      color: #ffffff;
+      border: none;
+      border-radius: 7px;
+      padding: 5px 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-mini-del {
+      background: var(--red);
+      color: #ffffff;
+      border: none;
+      border-radius: 7px;
+      padding: 5px 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-add-kart {
+      width: 100%;
+      background: var(--navy);
+      color: var(--yellow);
+      border: none;
+      border-radius: 10px;
+      padding: 9px;
+      font-size: 0.82rem;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 6px;
     }
   </style>
 </head>
@@ -681,16 +751,14 @@
 
   <!-- Topo -->
   <header class="top-banner">
-    <div class="logo-area">
-      <div>
-        <div class="logo-main">CIA DOS<br>BRINQUEDOS</div>
-        <span class="logo-sub">Aluguel de Brinquedos 🎈</span>
-      </div>
+    <div>
+      <div class="logo-main">CIA DOS<br>BRINQUEDOS</div>
+      <span class="logo-sub">Aluguel de Brinquedos 🎈</span>
     </div>
-    <button class="btn-gear" onclick="abrirPainelEngrenagem()" title="Painel de Caixa, Relatórios e Ajustes">⚙️</button>
+    <button class="btn-gear" onclick="abrirPainelEngrenagem()" title="Caixa, Relatórios e Gerenciar Brinquedos">⚙️</button>
   </header>
 
-  <!-- Cabeçalho da Tela Principal -->
+  <!-- Cabeçalho -->
   <div class="section-header">
     <div class="section-icon">🏎️</div>
     <div>
@@ -699,7 +767,7 @@
     </div>
   </div>
 
-  <!-- Cards dos Brinquedos -->
+  <!-- Grade de Brinquedos -->
   <main class="karts-grid" id="kartsGrid"></main>
 
   <!-- Rodapé -->
@@ -717,8 +785,8 @@
         <button class="btn-close-modal" onclick="fecharModalParada()">✕</button>
       </div>
 
-      <p style="font-size:0.86rem; color:#475569; margin-bottom:12px; font-weight:600;">
-        Para encerrar antes de zerar o tempo, o motivo é obrigatório e o valor não será zerado.
+      <p style="font-size:0.82rem; color:#475569; margin-bottom:10px; font-weight:600;">
+        Motivo obrigatório para parada antecipada. O valor não será zerado.
       </p>
 
       <div class="form-group">
@@ -739,7 +807,7 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label">Como contabilizar o valor:</label>
+        <label class="form-label">Contabilização do valor:</label>
         <select class="form-control" id="stopBillingRule" onchange="atualizarCalculoParada()">
           <option value="proporcional">Proporcional aos minutos rodados (Mín. R$ 1,00)</option>
           <option value="integral">Valor integral cobrado no início</option>
@@ -749,27 +817,27 @@
       <div class="calc-box" id="stopCalcBox"></div>
 
       <div class="modal-footer-btns">
-        <button class="btn-gray" onclick="fecharModalParada()">Continuar Corrida</button>
+        <button class="btn-gray" onclick="fecharModalParada()">Continuar</button>
         <button class="btn-confirm-red" onclick="confirmarParadaCorrida()">Confirmar Parada</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal da Engrenagem (Caixa, Relatório ROI, Auditoria e Ajustes - Aberto nesta fase) -->
+  <!-- Modal da Engrenagem (Sem senha nesta etapa) -->
   <div class="modal-overlay" id="gearModal">
     <div class="modal-box">
       <div class="modal-header">
-        <div class="modal-title">⚙️ Gestão, Caixa & Auditoria</div>
+        <div class="modal-title">⚙️ Gestão, Caixa & Frota</div>
         <button class="btn-close-modal" onclick="fecharPainelEngrenagem()">✕</button>
       </div>
 
       <div class="gear-tabs">
         <button class="gear-tab-btn active" id="tabBtnCaixa" onclick="trocarAbaGear('caixa')">💰 Caixa & ROI</button>
         <button class="gear-tab-btn" id="tabBtnAuditoria" onclick="trocarAbaGear('auditoria')">🛡️ Auditoria</button>
-        <button class="gear-tab-btn" id="tabBtnConfig" onclick="trocarAbaGear('config')">🔧 Ajustes</button>
+        <button class="gear-tab-btn" id="tabBtnConfig" onclick="trocarAbaGear('config')">🏎️ Brinquedos</button>
       </div>
 
-      <!-- Aba 1: Caixa do Dia e Relatório Vitalício -->
+      <!-- Aba Caixa & ROI -->
       <div class="gear-panel active" id="panelCaixa">
         <div class="caixa-grid">
           <div class="caixa-card">
@@ -784,31 +852,57 @@
 
         <button class="btn-zerar-caixa" onclick="zerarCaixaDia()">Zerar Apenas Caixa do Dia 🔄</button>
 
-        <div class="form-label" style="margin-bottom:8px;">📈 Relatório Vitalício (Retorno / ROI por Brinquedo)</div>
+        <div class="form-label" style="margin-bottom:6px;">📈 Relatório Vitalício (Retorno / ROI)</div>
         <div id="gearRoiList"></div>
       </div>
 
-      <!-- Aba 2: Auditoria de Corridas e Paradas -->
+      <!-- Aba Auditoria -->
       <div class="gear-panel" id="panelAuditoria">
-        <p style="font-size:0.8rem; color:#64748b; margin-bottom:10px;">
-          Histórico completo de corridas iniciadas, valores finais e justificativas de paradas antecipadas:
-        </p>
         <div id="gearAuditList"></div>
       </div>
 
-      <!-- Aba 3: Configurações Gerais e Fotos -->
+      <!-- Aba Brinquedos e Preço -->
       <div class="gear-panel" id="panelConfig">
         <div class="form-group">
           <label class="form-label">Valor Padrão por Minuto (R$):</label>
-          <input type="number" class="form-control" id="cfgPrecoMin" step="0.50" min="0.50" />
+          <input type="number" class="form-control" id="cfgPrecoMin" step="0.50" min="0.50" onchange="salvarPrecoPadrao()" />
         </div>
 
-        <div class="form-label" style="margin-bottom:8px;">📸 Foto / Imagem de Cada Brinquedo (URL ou Caminho):</div>
-        <div id="gearPhotosEditor"></div>
+        <!-- Lista de Brinquedos Cadastrados -->
+        <div class="form-label" style="margin-top:8px;">📋 Brinquedos Cadastrados (Editar ou Remover):</div>
+        <div id="fleetListContainer"></div>
 
-        <div class="modal-footer-btns">
-          <button class="btn-gray" onclick="fecharPainelEngrenagem()">Fechar</button>
-          <button class="btn-confirm-green" onclick="salvarConfiguracoes()">Salvar Ajustes</button>
+        <!-- Formulário Adicionar / Editar Brinquedo -->
+        <div class="fleet-box">
+          <div class="form-label" id="formKartTitle">➕ Adicionar Novo Brinquedo</div>
+          <input type="hidden" id="editKartId" value="" />
+
+          <div class="form-group">
+            <label class="form-label">Nome do Brinquedo:</label>
+            <input type="text" class="form-control" id="kartNomeInput" placeholder="Ex: DRIFT VERMELHO 005" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Frase Curta:</label>
+            <input type="text" class="form-control" id="kartTagInput" placeholder="⚡ Diversão sobre rodas! Sinta a adrenalina do drift!" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Cor do Card:</label>
+            <select class="form-control" id="kartThemeInput">
+              <option value="yellow">Amarelo / Azul Marinho</option>
+              <option value="cyan">Azul Ciano</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Foto do Brinquedo (Link/URL ou Galeria):</label>
+            <input type="text" class="form-control" id="kartFotoUrlInput" placeholder="https://... ou escolha foto abaixo" style="margin-bottom:6px;" />
+            <input type="file" class="form-control" id="kartFotoFileInput" accept="image/*" onchange="carregarArquivoFoto(event)" />
+          </div>
+
+          <button class="btn-add-kart" id="btnSalvarKartForm" onclick="salvarBrinquedoForm()">+ Adicionar Brinquedo</button>
+          <button class="btn-gray" style="width:100%; margin-top:6px; padding:8px; font-size:0.78rem;" onclick="limparFormKart()">Limpar Campos</button>
         </div>
       </div>
     </div>
@@ -818,24 +912,23 @@
     const BLE_SERVICE_UUID = '4fa1c201-222d-4b93-9fb6-52c1e7f32d88';
     const BLE_CHAR_UUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
-    function criarSvgKart(corPrincipal, corSecundaria, texto) {
+    function criarSvgKart(corFundo, corDetalhe, rotulo) {
       const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180">
-          <rect width="320" height="180" fill="${corPrincipal}"/>
-          <polygon points="0,180 120,0 200,0 80,180" fill="${corSecundaria}" opacity="0.45"/>
-          <path d="M95 125 L165 65 L235 72 L248 92 L155 128 Z" fill="#111827" stroke="#ffffff" stroke-width="3"/>
-          <path d="M168 72 L222 77 L214 95 L162 92 Z" fill="#38bdf8"/>
-          <circle cx="115" cy="135" r="24" fill="#0f172a" stroke="#e2e8f0" stroke-width="4"/>
-          <circle cx="115" cy="135" r="10" fill="#94a3b8"/>
-          <circle cx="222" cy="132" r="20" fill="#0f172a" stroke="#e2e8f0" stroke-width="4"/>
-          <circle cx="222" cy="132" r="8" fill="#94a3b8"/>
-          <rect x="135" y="55" width="34" height="10" rx="4" fill="#facc15" transform="rotate(-18 152 60)"/>
-          <text x="160" y="34" font-family="Arial, sans-serif" font-size="16" font-weight="900" fill="#ffffff" text-anchor="middle">${texto}</text>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 140">
+          <rect width="320" height="140" fill="${corFundo}"/>
+          <polygon points="0,140 105,0 175,0 70,140" fill="${corDetalhe}" opacity="0.4"/>
+          <path d="M100 102 L162 48 L228 54 L240 72 L154 105 Z" fill="#111827" stroke="#ffffff" stroke-width="3"/>
+          <path d="M165 54 L216 59 L208 75 L159 72 Z" fill="#38bdf8"/>
+          <circle cx="118" cy="110" r="20" fill="#0f172a" stroke="#e2e8f0" stroke-width="3.5"/>
+          <circle cx="118" cy="110" r="8" fill="#94a3b8"/>
+          <circle cx="216" cy="108" r="17" fill="#0f172a" stroke="#e2e8f0" stroke-width="3.5"/>
+          <circle cx="216" cy="108" r="7" fill="#94a3b8"/>
+          <text x="160" y="24" font-family="Arial, sans-serif" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">${rotulo}</text>
         </svg>`;
       return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg.trim());
     }
 
-    const DEFAULT_KARTS = [
+    const INITIAL_KARTS = [
       {
         id: 'kart_preto',
         name: 'DRIFT PRETO 001',
@@ -849,43 +942,34 @@
         tagline: '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!',
         theme: 'cyan',
         photo: criarSvgKart('#0284c7', '#38bdf8', 'DRIFT AZUL 002')
-      },
-      {
-        id: 'kart_colorido',
-        name: 'DRIFT COLORIDO 003',
-        tagline: '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!',
-        theme: 'yellow',
-        photo: criarSvgKart('#ea580c', '#facc15', 'DRIFT COLORIDO 003')
-      },
-      {
-        id: 'kart_verde',
-        name: 'DRIFT VERDE 004',
-        tagline: '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!',
-        theme: 'cyan',
-        photo: criarSvgKart('#15803d', '#4ade80', 'DRIFT VERDE 004')
       }
     ];
 
-    let appState = JSON.parse(localStorage.getItem('cia_brinquedos_app_v3')) || {
+    let appState = JSON.parse(localStorage.getItem('cia_brinquedos_app_v4')) || {
       precoMinuto: 1.00,
       diaCorridas: 0,
       diaFaturamento: 0,
+      karts: INITIAL_KARTS,
       roi: {},
-      fotos: {},
       activeRides: {},
       auditLog: []
     };
 
-    DEFAULT_KARTS.forEach(k => {
+    if (!Array.isArray(appState.karts) || appState.karts.length === 0) {
+      appState.karts = INITIAL_KARTS;
+    }
+
+    appState.karts.forEach(k => {
       if (!appState.roi[k.id]) appState.roi[k.id] = { rides: 0, total: 0 };
-      if (!appState.fotos[k.id]) appState.fotos[k.id] = k.photo;
+      if (!k.photo) k.photo = criarSvgKart('#f59e0b', '#0f172a', k.name);
     });
 
     const bleDevices = {};
     let kartEmParada = null;
+    let fotoBase64Temporaria = '';
 
     function salvarState() {
-      localStorage.setItem('cia_brinquedos_app_v3', JSON.stringify(appState));
+      localStorage.setItem('cia_brinquedos_app_v4', JSON.stringify(appState));
     }
 
     function fmtMoeda(v) {
@@ -958,7 +1042,7 @@
       }
     }
 
-    // Atalhos e cálculo de valor
+    // Presets e Valor
     function selecionarPreset(kartId, minutos) {
       const minEl = document.getElementById(`min_${kartId}`);
       const valEl = document.getElementById(`val_${kartId}`);
@@ -977,10 +1061,12 @@
       }
     }
 
-    // Iniciar Corrida (Valor obrigatório > 0 e já contabilizado no início)
+    // Iniciar Corrida
     async function iniciarCorrida(kartId) {
-      const kart = DEFAULT_KARTS.find(k => k.id === kartId);
-      const nomeCrianca = document.getElementById(`cli_${kartId}`).value.trim() || 'Sem nome';
+      const kart = appState.karts.find(k => k.id === kartId);
+      if (!kart) return;
+
+      const nomeCliente = document.getElementById(`cli_${kartId}`).value.trim() || 'Cliente sem nome';
       const minutos = parseInt(document.getElementById(`min_${kartId}`).value, 10);
       const valor = parseFloat(document.getElementById(`val_${kartId}`).value);
 
@@ -990,9 +1076,11 @@
       }
 
       if (isNaN(valor) || valor <= 0) {
-        alert('🚫 Toda corrida precisa iniciar com um valor maior que R$ 0,00!');
+        alert('🚫 Toda corrida precisa iniciar com valor maior que R$ 0,00!');
         return;
       }
+
+      if (!appState.roi[kartId]) appState.roi[kartId] = { rides: 0, total: 0 };
 
       const agora = Date.now();
       const auditId = 'RUN-' + agora;
@@ -1006,7 +1094,7 @@
         id: auditId,
         kartId,
         kartName: kart.name,
-        cliente: nomeCrianca,
+        cliente: nomeCliente,
         hora: new Date().toLocaleString('pt-BR'),
         minutosContratados: minutos,
         minutosRodados: minutos,
@@ -1018,7 +1106,7 @@
 
       appState.activeRides[kartId] = {
         auditId,
-        cliente: nomeCrianca,
+        cliente: nomeCliente,
         minutosContratados: minutos,
         valorInicial: valor,
         startTime: agora,
@@ -1040,6 +1128,7 @@
       ride.valorInicial = Number((ride.valorInicial + extra).toFixed(2));
 
       appState.diaFaturamento = Number((appState.diaFaturamento + extra).toFixed(2));
+      if (!appState.roi[kartId]) appState.roi[kartId] = { rides: 0, total: 0 };
       appState.roi[kartId].total = Number((appState.roi[kartId].total + extra).toFixed(2));
 
       const log = appState.auditLog.find(a => a.id === ride.auditId);
@@ -1101,7 +1190,7 @@
 
       document.getElementById('stopCalcBox').innerHTML = `
         ⏱️ Contratado: <strong>${ride.minutosContratados} min</strong> | Rodou: <strong>${minUsados} min</strong><br>
-        💰 Valor inicial: ${fmtMoeda(ride.valorInicial)} ➔ <strong>Contabilizar: ${fmtMoeda(valorFinal)}</strong>
+        💰 Inicial: ${fmtMoeda(ride.valorInicial)} ➔ <strong>Contabilizar: ${fmtMoeda(valorFinal)}</strong>
       `;
     }
 
@@ -1122,7 +1211,9 @@
 
       if (diferenca > 0) {
         appState.diaFaturamento = Math.max(0, Number((appState.diaFaturamento - diferenca).toFixed(2)));
-        appState.roi[kartEmParada].total = Math.max(0, Number((appState.roi[kartEmParada].total - diferenca).toFixed(2)));
+        if (appState.roi[kartEmParada]) {
+          appState.roi[kartEmParada].total = Math.max(0, Number((appState.roi[kartEmParada].total - diferenca).toFixed(2)));
+        }
       }
 
       const log = appState.auditLog.find(a => a.id === ride.auditId);
@@ -1142,12 +1233,12 @@
       renderizarKarts();
     }
 
-    // Loop de contagem regressiva
+    // Timer Regressivo
     setInterval(async () => {
       const agora = Date.now();
-      let mudouEstado = false;
+      let mudou = false;
 
-      for (const kart of DEFAULT_KARTS) {
+      for (const kart of appState.karts) {
         const ride = appState.activeRides[kart.id];
         if (ride) {
           const rest = Math.max(0, Math.ceil((ride.endTime - agora) / 1000));
@@ -1161,19 +1252,19 @@
             salvarState();
             tocarSomFim();
             await enviarBLE(kart.id, 'PARAR');
-            mudouEstado = true;
+            mudou = true;
           }
         }
       }
 
-      if (mudouEstado) renderizarKarts();
+      if (mudou) renderizarKarts();
     }, 1000);
 
-    // Painel da Engrenagem (Sem bloqueio de senha nesta etapa)
+    // Painel da Engrenagem (Sem senha nesta fase)
     function abrirPainelEngrenagem() {
       renderizarGearCaixa();
       renderizarGearAuditoria();
-      renderizarGearConfig();
+      renderizarGearBrinquedos();
       document.getElementById('gearModal').classList.add('active');
     }
 
@@ -1196,34 +1287,127 @@
       } else {
         document.getElementById('tabBtnConfig').classList.add('active');
         document.getElementById('panelConfig').classList.add('active');
-        renderizarGearConfig();
+        renderizarGearBrinquedos();
       }
     }
 
     function zerarCaixaDia() {
-      if (!confirm('Deseja zerar apenas o Caixa do Dia (corridas e faturamento de hoje)?')) return;
+      if (!confirm('Deseja zerar apenas o Caixa do Dia?')) return;
       appState.diaCorridas = 0;
       appState.diaFaturamento = 0;
       salvarState();
       renderizarGearCaixa();
     }
 
-    function salvarConfiguracoes() {
+    function salvarPrecoPadrao() {
       const novoPreco = parseFloat(document.getElementById('cfgPrecoMin').value);
       if (!isNaN(novoPreco) && novoPreco > 0) {
         appState.precoMinuto = novoPreco;
+        salvarState();
+        renderizarKarts();
+      }
+    }
+
+    function carregarArquivoFoto(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        fotoBase64Temporaria = e.target.result;
+        document.getElementById('kartFotoUrlInput').value = '[Imagem selecionada do dispositivo]';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function limparFormKart() {
+      document.getElementById('editKartId').value = '';
+      document.getElementById('formKartTitle').textContent = '➕ Adicionar Novo Brinquedo';
+      document.getElementById('btnSalvarKartForm').textContent = '+ Adicionar Brinquedo';
+      document.getElementById('kartNomeInput').value = '';
+      document.getElementById('kartTagInput').value = '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!';
+      document.getElementById('kartThemeInput').value = 'yellow';
+      document.getElementById('kartFotoUrlInput').value = '';
+      document.getElementById('kartFotoFileInput').value = '';
+      fotoBase64Temporaria = '';
+    }
+
+    function editarBrinquedo(kartId) {
+      const kart = appState.karts.find(k => k.id === kartId);
+      if (!kart) return;
+
+      document.getElementById('editKartId').value = kart.id;
+      document.getElementById('formKartTitle').textContent = '✏️ Editar Brinquedo';
+      document.getElementById('btnSalvarKartForm').textContent = '💾 Salvar Alterações do Brinquedo';
+      document.getElementById('kartNomeInput').value = kart.name;
+      document.getElementById('kartTagInput').value = kart.tagline || '';
+      document.getElementById('kartThemeInput').value = kart.theme || 'yellow';
+      document.getElementById('kartFotoUrlInput').value = kart.photo.startsWith('data:image/') ? '' : kart.photo;
+      document.getElementById('kartFotoFileInput').value = '';
+      fotoBase64Temporaria = '';
+    }
+
+    function salvarBrinquedoForm() {
+      const editId = document.getElementById('editKartId').value.trim();
+      const nome = document.getElementById('kartNomeInput').value.trim().toUpperCase();
+      const tagline = document.getElementById('kartTagInput').value.trim() || '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!';
+      const theme = document.getElementById('kartThemeInput').value;
+      const fotoUrl = document.getElementById('kartFotoUrlInput').value.trim();
+
+      if (!nome) {
+        alert('⚠️ Digite o nome do brinquedo.');
+        return;
       }
 
-      DEFAULT_KARTS.forEach(k => {
-        const inputFoto = document.getElementById(`foto_${k.id}`);
-        if (inputFoto && inputFoto.value.trim()) {
-          appState.fotos[k.id] = inputFoto.value.trim();
+      if (editId) {
+        const kart = appState.karts.find(k => k.id === editId);
+        if (kart) {
+          kart.name = nome;
+          kart.tagline = tagline;
+          kart.theme = theme;
+          if (fotoBase64Temporaria) {
+            kart.photo = fotoBase64Temporaria;
+          } else if (fotoUrl && !fotoUrl.startsWith('[Imagem selecionada')) {
+            kart.photo = fotoUrl;
+          }
         }
-      });
+      } else {
+        const newId = 'kart_' + Date.now();
+        const corFundo = theme === 'cyan' ? '#0284c7' : '#f59e0b';
+        const corDetalhe = theme === 'cyan' ? '#38bdf8' : '#0f172a';
+        const fotoFinal = fotoBase64Temporaria || (fotoUrl && !fotoUrl.startsWith('[Imagem selecionada') ? fotoUrl : criarSvgKart(corFundo, corDetalhe, nome));
+
+        appState.karts.push({
+          id: newId,
+          name: nome,
+          tagline,
+          theme,
+          photo: fotoFinal
+        });
+        appState.roi[newId] = { rides: 0, total: 0 };
+      }
 
       salvarState();
+      limparFormKart();
+      renderizarGearBrinquedos();
       renderizarKarts();
-      fecharPainelEngrenagem();
+    }
+
+    function removerBrinquedo(kartId) {
+      if (appState.activeRides[kartId]) {
+        alert('🚫 Não é possível remover um brinquedo com corrida em andamento.');
+        return;
+      }
+      if (appState.karts.length <= 1) {
+        alert('⚠️ Mantenha ao menos 1 brinquedo cadastrado.');
+        return;
+      }
+      const kart = appState.karts.find(k => k.id === kartId);
+      if (!confirm(`Deseja realmente remover "${kart?.name || 'este brinquedo'}"?`)) return;
+
+      appState.karts = appState.karts.filter(k => k.id !== kartId);
+      salvarState();
+      renderizarGearBrinquedos();
+      renderizarKarts();
     }
 
     function renderizarGearCaixa() {
@@ -1231,7 +1415,7 @@
       document.getElementById('gearFaturamentoHoje').textContent = fmtMoeda(appState.diaFaturamento);
 
       const roiEl = document.getElementById('gearRoiList');
-      roiEl.innerHTML = DEFAULT_KARTS.map(k => {
+      roiEl.innerHTML = appState.karts.map(k => {
         const d = appState.roi[k.id] || { rides: 0, total: 0 };
         return `
           <div class="roi-row">
@@ -1244,7 +1428,7 @@
     function renderizarGearAuditoria() {
       const audEl = document.getElementById('gearAuditList');
       if (!appState.auditLog.length) {
-        audEl.innerHTML = `<p style="text-align:center; color:#64748b; font-size:0.85rem;">Nenhuma corrida registrada até o momento.</p>`;
+        audEl.innerHTML = `<p style="text-align:center; color:#64748b; font-size:0.84rem;">Nenhuma corrida registrada.</p>`;
         return;
       }
 
@@ -1256,42 +1440,47 @@
               <span>${item.kartName} — ${item.cliente}</span>
               <span style="color:${isStopped ? 'var(--red)' : 'var(--green)'};">${fmtMoeda(item.valorFinal)}</span>
             </div>
-            <div style="color:#64748b; margin-top:3px;">
-              🕒 ${item.hora} • Tempo: ${item.minutosRodados}/${item.minutosContratados} min • ${item.status}
+            <div style="color:#64748b; margin-top:2px;">
+              🕒 ${item.hora} • ${item.minutosRodados}/${item.minutosContratados} min • ${item.status}
             </div>
             ${item.motivo ? `<div class="audit-reason-tag">⚠️ Motivo: ${item.motivo}</div>` : ''}
           </div>`;
       }).join('');
     }
 
-    function renderizarGearConfig() {
+    function renderizarGearBrinquedos() {
       document.getElementById('cfgPrecoMin').value = appState.precoMinuto.toFixed(2);
-      const editor = document.getElementById('gearPhotosEditor');
-      editor.innerHTML = DEFAULT_KARTS.map(k => `
-        <div class="kart-photo-edit">
-          <label class="form-label">${k.name}</label>
-          <input type="text" class="form-control" id="foto_${k.id}" value="${appState.fotos[k.id] || k.photo}" />
+      const listEl = document.getElementById('fleetListContainer');
+      listEl.innerHTML = appState.karts.map(k => `
+        <div class="fleet-item">
+          <div style="display:flex; align-items:center; gap:8px; min-width:0;">
+            <img src="${k.photo}" alt="${k.name}" class="fleet-thumb" />
+            <strong style="font-size:0.82rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${k.name}</strong>
+          </div>
+          <div class="fleet-actions">
+            <button class="btn-mini-edit" onclick="editarBrinquedo('${k.id}')">Editar</button>
+            <button class="btn-mini-del" onclick="removerBrinquedo('${k.id}')">Remover</button>
+          </div>
         </div>
       `).join('');
     }
 
-    // Tela Principal Limpa: Apenas Seleção, Dados da Corrida e Controles
+    // Tela Principal: Apenas Seleção, Dados e Controles Compactos
     function renderizarKarts() {
       const grid = document.getElementById('kartsGrid');
       const agora = Date.now();
       const precoPadrao = appState.precoMinuto;
 
-      grid.innerHTML = DEFAULT_KARTS.map(kart => {
+      grid.innerHTML = appState.karts.map(kart => {
         const ride = appState.activeRides[kart.id];
         const isConnected = !!bleDevices[kart.id]?.device?.gatt?.connected;
         const restante = ride ? Math.max(0, Math.ceil((ride.endTime - agora) / 1000)) : 0;
-        const fotoSrc = appState.fotos[kart.id] || kart.photo;
 
         return `
           <article class="kart-card ${kart.theme === 'cyan' ? 'theme-cyan' : ''} ${ride ? 'running' : ''}">
             <div>
               <div class="kart-photo-box">
-                <img src="${fotoSrc}" alt="${kart.name}" />
+                <img src="${kart.photo}" alt="${kart.name}" />
                 <button class="ble-pill ${isConnected ? 'connected' : ''}" onclick="alternarBLE('${kart.id}')">
                   ${isConnected ? '🔵 BLE Ligado' : '⚪ Conectar BLE'}
                 </button>
@@ -1304,16 +1493,23 @@
 
             ${ride ? `
               <div>
-                <div class="active-ride-panel">
-                  <div class="active-ride-line">
-                    <span>👤 ${ride.cliente}</span>
-                    <span>💰 ${fmtMoeda(ride.valorInicial)}</span>
+                <div class="client-banner">👤 Cliente: ${ride.cliente}</div>
+
+                <div class="micro-grid">
+                  <div class="micro-box">
+                    <span class="micro-label">Valor</span>
+                    <span class="micro-value green">${fmtMoeda(ride.valorInicial)}</span>
                   </div>
-                  <div class="active-ride-line" style="color:#15803d;">
-                    <span>Tempo: ${ride.minutosContratados} min</span>
-                    <span>Em andamento</span>
+                  <div class="micro-box">
+                    <span class="micro-label">Tempo</span>
+                    <span class="micro-value">${ride.minutosContratados} min</span>
+                  </div>
+                  <div class="micro-box">
+                    <span class="micro-label">Status</span>
+                    <span class="micro-value green">🟢 Ativo</span>
                   </div>
                 </div>
+
                 <div class="running-btns">
                   <button class="btn-plus1" onclick="adicionarMaisUmMinuto('${kart.id}')">+1 Minuto</button>
                   <button class="btn-stop-ride" onclick="abrirModalParada('${kart.id}')">🛑 Parar</button>
@@ -1328,7 +1524,7 @@
                 </div>
 
                 <div class="inputs-row">
-                  <input type="text" class="input-field name-input" id="cli_${kart.id}" placeholder="Nome criança" />
+                  <input type="text" class="input-field name-input" id="cli_${kart.id}" placeholder="Nome cliente" />
                   <input type="number" class="input-field" id="min_${kart.id}" min="1" value="5" oninput="aoDigitarMinutos('${kart.id}')" title="Minutos" />
                   <input type="number" class="input-field" id="val_${kart.id}" step="0.50" min="1" value="${(5 * precoPadrao).toFixed(2)}" title="Valor R$" />
                 </div>
