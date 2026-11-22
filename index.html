@@ -3,18 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Cia dos Brinquedos - Gestão & Controle</title>
+  <title>Cia dos Brinquedos - Aluguel de Brinquedos</title>
   <style>
     :root {
-      --primary: #0f294a;
-      --secondary: #ffcc00;
-      --accent: #ff5722;
-      --success: #16a34a;
-      --danger: #dc2626;
-      --warning: #f59e0b;
-      --bg: #f1f5f9;
-      --card: #ffffff;
-      --text: #1e293b;
+      --navy: #0a2447;
+      --navy-dark: #061830;
+      --navy-light: #163b6d;
+      --yellow: #ffcc00;
+      --yellow-dark: #e6b300;
+      --cyan: #00c4f4;
+      --cyan-dark: #009bc4;
+      --green: #16a34a;
+      --green-dark: #15803d;
+      --red: #dc2626;
+      --red-dark: #b91c1c;
+      --blue-ble: #2563eb;
+      --cream: #fffdf5;
+      --card-bg: #ffffff;
+      --text: #0f172a;
       --muted: #64748b;
     }
 
@@ -23,620 +29,903 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      background-color: var(--bg);
+      background-color: var(--cream);
       color: var(--text);
-      padding-bottom: 40px;
+      min-height: 100vh;
+      padding-bottom: 110px;
+      position: relative;
+      overflow-x: hidden;
     }
 
-    /* Header */
-    header {
-      background: linear-gradient(135deg, #0b2240 0%, #163b6b 100%);
-      color: white;
-      padding: 18px 20px;
-      border-bottom-left-radius: 24px;
-      border-bottom-right-radius: 24px;
+    /* Topo Curvo Azul */
+    .top-banner {
+      background: linear-gradient(180deg, #092244 0%, #123666 100%);
+      padding: 16px 20px 32px;
+      position: relative;
+      border-bottom-left-radius: 50% 24px;
+      border-bottom-right-radius: 50% 24px;
+      box-shadow: 0 6px 18px rgba(9, 34, 68, 0.22);
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      justify-content: space-between;
     }
 
-    .brand h1 {
-      font-size: 1.35rem;
+    .top-banner::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -5px;
+      height: 10px;
+      background: var(--yellow);
+      border-bottom-left-radius: 50% 10px;
+      border-bottom-right-radius: 50% 10px;
+      z-index: -1;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-main {
+      background: linear-gradient(180deg, #ffe24a 0%, #ff9900 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
       font-weight: 900;
-      color: var(--secondary);
-      letter-spacing: 0.5px;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+      font-size: 1.35rem;
+      letter-spacing: 0.4px;
+      filter: drop-shadow(0 2px 0 #05162e) drop-shadow(0 3px 4px rgba(0, 0, 0, 0.45));
+      line-height: 1.05;
     }
 
-    .brand p {
+    .logo-sub {
+      color: #ffffff;
       font-size: 0.85rem;
-      color: #cbd5e1;
+      font-weight: 700;
+      font-style: italic;
+      margin-top: 2px;
+      display: inline-block;
+      border-bottom: 2px solid var(--yellow);
+      padding-bottom: 1px;
+    }
+
+    .btn-gear {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ffe66d, var(--yellow));
+      border: 3px solid #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      font-size: 1.45rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-gear:active {
+      transform: scale(0.92);
+    }
+
+    /* Título da Seção */
+    .section-header {
+      max-width: 680px;
+      margin: 20px auto 14px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .section-title {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: var(--navy);
+      line-height: 1.15;
+    }
+
+    .section-subtitle {
+      font-size: 0.92rem;
+      color: var(--muted);
+      font-weight: 600;
       margin-top: 2px;
     }
 
-    .btn-config {
-      background: var(--secondary);
-      border: none;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      font-size: 1.3rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-    }
-
-    .container {
-      max-width: 600px;
+    /* Grade de Brinquedos */
+    .karts-grid {
+      max-width: 680px;
       margin: 0 auto;
-      padding: 16px;
-    }
-
-    /* Cards Gerais */
-    .card {
-      background: var(--card);
-      border-radius: 20px;
-      padding: 18px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    }
-
-    .card-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--primary);
-      text-align: center;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    /* Caixa do Dia */
-    .stats-grid {
+      padding: 0 16px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .stat-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 14px 10px;
-      text-align: center;
-    }
-
-    .stat-value {
-      font-size: 1.55rem;
-      font-weight: 900;
-    }
-
-    .stat-value.red { color: var(--danger); }
-    .stat-value.green { color: var(--success); }
-
-    .stat-label {
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-top: 4px;
-      font-weight: 600;
-    }
-
-    .btn-reset-day {
-      width: 100%;
-      background: #ef4444;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.9rem;
-      cursor: pointer;
-    }
-
-    /* Karts Grid */
-    .karts-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
     }
 
     .kart-card {
-      background: var(--card);
-      border-radius: 18px;
-      padding: 16px;
-      border: 2px solid #e2e8f0;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.04);
-      transition: all 0.2s;
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 14px;
+      border: 3px solid var(--navy);
+      box-shadow: 0 7px 0 var(--navy), 0 12px 22px rgba(10, 36, 71, 0.12);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.15s ease;
+    }
+
+    .kart-card.theme-cyan {
+      border-color: var(--cyan-dark);
+      box-shadow: 0 7px 0 var(--cyan-dark), 0 12px 22px rgba(0, 155, 196, 0.14);
     }
 
     .kart-card.running {
-      border-color: var(--success);
-      background: #f0fdf4;
+      border-color: var(--green);
+      box-shadow: 0 7px 0 var(--green-dark), 0 12px 22px rgba(22, 163, 74, 0.18);
+      background: #f4fdf7;
     }
 
     .kart-card.finished {
-      border-color: var(--danger);
+      border-color: var(--red);
+      box-shadow: 0 7px 0 var(--red-dark), 0 12px 22px rgba(220, 38, 38, 0.22);
       background: #fef2f2;
-      animation: pulse 1s infinite;
+      animation: alertPulse 0.9s infinite;
     }
 
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.01); }
-      100% { transform: scale(1); }
+    @keyframes alertPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.015); }
     }
 
-    .kart-header {
+    .kart-photo-box {
+      width: 100%;
+      height: 175px;
+      border-radius: 18px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #facc15 0%, #f97316 100%);
+      position: relative;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      justify-content: center;
+      border: 2px solid rgba(10, 36, 71, 0.12);
     }
 
-    .kart-name {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--primary);
+    .kart-card.theme-cyan .kart-photo-box {
+      background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
     }
 
-    .ble-badge {
+    .kart-photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .ble-pill {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--navy);
+      border: 2px solid var(--navy);
+      border-radius: 999px;
+      padding: 5px 11px;
       font-size: 0.75rem;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-weight: 700;
-      border: none;
+      font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
-    .ble-disconnected {
-      background: #e2e8f0;
-      color: #475569;
+    .ble-pill.connected {
+      background: #dcfce7;
+      color: #166534;
+      border-color: var(--green);
     }
 
-    .ble-connected {
-      background: #dbeafe;
-      color: #1d4ed8;
-    }
-
-    .timer-display {
-      font-size: 2.4rem;
-      font-weight: 900;
+    .kart-badge-name {
+      margin-top: 12px;
+      background: var(--navy);
+      color: #ffffff;
       text-align: center;
+      padding: 9px 12px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .kart-card.theme-cyan .kart-badge-name {
+      background: #073b66;
+    }
+
+    .kart-tagline {
+      text-align: center;
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #334155;
+      margin: 9px 0 6px;
+    }
+
+    .timer-box {
+      text-align: center;
+      font-size: 2.35rem;
+      font-weight: 900;
       font-variant-numeric: tabular-nums;
-      color: var(--primary);
-      margin: 8px 0;
+      color: var(--navy);
+      margin: 4px 0 10px;
+      letter-spacing: 1px;
     }
 
-    .running .timer-display {
-      color: var(--success);
+    .running .timer-box {
+      color: var(--green-dark);
     }
 
-    .finished .timer-display {
-      color: var(--danger);
+    .finished .timer-box {
+      color: var(--red);
     }
 
-    .active-info {
-      background: white;
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 0.85rem;
-      margin-bottom: 12px;
-      border: 1px solid #bbf7d0;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    /* Controles de Início */
-    .setup-controls {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .input-row {
-      display: grid;
-      grid-template-columns: 1.4fr 0.8fr 0.8fr;
-      gap: 8px;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      font-size: 0.9rem;
-      outline: none;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--primary);
-    }
-
-    .preset-btns {
+    .presets-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 6px;
+      margin-bottom: 10px;
     }
 
-    .btn-preset {
+    .preset-btn {
       background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      padding: 8px;
+      border: 1.5px solid #cbd5e1;
       border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.82rem;
-      color: var(--primary);
+      padding: 7px 4px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--navy);
       cursor: pointer;
     }
 
-    .btn-preset:active {
+    .preset-btn:active {
       background: #e2e8f0;
     }
 
-    .action-btns {
+    .inputs-row {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 8px;
+      grid-template-columns: 1.4fr 0.75fr 0.85fr;
+      gap: 7px;
+      margin-bottom: 11px;
     }
 
-    .btn {
-      padding: 12px;
-      border: none;
-      border-radius: 12px;
-      font-weight: 800;
-      font-size: 0.95rem;
-      cursor: pointer;
-      color: white;
+    .input-field {
+      width: 100%;
+      padding: 9px 8px;
+      border-radius: 11px;
+      border: 1.5px solid #cbd5e1;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+      background: #ffffff;
       text-align: center;
     }
 
-    .btn-start {
-      background: var(--success);
-      grid-column: span 2;
+    .input-field.name-input {
+      text-align: left;
     }
 
-    .btn-add-min {
-      background: #0284c7;
-    }
-
-    .btn-stop {
-      background: var(--danger);
-    }
-
-    /* ROI List */
-    .roi-item {
+    .btn-primary-action {
+      width: 100%;
+      border: 2px solid var(--navy);
+      border-radius: 16px;
+      padding: 13px 14px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      cursor: pointer;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 12px 14px;
-      background: #f8fafc;
-      border-radius: 12px;
-      margin-bottom: 8px;
-      border: 1px solid #e2e8f0;
-    }
-
-    .roi-name {
-      font-weight: 800;
-      font-size: 0.9rem;
-      color: var(--primary);
-    }
-
-    .roi-stats {
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    .roi-stats strong {
-      color: var(--success);
-      font-size: 0.95rem;
-      margin-left: 6px;
-    }
-
-    /* Log de Auditoria */
-    .audit-list {
-      max-height: 320px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
+      justify-content: center;
       gap: 8px;
+      box-shadow: 0 4px 0 var(--navy);
+      transition: transform 0.1s ease;
     }
 
-    .audit-item {
-      background: #f8fafc;
-      border-left: 4px solid var(--success);
-      padding: 10px 12px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      border-top: 1px solid #e2e8f0;
-      border-right: 1px solid #e2e8f0;
-      border-bottom: 1px solid #e2e8f0;
+    .btn-primary-action:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 var(--navy);
     }
 
-    .audit-item.interrupted {
-      border-left-color: var(--danger);
-      background: #fffafa;
+    .btn-start-yellow {
+      background: linear-gradient(180deg, #ffe033 0%, #ffb700 100%);
+      color: var(--navy);
     }
 
-    .audit-top {
+    .kart-card.theme-cyan .btn-start-yellow {
+      background: linear-gradient(180deg, #38e2ff 0%, #00b4e6 100%);
+      color: #052238;
+      border-color: #052238;
+      box-shadow: 0 4px 0 #052238;
+    }
+
+    .active-ride-panel {
+      background: #ffffff;
+      border: 2px solid #86efac;
+      border-radius: 14px;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 0.84rem;
+    }
+
+    .active-ride-line {
       display: flex;
       justify-content: space-between;
-      font-weight: 800;
+      font-weight: 700;
       margin-bottom: 4px;
     }
 
-    .audit-reason {
-      margin-top: 5px;
-      padding: 5px 8px;
-      background: #fee2e2;
-      color: #991b1b;
-      border-radius: 6px;
-      font-weight: 600;
+    .active-ride-line:last-child {
+      margin-bottom: 0;
     }
 
-    /* Modais */
-    .modal-backdrop {
+    .running-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .btn-plus1 {
+      background: #0284c7;
+      color: #ffffff;
+      border: none;
+      border-radius: 13px;
+      padding: 12px 8px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .btn-stop-ride {
+      background: var(--red);
+      color: #ffffff;
+      border: none;
+      border-radius: 13px;
+      padding: 12px 8px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    /* Rodapé Decorativo */
+    .bottom-wave {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--navy);
+      color: var(--yellow);
+      padding: 12px 18px;
+      border-top-left-radius: 50% 18px;
+      border-top-right-radius: 50% 18px;
+      border-top: 4px solid var(--yellow);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 900;
+      font-style: italic;
+      font-size: 1rem;
+      z-index: 40;
+      box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.18);
+    }
+
+    /* Modais (Parada Obrigatória e Painel da Engrenagem) */
+    .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.7);
+      background: rgba(6, 24, 48, 0.72);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 16px;
-      z-index: 1000;
+      padding: 14px;
+      z-index: 200;
+      overflow-y: auto;
     }
 
-    .modal-backdrop.open {
+    .modal-overlay.active {
       display: flex;
     }
 
-    .modal {
-      background: white;
+    .modal-box {
+      background: #ffffff;
       width: 100%;
-      max-width: 440px;
-      border-radius: 20px;
+      max-width: 540px;
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 22px;
       padding: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      border: 3px solid var(--navy);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
     }
 
-    .modal h3 {
-      color: var(--primary);
-      margin-bottom: 10px;
-      font-size: 1.15rem;
-    }
-
-    .modal p {
-      font-size: 0.88rem;
-      color: var(--muted);
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 14px;
-      line-height: 1.4;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e2e8f0;
     }
 
-    .modal-group {
+    .modal-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--navy);
+    }
+
+    .btn-close-modal {
+      background: #e2e8f0;
+      color: var(--navy);
+      border: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-weight: 900;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .form-group {
       margin-bottom: 12px;
     }
 
-    .modal-group label {
+    .form-label {
       display: block;
       font-size: 0.82rem;
-      font-weight: 700;
+      font-weight: 800;
+      color: var(--navy);
       margin-bottom: 5px;
-      color: var(--text);
     }
 
-    .modal-actions {
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border-radius: 11px;
+      border: 1.5px solid #cbd5e1;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .calc-box {
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      color: #14532d;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      line-height: 1.45;
+      margin-top: 8px;
+    }
+
+    .modal-footer-btns {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
       margin-top: 16px;
     }
 
-    .btn-cancel {
+    .btn-gray {
       background: #94a3b8;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      font-weight: 800;
+      cursor: pointer;
     }
 
-    .preview-calc {
-      background: #f0fdf4;
-      border: 1px solid #86efac;
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      color: #166534;
-      margin-top: 10px;
+    .btn-confirm-red {
+      background: var(--red);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-confirm-green {
+      background: var(--green);
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    /* Abas Dentro da Engrenagem */
+    .gear-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .gear-tab-btn {
+      padding: 9px 6px;
+      border-radius: 11px;
+      border: 1.5px solid #cbd5e1;
+      background: #f8fafc;
+      color: var(--navy);
+      font-weight: 800;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .gear-tab-btn.active {
+      background: var(--navy);
+      color: var(--yellow);
+      border-color: var(--navy);
+    }
+
+    .gear-panel {
+      display: none;
+    }
+
+    .gear-panel.active {
+      display: block;
+    }
+
+    .caixa-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .caixa-card {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .caixa-val {
+      font-size: 1.45rem;
+      font-weight: 900;
+    }
+
+    .caixa-val.red { color: var(--red); }
+    .caixa-val.green { color: var(--green); }
+
+    .caixa-lbl {
+      font-size: 0.78rem;
+      color: var(--muted);
       font-weight: 700;
+      margin-top: 3px;
+    }
+
+    .btn-zerar-caixa {
+      width: 100%;
+      background: #ef4444;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 11px;
+      font-weight: 800;
+      font-size: 0.88rem;
+      cursor: pointer;
+      margin-bottom: 14px;
+    }
+
+    .roi-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 10px 12px;
+      border-radius: 11px;
+      margin-bottom: 7px;
+      font-size: 0.86rem;
+    }
+
+    .audit-card {
+      background: #f8fafc;
+      border-left: 4px solid var(--green);
+      border-top: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      font-size: 0.8rem;
+    }
+
+    .audit-card.stopped {
+      border-left-color: var(--red);
+      background: #fff9f9;
+    }
+
+    .audit-reason-tag {
+      margin-top: 5px;
+      background: #fee2e2;
+      color: #991b1b;
+      padding: 5px 8px;
+      border-radius: 7px;
+      font-weight: 700;
+    }
+
+    .kart-photo-edit {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="brand">
-      <h1>CIA DOS BRINQUEDOS</h1>
-      <p>Aluguel de Brinquedos 🎈</p>
+  <!-- Topo -->
+  <header class="top-banner">
+    <div class="logo-area">
+      <div>
+        <div class="logo-main">CIA DOS<br>BRINQUEDOS</div>
+        <span class="logo-sub">Aluguel de Brinquedos 🎈</span>
+      </div>
     </div>
-    <button class="btn-config" onclick="abrirConfig()" title="Configurações">⚙️</button>
+    <button class="btn-gear" onclick="abrirPainelEngrenagem()" title="Painel de Caixa, Relatórios e Ajustes">⚙️</button>
   </header>
 
-  <div class="container">
-    <!-- Caixa do Dia -->
-    <div class="card">
-      <div class="card-title">💰 Caixa do Dia</div>
-      <div class="stats-grid">
-        <div class="stat-box">
-          <div class="stat-value red" id="diaCorridas">0</div>
-          <div class="stat-label">Corridas Hoje</div>
-        </div>
-        <div class="stat-box">
-          <div class="stat-value green" id="diaFaturamento">R$ 0,00</div>
-          <div class="stat-label">Faturamento Hoje</div>
-        </div>
-      </div>
-      <button class="btn-reset-day" onclick="zerarCaixaDia()">Zerar Apenas Caixa do Dia 🔄</button>
-    </div>
-
-    <!-- Lista de Carrinhos -->
-    <div class="karts-list" id="kartsContainer"></div>
-
-    <!-- Relatório Vitalício -->
-    <div class="card" style="margin-top: 18px;">
-      <div class="card-title">📈 Relatório Vitalício (Retorno / ROI)</div>
-      <p style="text-align:center; font-size:0.8rem; color:var(--muted); margin-bottom:12px;">
-        Faturamento histórico acumulado de cada carrinho:
-      </p>
-      <div id="roiContainer"></div>
-    </div>
-
-    <!-- Histórico & Auditoria de Operação -->
-    <div class="card">
-      <div class="card-title">🛡️ Auditoria & Histórico de Corridas</div>
-      <p style="text-align:center; font-size:0.78rem; color:var(--muted); margin-bottom:12px;">
-        Registro inviolável de corridas iniciadas, valores e motivos de parada:
-      </p>
-      <div class="audit-list" id="auditContainer"></div>
+  <!-- Cabeçalho da Tela Principal -->
+  <div class="section-header">
+    <div class="section-icon">🏎️</div>
+    <div>
+      <div class="section-title">Selecione um Brinquedo</div>
+      <div class="section-subtitle">Escolha o brinquedo e inicie a corrida</div>
     </div>
   </div>
 
-  <!-- Modal de Parada Obrigatória -->
-  <div class="modal-backdrop" id="stopModal">
-    <div class="modal">
-      <h3>⚠️ Encerrar Corrida Antes do Tempo</h3>
-      <p id="stopModalDesc">Informe obrigatoriamente o motivo para interromper esta corrida.</p>
+  <!-- Cards dos Brinquedos -->
+  <main class="karts-grid" id="kartsGrid"></main>
 
-      <div class="modal-group">
-        <label>Motivo Padrão:</label>
-        <select id="stopReasonSelect" onchange="atualizarMotivoTexto()">
-          <option value="">-- Selecione um motivo --</option>
+  <!-- Rodapé -->
+  <footer class="bottom-wave">
+    <span>😊</span>
+    <span>Aqui a diversão não tem hora!</span>
+    <span>🎮</span>
+  </footer>
+
+  <!-- Modal Obrigatório de Parada Antes do Tempo -->
+  <div class="modal-overlay" id="stopModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">🛑 Parar Corrida Antes do Tempo</div>
+        <button class="btn-close-modal" onclick="fecharModalParada()">✕</button>
+      </div>
+
+      <p style="font-size:0.86rem; color:#475569; margin-bottom:12px; font-weight:600;">
+        Para encerrar antes de zerar o tempo, o motivo é obrigatório e o valor não será zerado.
+      </p>
+
+      <div class="form-group">
+        <label class="form-label">Motivo da Parada:</label>
+        <select class="form-control" id="stopReasonPreset" onchange="sincronizarMotivo()">
+          <option value="">-- Escolha um motivo --</option>
           <option value="Criança desistiu / chorou">Criança desistiu / chorou</option>
           <option value="Bateria do carrinho acabou">Bateria do carrinho acabou</option>
           <option value="Problema técnico / mecânico">Problema técnico / mecânico</option>
-          <option value="Solicitação dos pais / responsável">Solicitação dos pais / responsável</option>
-          <option value="Outro motivo">Outro motivo (descrever abaixo)</option>
+          <option value="Pais solicitaram encerrar">Pais solicitaram encerrar</option>
+          <option value="Outro">Outro motivo (escrever abaixo)</option>
         </select>
       </div>
 
-      <div class="modal-group">
-        <label>Detalhes / Observação Obrigatória:</label>
-        <textarea id="stopReasonText" rows="2" placeholder="Descreva o que aconteceu..."></textarea>
+      <div class="form-group">
+        <label class="form-label">Descrição Obrigatória do Motivo:</label>
+        <textarea class="form-control" id="stopReasonDetail" rows="2" placeholder="Explique o motivo da parada..."></textarea>
       </div>
 
-      <div class="modal-group">
-        <label>Regra de Cobrança desta Parada:</label>
-        <select id="stopBillingMode" onchange="atualizarPreviewParada()">
+      <div class="form-group">
+        <label class="form-label">Como contabilizar o valor:</label>
+        <select class="form-control" id="stopBillingRule" onchange="atualizarCalculoParada()">
           <option value="proporcional">Proporcional aos minutos rodados (Mín. R$ 1,00)</option>
-          <option value="integral">Manter valor integral cobrado no início</option>
+          <option value="integral">Valor integral cobrado no início</option>
         </select>
       </div>
 
-      <div class="preview-calc" id="stopCalcPreview"></div>
+      <div class="calc-box" id="stopCalcBox"></div>
 
-      <div class="modal-actions">
-        <button class="btn btn-cancel" onclick="fecharModalParada()">Voltar</button>
-        <button class="btn btn-stop" onclick="confirmarParada()">Confirmar Parada</button>
+      <div class="modal-footer-btns">
+        <button class="btn-gray" onclick="fecharModalParada()">Continuar Corrida</button>
+        <button class="btn-confirm-red" onclick="confirmarParadaCorrida()">Confirmar Parada</button>
       </div>
     </div>
   </div>
 
-  <!-- Modal de Configurações -->
-  <div class="modal-backdrop" id="configModal">
-    <div class="modal">
-      <h3>⚙️ Configurações do Sistema</h3>
-      <div class="modal-group">
-        <label>Valor padrão por minuto (R$):</label>
-        <input type="number" id="cfgPrecoMinuto" step="0.50" min="0.50" />
+  <!-- Modal da Engrenagem (Caixa, Relatório ROI, Auditoria e Ajustes - Aberto nesta fase) -->
+  <div class="modal-overlay" id="gearModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title">⚙️ Gestão, Caixa & Auditoria</div>
+        <button class="btn-close-modal" onclick="fecharPainelEngrenagem()">✕</button>
       </div>
-      <div class="modal-group">
-        <label>Senha do Proprietário (para zerar caixa / editar):</label>
-        <input type="password" id="cfgSenha" placeholder="Padrão: 1234" />
+
+      <div class="gear-tabs">
+        <button class="gear-tab-btn active" id="tabBtnCaixa" onclick="trocarAbaGear('caixa')">💰 Caixa & ROI</button>
+        <button class="gear-tab-btn" id="tabBtnAuditoria" onclick="trocarAbaGear('auditoria')">🛡️ Auditoria</button>
+        <button class="gear-tab-btn" id="tabBtnConfig" onclick="trocarAbaGear('config')">🔧 Ajustes</button>
       </div>
-      <div class="modal-actions">
-        <button class="btn btn-cancel" onclick="fecharConfig()">Cancelar</button>
-        <button class="btn btn-start" style="grid-column: span 1;" onclick="salvarConfig()">Salvar</button>
+
+      <!-- Aba 1: Caixa do Dia e Relatório Vitalício -->
+      <div class="gear-panel active" id="panelCaixa">
+        <div class="caixa-grid">
+          <div class="caixa-card">
+            <div class="caixa-val red" id="gearCorridasHoje">0</div>
+            <div class="caixa-lbl">Corridas Hoje</div>
+          </div>
+          <div class="caixa-card">
+            <div class="caixa-val green" id="gearFaturamentoHoje">R$ 0,00</div>
+            <div class="caixa-lbl">Faturamento Hoje</div>
+          </div>
+        </div>
+
+        <button class="btn-zerar-caixa" onclick="zerarCaixaDia()">Zerar Apenas Caixa do Dia 🔄</button>
+
+        <div class="form-label" style="margin-bottom:8px;">📈 Relatório Vitalício (Retorno / ROI por Brinquedo)</div>
+        <div id="gearRoiList"></div>
+      </div>
+
+      <!-- Aba 2: Auditoria de Corridas e Paradas -->
+      <div class="gear-panel" id="panelAuditoria">
+        <p style="font-size:0.8rem; color:#64748b; margin-bottom:10px;">
+          Histórico completo de corridas iniciadas, valores finais e justificativas de paradas antecipadas:
+        </p>
+        <div id="gearAuditList"></div>
+      </div>
+
+      <!-- Aba 3: Configurações Gerais e Fotos -->
+      <div class="gear-panel" id="panelConfig">
+        <div class="form-group">
+          <label class="form-label">Valor Padrão por Minuto (R$):</label>
+          <input type="number" class="form-control" id="cfgPrecoMin" step="0.50" min="0.50" />
+        </div>
+
+        <div class="form-label" style="margin-bottom:8px;">📸 Foto / Imagem de Cada Brinquedo (URL ou Caminho):</div>
+        <div id="gearPhotosEditor"></div>
+
+        <div class="modal-footer-btns">
+          <button class="btn-gray" onclick="fecharPainelEngrenagem()">Fechar</button>
+          <button class="btn-confirm-green" onclick="salvarConfiguracoes()">Salvar Ajustes</button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // Configurações BLE ESP32
     const BLE_SERVICE_UUID = '4fa1c201-222d-4b93-9fb6-52c1e7f32d88';
     const BLE_CHAR_UUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
-    // Lista inicial de carrinhos
+    function criarSvgKart(corPrincipal, corSecundaria, texto) {
+      const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180">
+          <rect width="320" height="180" fill="${corPrincipal}"/>
+          <polygon points="0,180 120,0 200,0 80,180" fill="${corSecundaria}" opacity="0.45"/>
+          <path d="M95 125 L165 65 L235 72 L248 92 L155 128 Z" fill="#111827" stroke="#ffffff" stroke-width="3"/>
+          <path d="M168 72 L222 77 L214 95 L162 92 Z" fill="#38bdf8"/>
+          <circle cx="115" cy="135" r="24" fill="#0f172a" stroke="#e2e8f0" stroke-width="4"/>
+          <circle cx="115" cy="135" r="10" fill="#94a3b8"/>
+          <circle cx="222" cy="132" r="20" fill="#0f172a" stroke="#e2e8f0" stroke-width="4"/>
+          <circle cx="222" cy="132" r="8" fill="#94a3b8"/>
+          <rect x="135" y="55" width="34" height="10" rx="4" fill="#facc15" transform="rotate(-18 152 60)"/>
+          <text x="160" y="34" font-family="Arial, sans-serif" font-size="16" font-weight="900" fill="#ffffff" text-anchor="middle">${texto}</text>
+        </svg>`;
+      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg.trim());
+    }
+
     const DEFAULT_KARTS = [
-      { id: 'kart1', name: 'DRIF COLORIDO' },
-      { id: 'kart2', name: 'DRIF VERDE' },
-      { id: 'kart3', name: 'DRIFT FOGO E GELO' },
-      { id: 'kart4', name: 'DRIF PRETO' }
+      {
+        id: 'kart_preto',
+        name: 'DRIFT PRETO 001',
+        tagline: '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!',
+        theme: 'yellow',
+        photo: criarSvgKart('#f59e0b', '#0f172a', 'DRIFT PRETO 001')
+      },
+      {
+        id: 'kart_azul',
+        name: 'DRIFT AZUL 002',
+        tagline: '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!',
+        theme: 'cyan',
+        photo: criarSvgKart('#0284c7', '#38bdf8', 'DRIFT AZUL 002')
+      },
+      {
+        id: 'kart_colorido',
+        name: 'DRIFT COLORIDO 003',
+        tagline: '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!',
+        theme: 'yellow',
+        photo: criarSvgKart('#ea580c', '#facc15', 'DRIFT COLORIDO 003')
+      },
+      {
+        id: 'kart_verde',
+        name: 'DRIFT VERDE 004',
+        tagline: '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!',
+        theme: 'cyan',
+        photo: criarSvgKart('#15803d', '#4ade80', 'DRIFT VERDE 004')
+      }
     ];
 
-    // Estado persistente
-    let state = JSON.parse(localStorage.getItem('cia_brinquedos_v2')) || {
+    let appState = JSON.parse(localStorage.getItem('cia_brinquedos_app_v3')) || {
       precoMinuto: 1.00,
-      senhaProprietario: '1234',
       diaCorridas: 0,
       diaFaturamento: 0,
-      roi: {
-        kart1: { rides: 0, total: 0 },
-        kart2: { rides: 0, total: 0 },
-        kart3: { rides: 0, total: 0 },
-        kart4: { rides: 0, total: 0 }
-      },
+      roi: {},
+      fotos: {},
       activeRides: {},
       auditLog: []
     };
 
-    // Conexões Bluetooth em memória
-    const bleConnections = {};
-    let kartParandoAtual = null;
+    DEFAULT_KARTS.forEach(k => {
+      if (!appState.roi[k.id]) appState.roi[k.id] = { rides: 0, total: 0 };
+      if (!appState.fotos[k.id]) appState.fotos[k.id] = k.photo;
+    });
 
-    function salvarEstado() {
-      localStorage.setItem('cia_brinquedos_v2', JSON.stringify(state));
+    const bleDevices = {};
+    let kartEmParada = null;
+
+    function salvarState() {
+      localStorage.setItem('cia_brinquedos_app_v3', JSON.stringify(appState));
     }
 
-    function formatarMoeda(valor) {
-      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    function fmtMoeda(v) {
+      return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    function formatarTempo(segundos) {
-      const m = Math.floor(segundos / 60);
-      const s = segundos % 60;
-      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    function fmtTempo(seg) {
+      const s = Math.max(0, Math.floor(seg));
+      const mm = String(Math.floor(s / 60)).padStart(2, '0');
+      const ss = String(s % 60).padStart(2, '0');
+      return `${mm}:${ss}`;
     }
 
-    // Som de alerta ao finalizar tempo
-    function tocarAlarme() {
+    function tocarSomFim() {
       try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
         const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(880, ctx.currentTime);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(920, ctx.currentTime);
+        osc.connect(ctx.destination);
         osc.start();
-        setTimeout(() => osc.stop(), 600);
+        setTimeout(() => osc.stop(), 650);
       } catch (e) {}
     }
 
     // Bluetooth BLE
-    async function conectarBLE(kartId, kartName) {
+    async function alternarBLE(kartId) {
       if (!navigator.bluetooth) {
-        alert('Este navegador não suporta Web Bluetooth. Use o Google Chrome no Android.');
+        alert('Web Bluetooth não disponível neste navegador. Use o Chrome no Android.');
         return;
       }
+
+      if (bleDevices[kartId]?.device?.gatt?.connected) {
+        bleDevices[kartId].device.gatt.disconnect();
+        delete bleDevices[kartId];
+        renderizarKarts();
+        return;
+      }
+
       try {
         const device = await navigator.bluetooth.requestDevice({
           filters: [{ namePrefix: 'ESP32' }, { namePrefix: 'DRIFT' }, { namePrefix: 'CIA' }],
@@ -646,403 +935,415 @@
         const service = await server.getPrimaryService(BLE_SERVICE_UUID);
         const characteristic = await service.getCharacteristic(BLE_CHAR_UUID);
 
-        bleConnections[kartId] = { device, characteristic };
+        bleDevices[kartId] = { device, characteristic };
         device.addEventListener('gattserverdisconnected', () => {
-          delete bleConnections[kartId];
+          delete bleDevices[kartId];
           renderizarKarts();
         });
 
         renderizarKarts();
       } catch (err) {
-        console.warn('Conexão BLE cancelada ou falhou:', err);
+        console.warn('BLE não conectado:', err);
       }
     }
 
-    async function enviarComandoBLE(kartId, comando) {
-      const conn = bleConnections[kartId];
-      if (conn && conn.characteristic) {
+    async function enviarBLE(kartId, comando) {
+      const item = bleDevices[kartId];
+      if (item && item.characteristic) {
         try {
-          const encoder = new TextEncoder();
-          await conn.characteristic.writeValue(encoder.encode(comando));
+          await item.characteristic.writeValue(new TextEncoder().encode(comando));
         } catch (err) {
-          console.error('Erro ao enviar comando BLE:', err);
+          console.error('Falha ao enviar BLE:', err);
         }
       }
     }
 
-    // Atualizar valor sugerido conforme minutos digitados
-    function atualizarValorSugerido(kartId) {
-      const minInput = document.getElementById(`min_${kartId}`);
-      const valInput = document.getElementById(`val_${kartId}`);
-      const mins = parseFloat(minInput.value) || 0;
-      if (mins > 0) {
-        valInput.value = (mins * state.precoMinuto).toFixed(2);
+    // Atalhos e cálculo de valor
+    function selecionarPreset(kartId, minutos) {
+      const minEl = document.getElementById(`min_${kartId}`);
+      const valEl = document.getElementById(`val_${kartId}`);
+      if (minEl && valEl) {
+        minEl.value = minutos;
+        valEl.value = (minutos * appState.precoMinuto).toFixed(2);
       }
     }
 
-    function aplicarPreset(kartId, minutos) {
-      document.getElementById(`min_${kartId}`).value = minutos;
-      document.getElementById(`val_${kartId}`).value = (minutos * state.precoMinuto).toFixed(2);
+    function aoDigitarMinutos(kartId) {
+      const minEl = document.getElementById(`min_${kartId}`);
+      const valEl = document.getElementById(`val_${kartId}`);
+      const mins = parseFloat(minEl.value) || 0;
+      if (mins > 0) {
+        valEl.value = (mins * appState.precoMinuto).toFixed(2);
+      }
     }
 
-    // INICIAR CORRIDA (Regra 1 e 2: Bloqueia valor zero e já registra no caixa)
+    // Iniciar Corrida (Valor obrigatório > 0 e já contabilizado no início)
     async function iniciarCorrida(kartId) {
       const kart = DEFAULT_KARTS.find(k => k.id === kartId);
-      const cliente = document.getElementById(`cli_${kartId}`).value.trim() || 'Cliente';
+      const nomeCrianca = document.getElementById(`cli_${kartId}`).value.trim() || 'Sem nome';
       const minutos = parseInt(document.getElementById(`min_${kartId}`).value, 10);
       const valor = parseFloat(document.getElementById(`val_${kartId}`).value);
 
       if (!minutos || minutos <= 0) {
-        alert('⚠️ Informe um tempo válido em minutos para iniciar!');
+        alert('⚠️ Informe quantos minutos terá a corrida.');
         return;
       }
 
       if (isNaN(valor) || valor <= 0) {
-        alert('🚫 BLOQUEADO: Toda corrida precisa iniciar com um valor maior que R$ 0,00!');
+        alert('🚫 Toda corrida precisa iniciar com um valor maior que R$ 0,00!');
         return;
       }
 
       const agora = Date.now();
-      const totalSegundos = minutos * 60;
-      const auditId = 'AUD-' + agora;
+      const auditId = 'RUN-' + agora;
 
-      // Contabiliza imediatamente no caixa e no ROI (nunca fica zero!)
-      state.diaCorridas += 1;
-      state.diaFaturamento += valor;
-      if (!state.roi[kartId]) state.roi[kartId] = { rides: 0, total: 0 };
-      state.roi[kartId].rides += 1;
-      state.roi[kartId].total += valor;
+      appState.diaCorridas += 1;
+      appState.diaFaturamento = Number((appState.diaFaturamento + valor).toFixed(2));
+      appState.roi[kartId].rides += 1;
+      appState.roi[kartId].total = Number((appState.roi[kartId].total + valor).toFixed(2));
 
-      // Cria registro de auditoria inicial
-      state.auditLog.unshift({
+      appState.auditLog.unshift({
         id: auditId,
         kartId,
         kartName: kart.name,
-        cliente,
-        dataHora: new Date().toLocaleString('pt-BR'),
+        cliente: nomeCrianca,
+        hora: new Date().toLocaleString('pt-BR'),
         minutosContratados: minutos,
         minutosRodados: minutos,
         valorInicial: valor,
         valorFinal: valor,
         status: 'Em andamento',
-        motivoParada: ''
+        motivo: ''
       });
 
-      state.activeRides[kartId] = {
+      appState.activeRides[kartId] = {
         auditId,
-        cliente,
+        cliente: nomeCrianca,
         minutosContratados: minutos,
         valorInicial: valor,
         startTime: agora,
-        endTime: agora + (totalSegundos * 1000)
+        endTime: agora + (minutos * 60 * 1000)
       };
 
-      salvarEstado();
-      await enviarComandoBLE(kartId, 'INICIAR');
-      renderizarTudo();
+      salvarState();
+      await enviarBLE(kartId, 'INICIAR');
+      renderizarKarts();
     }
 
-    // Adicionar +1 Minuto
-    function adicionarMinuto(kartId) {
-      const ride = state.activeRides[kartId];
+    function adicionarMaisUmMinuto(kartId) {
+      const ride = appState.activeRides[kartId];
       if (!ride) return;
 
-      const valorExtra = state.precoMinuto;
+      const extra = Number(appState.precoMinuto.toFixed(2));
       ride.endTime += 60 * 1000;
       ride.minutosContratados += 1;
-      ride.valorInicial += valorExtra;
+      ride.valorInicial = Number((ride.valorInicial + extra).toFixed(2));
 
-      state.diaFaturamento += valorExtra;
-      state.roi[kartId].total += valorExtra;
+      appState.diaFaturamento = Number((appState.diaFaturamento + extra).toFixed(2));
+      appState.roi[kartId].total = Number((appState.roi[kartId].total + extra).toFixed(2));
 
-      const logItem = state.auditLog.find(a => a.id === ride.auditId);
-      if (logItem) {
-        logItem.minutosContratados += 1;
-        logItem.minutosRodados += 1;
-        logItem.valorInicial += valorExtra;
-        logItem.valorFinal += valorExtra;
+      const log = appState.auditLog.find(a => a.id === ride.auditId);
+      if (log) {
+        log.minutosContratados += 1;
+        log.minutosRodados += 1;
+        log.valorInicial = Number((log.valorInicial + extra).toFixed(2));
+        log.valorFinal = Number((log.valorFinal + extra).toFixed(2));
       }
 
-      salvarEstado();
-      renderizarTudo();
+      salvarState();
+      renderizarKarts();
     }
 
-    // Abrir Modal de Parada Obrigatória
+    // Parada Obrigatória com Cálculo Proporcional
     function abrirModalParada(kartId) {
-      const ride = state.activeRides[kartId];
-      if (!ride) return;
-
-      kartParandoAtual = kartId;
-      document.getElementById('stopReasonSelect').value = '';
-      document.getElementById('stopReasonText').value = '';
-      document.getElementById('stopBillingMode').value = 'proporcional';
-
-      atualizarPreviewParada();
-      document.getElementById('stopModal').classList.add('open');
+      if (!appState.activeRides[kartId]) return;
+      kartEmParada = kartId;
+      document.getElementById('stopReasonPreset').value = '';
+      document.getElementById('stopReasonDetail').value = '';
+      document.getElementById('stopBillingRule').value = 'proporcional';
+      atualizarCalculoParada();
+      document.getElementById('stopModal').classList.add('active');
     }
 
     function fecharModalParada() {
-      kartParandoAtual = null;
-      document.getElementById('stopModal').classList.remove('open');
+      kartEmParada = null;
+      document.getElementById('stopModal').classList.remove('active');
     }
 
-    function atualizarMotivoTexto() {
-      const sel = document.getElementById('stopReasonSelect').value;
-      const txt = document.getElementById('stopReasonText');
-      if (sel && sel !== 'Outro motivo') {
-        txt.value = sel;
-      } else if (sel === 'Outro motivo') {
-        txt.value = '';
-        txt.focus();
+    function sincronizarMotivo() {
+      const preset = document.getElementById('stopReasonPreset').value;
+      const detail = document.getElementById('stopReasonDetail');
+      if (preset && preset !== 'Outro') {
+        detail.value = preset;
+      } else if (preset === 'Outro') {
+        detail.value = '';
+        detail.focus();
       }
     }
 
-    function calcularDadosParada(ride) {
-      const agora = Date.now();
-      const segundosDecorridos = Math.max(1, Math.floor((agora - ride.startTime) / 1000));
-      // Arredonda para cima os minutos iniciados (ex: 2m10s = 3 minutos usados)
-      const minutosUsados = Math.min(
+    function calcularProporcao(ride) {
+      const segDecorridos = Math.max(1, Math.floor((Date.now() - ride.startTime) / 1000));
+      const minUsados = Math.min(
         ride.minutosContratados,
-        Math.max(1, Math.ceil(segundosDecorridos / 60))
+        Math.max(1, Math.ceil(segDecorridos / 60))
       );
-
-      const valorPorMinuto = ride.valorInicial / ride.minutosContratados;
-      const valorProporcional = Math.max(1.00, Number((minutosUsados * valorPorMinuto).toFixed(2)));
-
-      return {
-        minutosUsados,
-        valorProporcional
-      };
+      const unitario = ride.valorInicial / ride.minutosContratados;
+      const valorProp = Math.max(1.00, Number((minUsados * unitario).toFixed(2)));
+      return { minUsados, valorProp };
     }
 
-    function atualizarPreviewParada() {
-      if (!kartParandoAtual) return;
-      const ride = state.activeRides[kartParandoAtual];
-      const modo = document.getElementById('stopBillingMode').value;
-      const { minutosUsados, valorProporcional } = calcularDadosParada(ride);
+    function atualizarCalculoParada() {
+      if (!kartEmParada) return;
+      const ride = appState.activeRides[kartEmParada];
+      const regra = document.getElementById('stopBillingRule').value;
+      const { minUsados, valorProp } = calcularProporcao(ride);
+      const valorFinal = regra === 'proporcional' ? valorProp : ride.valorInicial;
 
-      const valorFinal = modo === 'proporcional' ? valorProporcional : ride.valorInicial;
-
-      document.getElementById('stopCalcPreview').innerHTML = `
-        ⏱️ Tempo contratado: ${ride.minutosContratados} min | Tempo rodado: ${minutosUsados} min<br>
-        💵 Valor inicial: ${formatarMoeda(ride.valorInicial)} ➔ <strong>Valor contabilizado: ${formatarMoeda(valorFinal)}</strong>
+      document.getElementById('stopCalcBox').innerHTML = `
+        ⏱️ Contratado: <strong>${ride.minutosContratados} min</strong> | Rodou: <strong>${minUsados} min</strong><br>
+        💰 Valor inicial: ${fmtMoeda(ride.valorInicial)} ➔ <strong>Contabilizar: ${fmtMoeda(valorFinal)}</strong>
       `;
     }
 
-    // CONFIRMAR PARADA COM JUSTIFICATIVA E REAJUSTE PROPORCIONAL
-    async function confirmarParada() {
-      if (!kartParandoAtual) return;
-      const ride = state.activeRides[kartParandoAtual];
-      const motivo = document.getElementById('stopReasonText').value.trim();
-      const modo = document.getElementById('stopBillingMode').value;
+    async function confirmarParadaCorrida() {
+      if (!kartEmParada) return;
+      const ride = appState.activeRides[kartEmParada];
+      const motivo = document.getElementById('stopReasonDetail').value.trim();
+      const regra = document.getElementById('stopBillingRule').value;
 
-      if (motivo.length < 4) {
-        alert('🚫 OBRIGATÓRIO: Informe detalhadamente o motivo da parada antes de encerrar a corrida!');
+      if (motivo.length < 3) {
+        alert('🚫 É obrigatório informar o motivo da parada antes de encerrar.');
         return;
       }
 
-      const { minutosUsados, valorProporcional } = calcularDadosParada(ride);
-      const valorFinal = modo === 'proporcional' ? valorProporcional : ride.valorInicial;
-      const diferenca = ride.valorInicial - valorFinal;
+      const { minUsados, valorProp } = calcularProporcao(ride);
+      const valorFinal = regra === 'proporcional' ? valorProp : ride.valorInicial;
+      const diferenca = Number((ride.valorInicial - valorFinal).toFixed(2));
 
-      // Ajusta o caixa e o ROI caso seja proporcional (nunca zera!)
       if (diferenca > 0) {
-        state.diaFaturamento = Math.max(0, Number((state.diaFaturamento - diferenca).toFixed(2)));
-        state.roi[kartParandoAtual].total = Math.max(0, Number((state.roi[kartParandoAtual].total - diferenca).toFixed(2)));
+        appState.diaFaturamento = Math.max(0, Number((appState.diaFaturamento - diferenca).toFixed(2)));
+        appState.roi[kartEmParada].total = Math.max(0, Number((appState.roi[kartEmParada].total - diferenca).toFixed(2)));
       }
 
-      // Atualiza o registro de auditoria
-      const logItem = state.auditLog.find(a => a.id === ride.auditId);
-      if (logItem) {
-        logItem.minutosRodados = minutosUsados;
-        logItem.valorFinal = valorFinal;
-        logItem.status = 'Interrompida';
-        logItem.motivoParada = `${motivo} (Rodou ${minutosUsados}/${ride.minutosContratados} min)`;
+      const log = appState.auditLog.find(a => a.id === ride.auditId);
+      if (log) {
+        log.minutosRodados = minUsados;
+        log.valorFinal = valorFinal;
+        log.status = 'Parada Antecipada';
+        log.motivo = motivo;
       }
 
-      const kartIdParaParar = kartParandoAtual;
-      delete state.activeRides[kartIdParaParar];
+      const idAlvo = kartEmParada;
+      delete appState.activeRides[idAlvo];
 
-      salvarEstado();
+      salvarState();
       fecharModalParada();
-      await enviarComandoBLE(kartIdParaParar, 'PARAR');
-      renderizarTudo();
+      await enviarBLE(idAlvo, 'PARAR');
+      renderizarKarts();
     }
 
-    // Loop do Cronômetro
+    // Loop de contagem regressiva
     setInterval(async () => {
       const agora = Date.now();
-      let precisouAtualizar = false;
+      let mudouEstado = false;
 
       for (const kart of DEFAULT_KARTS) {
-        const ride = state.activeRides[kart.id];
+        const ride = appState.activeRides[kart.id];
         if (ride) {
-          const restante = Math.max(0, Math.ceil((ride.endTime - agora) / 1000));
-          const timerEl = document.getElementById(`timer_${kart.id}`);
-          if (timerEl) {
-            timerEl.textContent = formatarTempo(restante);
-          }
+          const rest = Math.max(0, Math.ceil((ride.endTime - agora) / 1000));
+          const el = document.getElementById(`timer_${kart.id}`);
+          if (el) el.textContent = fmtTempo(rest);
 
-          if (restante === 0) {
-            // Tempo concluído normalmente
-            const logItem = state.auditLog.find(a => a.id === ride.auditId);
-            if (logItem) {
-              logItem.status = 'Concluída';
-            }
-            delete state.activeRides[kart.id];
-            salvarEstado();
-            tocarAlarme();
-            await enviarComandoBLE(kart.id, 'PARAR');
-            precisouAtualizar = true;
+          if (rest <= 0) {
+            const log = appState.auditLog.find(a => a.id === ride.auditId);
+            if (log) log.status = 'Concluída';
+            delete appState.activeRides[kart.id];
+            salvarState();
+            tocarSomFim();
+            await enviarBLE(kart.id, 'PARAR');
+            mudouEstado = true;
           }
         }
       }
 
-      if (precisouAtualizar) {
-        renderizarTudo();
-      }
+      if (mudouEstado) renderizarKarts();
     }, 1000);
 
-    // Zerar Caixa do Dia (Protegido por senha)
+    // Painel da Engrenagem (Sem bloqueio de senha nesta etapa)
+    function abrirPainelEngrenagem() {
+      renderizarGearCaixa();
+      renderizarGearAuditoria();
+      renderizarGearConfig();
+      document.getElementById('gearModal').classList.add('active');
+    }
+
+    function fecharPainelEngrenagem() {
+      document.getElementById('gearModal').classList.remove('active');
+    }
+
+    function trocarAbaGear(aba) {
+      document.querySelectorAll('.gear-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.gear-panel').forEach(p => p.classList.remove('active'));
+
+      if (aba === 'caixa') {
+        document.getElementById('tabBtnCaixa').classList.add('active');
+        document.getElementById('panelCaixa').classList.add('active');
+        renderizarGearCaixa();
+      } else if (aba === 'auditoria') {
+        document.getElementById('tabBtnAuditoria').classList.add('active');
+        document.getElementById('panelAuditoria').classList.add('active');
+        renderizarGearAuditoria();
+      } else {
+        document.getElementById('tabBtnConfig').classList.add('active');
+        document.getElementById('panelConfig').classList.add('active');
+        renderizarGearConfig();
+      }
+    }
+
     function zerarCaixaDia() {
-      const senha = prompt('Digite a senha do proprietário para zerar o Caixa do Dia:');
-      if (senha !== state.senhaProprietario) {
-        alert('❌ Senha incorreta! O caixa não foi alterado.');
+      if (!confirm('Deseja zerar apenas o Caixa do Dia (corridas e faturamento de hoje)?')) return;
+      appState.diaCorridas = 0;
+      appState.diaFaturamento = 0;
+      salvarState();
+      renderizarGearCaixa();
+    }
+
+    function salvarConfiguracoes() {
+      const novoPreco = parseFloat(document.getElementById('cfgPrecoMin').value);
+      if (!isNaN(novoPreco) && novoPreco > 0) {
+        appState.precoMinuto = novoPreco;
+      }
+
+      DEFAULT_KARTS.forEach(k => {
+        const inputFoto = document.getElementById(`foto_${k.id}`);
+        if (inputFoto && inputFoto.value.trim()) {
+          appState.fotos[k.id] = inputFoto.value.trim();
+        }
+      });
+
+      salvarState();
+      renderizarKarts();
+      fecharPainelEngrenagem();
+    }
+
+    function renderizarGearCaixa() {
+      document.getElementById('gearCorridasHoje').textContent = appState.diaCorridas;
+      document.getElementById('gearFaturamentoHoje').textContent = fmtMoeda(appState.diaFaturamento);
+
+      const roiEl = document.getElementById('gearRoiList');
+      roiEl.innerHTML = DEFAULT_KARTS.map(k => {
+        const d = appState.roi[k.id] || { rides: 0, total: 0 };
+        return `
+          <div class="roi-row">
+            <strong>${k.name}</strong>
+            <span>${d.rides} corridas • <strong style="color:var(--green);">${fmtMoeda(d.total)}</strong></span>
+          </div>`;
+      }).join('');
+    }
+
+    function renderizarGearAuditoria() {
+      const audEl = document.getElementById('gearAuditList');
+      if (!appState.auditLog.length) {
+        audEl.innerHTML = `<p style="text-align:center; color:#64748b; font-size:0.85rem;">Nenhuma corrida registrada até o momento.</p>`;
         return;
       }
-      state.diaCorridas = 0;
-      state.diaFaturamento = 0;
-      salvarEstado();
-      renderizarTudo();
+
+      audEl.innerHTML = appState.auditLog.slice(0, 60).map(item => {
+        const isStopped = item.status === 'Parada Antecipada';
+        return `
+          <div class="audit-card ${isStopped ? 'stopped' : ''}">
+            <div style="display:flex; justify-content:space-between; font-weight:800;">
+              <span>${item.kartName} — ${item.cliente}</span>
+              <span style="color:${isStopped ? 'var(--red)' : 'var(--green)'};">${fmtMoeda(item.valorFinal)}</span>
+            </div>
+            <div style="color:#64748b; margin-top:3px;">
+              🕒 ${item.hora} • Tempo: ${item.minutosRodados}/${item.minutosContratados} min • ${item.status}
+            </div>
+            ${item.motivo ? `<div class="audit-reason-tag">⚠️ Motivo: ${item.motivo}</div>` : ''}
+          </div>`;
+      }).join('');
     }
 
-    // Configurações
-    function abrirConfig() {
-      const senha = prompt('Digite a senha do proprietário para acessar configurações:');
-      if (senha !== state.senhaProprietario) {
-        alert('❌ Senha incorreta!');
-        return;
-      }
-      document.getElementById('cfgPrecoMinuto').value = state.precoMinuto.toFixed(2);
-      document.getElementById('cfgSenha').value = state.senhaProprietario;
-      document.getElementById('configModal').classList.add('open');
+    function renderizarGearConfig() {
+      document.getElementById('cfgPrecoMin').value = appState.precoMinuto.toFixed(2);
+      const editor = document.getElementById('gearPhotosEditor');
+      editor.innerHTML = DEFAULT_KARTS.map(k => `
+        <div class="kart-photo-edit">
+          <label class="form-label">${k.name}</label>
+          <input type="text" class="form-control" id="foto_${k.id}" value="${appState.fotos[k.id] || k.photo}" />
+        </div>
+      `).join('');
     }
 
-    function fecharConfig() {
-      document.getElementById('configModal').classList.remove('open');
-    }
-
-    function salvarConfig() {
-      const novoPreco = parseFloat(document.getElementById('cfgPrecoMinuto').value);
-      const novaSenha = document.getElementById('cfgSenha').value.trim();
-
-      if (novoPreco > 0) state.precoMinuto = novoPreco;
-      if (novaSenha.length >= 4) state.senhaProprietario = novaSenha;
-
-      salvarEstado();
-      fecharConfig();
-      renderizarTudo();
-    }
-
-    // Renderização da Tela
+    // Tela Principal Limpa: Apenas Seleção, Dados da Corrida e Controles
     function renderizarKarts() {
-      const container = document.getElementById('kartsContainer');
+      const grid = document.getElementById('kartsGrid');
       const agora = Date.now();
+      const precoPadrao = appState.precoMinuto;
 
-      container.innerHTML = DEFAULT_KARTS.map(kart => {
-        const ride = state.activeRides[kart.id];
-        const conectado = !!bleConnections[kart.id];
+      grid.innerHTML = DEFAULT_KARTS.map(kart => {
+        const ride = appState.activeRides[kart.id];
+        const isConnected = !!bleDevices[kart.id]?.device?.gatt?.connected;
         const restante = ride ? Math.max(0, Math.ceil((ride.endTime - agora) / 1000)) : 0;
+        const fotoSrc = appState.fotos[kart.id] || kart.photo;
 
         return `
-          <div class="kart-card ${ride ? 'running' : ''}">
-            <div class="kart-header">
-              <div class="kart-name">🏎️ ${kart.name}</div>
-              <button class="ble-badge ${conectado ? 'ble-connected' : 'ble-disconnected'}"
-                      onclick="conectarBLE('${kart.id}', '${kart.name}')">
-                ${conectado ? '🔵 Conectado' : '⚪ Conectar BLE'}
-              </button>
-            </div>
+          <article class="kart-card ${kart.theme === 'cyan' ? 'theme-cyan' : ''} ${ride ? 'running' : ''}">
+            <div>
+              <div class="kart-photo-box">
+                <img src="${fotoSrc}" alt="${kart.name}" />
+                <button class="ble-pill ${isConnected ? 'connected' : ''}" onclick="alternarBLE('${kart.id}')">
+                  ${isConnected ? '🔵 BLE Ligado' : '⚪ Conectar BLE'}
+                </button>
+              </div>
 
-            <div class="timer-display" id="timer_${kart.id}">
-              ${ride ? formatarTempo(restante) : '00:00'}
+              <div class="kart-badge-name">${kart.name}</div>
+              <div class="kart-tagline">${kart.tagline}</div>
+              <div class="timer-box" id="timer_${kart.id}">${ride ? fmtTempo(restante) : '00:00'}</div>
             </div>
 
             ${ride ? `
-              <div class="active-info">
-                <span>👤 <strong>${ride.cliente}</strong> (${ride.minutosContratados} min)</span>
-                <span>💵 <strong>${formatarMoeda(ride.valorInicial)}</strong></span>
-              </div>
-              <div class="action-btns">
-                <button class="btn btn-add-min" onclick="adicionarMinuto('${kart.id}')">+1 Minuto</button>
-                <button class="btn btn-stop" onclick="abrirModalParada('${kart.id}')">🛑 Parar (Justificar)</button>
+              <div>
+                <div class="active-ride-panel">
+                  <div class="active-ride-line">
+                    <span>👤 ${ride.cliente}</span>
+                    <span>💰 ${fmtMoeda(ride.valorInicial)}</span>
+                  </div>
+                  <div class="active-ride-line" style="color:#15803d;">
+                    <span>Tempo: ${ride.minutosContratados} min</span>
+                    <span>Em andamento</span>
+                  </div>
+                </div>
+                <div class="running-btns">
+                  <button class="btn-plus1" onclick="adicionarMaisUmMinuto('${kart.id}')">+1 Minuto</button>
+                  <button class="btn-stop-ride" onclick="abrirModalParada('${kart.id}')">🛑 Parar</button>
+                </div>
               </div>
             ` : `
-              <div class="setup-controls">
-                <div class="preset-btns">
-                  <button class="btn-preset" onclick="aplicarPreset('${kart.id}', 5)">5 min (${formatarMoeda(5 * state.precoMinuto)})</button>
-                  <button class="btn-preset" onclick="aplicarPreset('${kart.id}', 10)">10 min (${formatarMoeda(10 * state.precoMinuto)})</button>
-                  <button class="btn-preset" onclick="aplicarPreset('${kart.id}', 15)">15 min (${formatarMoeda(15 * state.precoMinuto)})</button>
+              <div>
+                <div class="presets-row">
+                  <button class="preset-btn" onclick="selecionarPreset('${kart.id}', 5)">5m (${fmtMoeda(5 * precoPadrao)})</button>
+                  <button class="preset-btn" onclick="selecionarPreset('${kart.id}', 10)">10m (${fmtMoeda(10 * precoPadrao)})</button>
+                  <button class="preset-btn" onclick="selecionarPreset('${kart.id}', 15)">15m (${fmtMoeda(15 * precoPadrao)})</button>
                 </div>
-                <div class="input-row">
-                  <input type="text" id="cli_${kart.id}" placeholder="Nome da criança" />
-                  <input type="number" id="min_${kart.id}" placeholder="Min" min="1" value="5" oninput="atualizarValorSugerido('${kart.id}')" />
-                  <input type="number" id="val_${kart.id}" placeholder="R$" step="0.50" min="1" value="${(5 * state.precoMinuto).toFixed(2)}" />
+
+                <div class="inputs-row">
+                  <input type="text" class="input-field name-input" id="cli_${kart.id}" placeholder="Nome criança" />
+                  <input type="number" class="input-field" id="min_${kart.id}" min="1" value="5" oninput="aoDigitarMinutos('${kart.id}')" title="Minutos" />
+                  <input type="number" class="input-field" id="val_${kart.id}" step="0.50" min="1" value="${(5 * precoPadrao).toFixed(2)}" title="Valor R$" />
                 </div>
-                <button class="btn btn-start" onclick="iniciarCorrida('${kart.id}')">▶️ INICIAR CORRIDA</button>
+
+                <button class="btn-primary-action btn-start-yellow" onclick="iniciarCorrida('${kart.id}')">
+                  ▶️ Iniciar Corrida
+                </button>
               </div>
             `}
-          </div>
+          </article>
         `;
       }).join('');
     }
 
-    function renderizarResumo() {
-      document.getElementById('diaCorridas').textContent = state.diaCorridas;
-      document.getElementById('diaFaturamento').textContent = formatarMoeda(state.diaFaturamento);
-
-      const roiContainer = document.getElementById('roiContainer');
-      roiContainer.innerHTML = DEFAULT_KARTS.map(kart => {
-        const dados = state.roi[kart.id] || { rides: 0, total: 0 };
-        return `
-          <div class="roi-item">
-            <div class="roi-name">${kart.name}</div>
-            <div class="roi-stats">
-              ${dados.rides} total <strong>${formatarMoeda(dados.total)}</strong>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      const auditContainer = document.getElementById('auditContainer');
-      if (state.auditLog.length === 0) {
-        auditContainer.innerHTML = `<p style="text-align:center; color:var(--muted); font-size:0.85rem;">Nenhuma corrida registrada ainda.</p>`;
-      } else {
-        auditContainer.innerHTML = state.auditLog.slice(0, 50).map(item => `
-          <div class="audit-item ${item.status === 'Interrompida' ? 'interrupted' : ''}">
-            <div class="audit-top">
-              <span>${item.kartName} • ${item.cliente}</span>
-              <span style="color:${item.status === 'Interrompida' ? 'var(--danger)' : 'var(--success)'}">
-                ${formatarMoeda(item.valorFinal)} (${item.status})
-              </span>
-            </div>
-            <div style="color:var(--muted); font-size:0.78rem;">
-              🕒 ${item.dataHora} • Tempo: ${item.minutosRodados}/${item.minutosContratados} min
-            </div>
-            ${item.motivoParada ? `
-              <div class="audit-reason">⚠️ Motivo: ${item.motivoParada}</div>
-            ` : ''}
-          </div>
-        `).join('');
-      }
-    }
-
-    function renderizarTudo() {
-      renderizarKarts();
-      renderizarResumo();
-    }
-
-    renderizarTudo();
+    renderizarKarts();
   </script>
 </body>
 </html>
