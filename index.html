@@ -1,869 +1,1048 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Cia dos Brinquedos - Aluguel de Brinquedos</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Cia dos Brinquedos - Gestão & Controle</title>
   <style>
     :root {
-      --bg-cream: #fffdf5;
-      --header-blue: #0b2545;
-      --card-dark: #0a192f;
-      --accent-yellow: #ffd000;
-      --accent-cyan: #00b4d8;
-      --accent-orange: #ff6b6b;
-      --text-dark: #1e293b;
-      --text-muted: #64748b;
+      --primary: #0f294a;
+      --secondary: #ffcc00;
+      --accent: #ff5722;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --warning: #f59e0b;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; }
-    body { background-color: var(--bg-cream); color: var(--text-dark); min-height: 100vh; display: flex; justify-content: center; padding: 0 0 40px 0; }
-
-    .app-container { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; position: relative; }
-
-    /* Topo Moderno Temático */
-    .header-banner { background: linear-gradient(135deg, #0b2545 0%, #134074 100%); padding: 20px 16px; border-bottom-left-radius: 28px; border-bottom-right-radius: 28px; box-shadow: 0 10px 25px rgba(11,37,69,0.25); display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 10; }
-    .header-logo-area { display: flex; flex-direction: column; gap: 2px; }
-    .header-title { font-size: 1.4rem; font-weight: 900; color: #ffd000; text-transform: uppercase; text-shadow: 2px 2px 0px #ff6b6b; letter-spacing: 0.5px; }
-    .header-subtitle { font-size: 0.8rem; color: #90e0ef; font-weight: 700; letter-spacing: 1px; }
-    
-    .btn-settings { background: #ffd000; border: none; color: #0b2545; font-size: 1.2rem; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(255,208,0,0.4); transition: transform 0.1s; }
-    .btn-settings:active { transform: scale(0.92); }
-
-    /* Seção Título de Seleção */
-    .section-header { text-align: center; padding: 8px 16px 0 16px; }
-    .section-title { font-size: 1.35rem; font-weight: 900; color: var(--header-blue); }
-    .section-desc { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
-
-    /* Telas / Views */
-    .screen { display: none; flex-direction: column; gap: 16px; }
-    .screen.active { display: flex; }
-
-    /* Grelha Compacta Lado a Lado */
-    .toys-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; }
-    .toy-modern-card { background: var(--card-dark); border-radius: 18px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 8px 20px rgba(10,25,47,0.25); display: flex; flex-direction: column; position: relative; cursor: pointer; transition: transform 0.1s; }
-    .toy-modern-card:active { transform: scale(0.96); }
-    
-    .toy-img-container { width: 100%; aspect-ratio: 4 / 2; background: radial-gradient(circle, #1e293b 0%, #0a192f 100%); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px; }
-    .toy-img-container img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.3)); }
-
-    .toy-info-body { padding: 8px 10px 10px 10px; display: flex; flex-direction: column; gap: 6px; background: #0a192f; }
-    .toy-card-name { font-size: 0.85rem; font-weight: 900; color: #ffffff; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    .btn-select-toy { background: linear-gradient(90deg, #ffd000 0%, #ffaa00 100%); border: none; border-radius: 99px; padding: 5px; font-size: 0.72rem; font-weight: 900; color: #0b2545; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 2px 8px rgba(255,208,0,0.3); }
-
-    .active-tag { position: absolute; top: 8px; right: 8px; background: #ff6b6b; color: white; font-size: 0.65rem; font-weight: 900; padding: 4px 8px; border-radius: 99px; box-shadow: 0 2px 8px rgba(255,107,107,0.4); z-index: 5; text-align: center; max-width: 85%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .alarm-blinking { animation: alertaPiscar 0.6s infinite alternate; background-color: #ef4444 !important; color: #ffffff !important; }
-    @keyframes alertaPiscar {
-      0% { opacity: 1; transform: scale(1); }
-      100% { opacity: 0.4; transform: scale(1.03); }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* Tela de Operação */
-    .container-inner { padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
-    .card-white { background: #ffffff; border-radius: 20px; padding: 16px; border: 2px solid #e2e8f0; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding-bottom: 40px;
+    }
 
-    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 99px; font-weight: 800; font-size: 0.75rem; background: #e2e8f0; color: #475569; }
-    .status-badge.connected { background: #dcfce7; color: #16a34a; border: 1px solid #16a34a; }
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #0b2240 0%, #163b6b 100%);
+      color: white;
+      padding: 18px 20px;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
 
-    .timer-display { text-align: center; margin: 4px 0 10px 0; }
-    .timer-time { font-size: 3.5rem; font-weight: 900; font-family: monospace; color: #0b2545; letter-spacing: -2px; }
-    .timer-label { font-size: 0.8rem; color: #ff6b6b; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+    .brand h1 {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--secondary);
+      letter-spacing: 0.5px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+    }
 
-    .progress-bar-container { width: 100%; height: 10px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin-top: 8px; }
-    .progress-bar { height: 100%; width: 0%; background: #16a34a; transition: width 0.3s ease; }
+    .brand p {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-top: 2px;
+    }
 
-    /* 4 colunas exatas para os botões de tempo, incluindo a caixa personalizada */
-    .time-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 10px 0; }
-    .time-btn { background: #f1f5f9; border: 2px solid #cbd5e1; color: #334155; padding: 10px 4px; border-radius: 12px; font-weight: 800; font-size: 0.78rem; cursor: pointer; text-align: center; white-space: nowrap; }
-    .time-btn.selected { background: #0b2545; border-color: #0b2545; color: #ffd000; }
-    
-    /* Caixa em branco com mesmo formato que abre teclado numérico */
-    .time-input-custom { background: #f1f5f9; border: 2px solid #cbd5e1; color: #334155; padding: 10px 2px; border-radius: 12px; font-weight: 800; font-size: 0.78rem; text-align: center; width: 100%; outline: none; }
-    .time-input-custom:focus { border-color: #0b2545; background: #ffffff; color: #0b2545; }
+    .btn-config {
+      background: var(--secondary);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
 
-    .price-tag { text-align: center; font-size: 1.25rem; font-weight: 900; color: #16a34a; margin-bottom: 12px; }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px;
+    }
 
-    /* Botões Gerais */
-    .btn { border: none; border-radius: 14px; padding: 14px; font-size: 1rem; font-weight: 900; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: #fff; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .btn:active { transform: scale(0.97); }
+    /* Cards Gerais */
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
 
-    .btn-blue { background: #0b2545; }
-    .btn-green { background: #16a34a; }
-    .btn-yellow { background: #ffd000; color: #0b2545; }
-    .btn-red { background: #ff6b6b; }
-    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
 
-    /* Formulários e Listas */
-    .form-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
-    .form-group label { font-size: 0.85rem; color: #334155; font-weight: 700; }
-    .form-input { background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 10px; padding: 10px; color: #1e293b; font-size: 0.9rem; font-weight: bold; }
+    /* Caixa do Dia */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
 
-    .toy-manage-item { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 8px 12px; border-radius: 12px; border: 2px solid #e2e8f0; margin-bottom: 8px; }
-    .toy-thumb { width: 50px; aspect-ratio: 4 / 2; border-radius: 6px; object-fit: contain; background: #0a192f; }
+    .stat-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+    }
 
-    .footer-banner { text-align: center; padding: 16px; font-size: 0.85rem; font-weight: 800; color: #0b2545; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .stat-value {
+      font-size: 1.55rem;
+      font-weight: 900;
+    }
 
-    .report-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px 12px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 6px; font-size: 0.82rem; }
+    .stat-value.red { color: var(--danger); }
+    .stat-value.green { color: var(--success); }
 
-    /* Menu Dropdown */
-    .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
-    .menu-box { position: absolute; top: 75px; right: 16px; background: #ffffff; border-radius: 20px; padding: 10px; width: 230px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); border: 2px solid #e2e8f0; z-index: 1000; }
-    .menu-item { background: #f8fafc; border: 1px solid #e2e8f0; color: #0b2545; padding: 12px; font-size: 0.88rem; text-align: left; cursor: pointer; border-radius: 12px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
-    .menu-item:hover { background: #eff6ff; }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .btn-reset-day {
+      width: 100%;
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    /* Karts Grid */
+    .karts-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .kart-card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 16px;
+      border: 2px solid #e2e8f0;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+      transition: all 0.2s;
+    }
+
+    .kart-card.running {
+      border-color: var(--success);
+      background: #f0fdf4;
+    }
+
+    .kart-card.finished {
+      border-color: var(--danger);
+      background: #fef2f2;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.01); }
+      100% { transform: scale(1); }
+    }
+
+    .kart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .kart-name {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .ble-badge {
+      font-size: 0.75rem;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .ble-disconnected {
+      background: #e2e8f0;
+      color: #475569;
+    }
+
+    .ble-connected {
+      background: #dbeafe;
+      color: #1d4ed8;
+    }
+
+    .timer-display {
+      font-size: 2.4rem;
+      font-weight: 900;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      color: var(--primary);
+      margin: 8px 0;
+    }
+
+    .running .timer-display {
+      color: var(--success);
+    }
+
+    .finished .timer-display {
+      color: var(--danger);
+    }
+
+    .active-info {
+      background: white;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      border: 1px solid #bbf7d0;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* Controles de Início */
+    .setup-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr 0.8fr;
+      gap: 8px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+    }
+
+    .preset-btns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .btn-preset {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 8px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--primary);
+      cursor: pointer;
+    }
+
+    .btn-preset:active {
+      background: #e2e8f0;
+    }
+
+    .action-btns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: white;
+      text-align: center;
+    }
+
+    .btn-start {
+      background: var(--success);
+      grid-column: span 2;
+    }
+
+    .btn-add-min {
+      background: #0284c7;
+    }
+
+    .btn-stop {
+      background: var(--danger);
+    }
+
+    /* ROI List */
+    .roi-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .roi-name {
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--primary);
+    }
+
+    .roi-stats {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .roi-stats strong {
+      color: var(--success);
+      font-size: 0.95rem;
+      margin-left: 6px;
+    }
+
+    /* Log de Auditoria */
+    .audit-list {
+      max-height: 320px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .audit-item {
+      background: #f8fafc;
+      border-left: 4px solid var(--success);
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      border-top: 1px solid #e2e8f0;
+      border-right: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .audit-item.interrupted {
+      border-left-color: var(--danger);
+      background: #fffafa;
+    }
+
+    .audit-top {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .audit-reason {
+      margin-top: 5px;
+      padding: 5px 8px;
+      background: #fee2e2;
+      color: #991b1b;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    /* Modais */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 1000;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .modal h3 {
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-size: 1.15rem;
+    }
+
+    .modal p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+
+    .modal-group {
+      margin-bottom: 12px;
+    }
+
+    .modal-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+      color: var(--text);
+    }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn-cancel {
+      background: #94a3b8;
+    }
+
+    .preview-calc {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      color: #166534;
+      margin-top: 10px;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
 
-  <div class="app-container">
-    
-    <div class="header-banner">
-      <div class="header-logo-area">
-        <div class="header-title">Cia dos Brinquedos</div>
-        <div class="header-subtitle">Aluguel de Brinquedos 🎈</div>
-      </div>
-      <button class="btn-settings" onclick="toggleMenu()">⚙️</button>
+  <header>
+    <div class="brand">
+      <h1>CIA DOS BRINQUEDOS</h1>
+      <p>Aluguel de Brinquedos 🎈</p>
     </div>
+    <button class="btn-config" onclick="abrirConfig()" title="Configurações">⚙️</button>
+  </header>
 
-    <div id="menuOverlay" class="menu-overlay" onclick="toggleMenu()">
-      <div class="menu-box" onclick="event.stopPropagation()">
-        <button class="menu-item" onclick="navegarPara('screen-home')">🏠 Início (Karts)</button>
-        <button class="menu-item" onclick="navegarPara('screen-cadastrar')">🎨 Cadastrar Karts</button>
-        <button class="menu-item" onclick="navegarPara('screen-bluetooth')">📡 Conectar Bluetooth</button>
-        <button class="menu-item" onclick="navegarPara('screen-caixa')">💰 Caixa e Relatório ROI</button>
-      </div>
-    </div>
-
-    <!-- 1. TELA INICIAL -->
-    <div id="screen-home" class="screen active">
-      <div class="section-header">
-        <div class="section-title">Selecione um Brinquedo</div>
-        <div class="section-desc">Escolha o brinquedo que deseja alugar</div>
-      </div>
-      <div id="toysGrid" class="toys-grid"></div>
-      
-      <div class="footer-banner">
-        <span>⚡ Aqui a diversão não tem hora! 🎮</span>
-      </div>
-    </div>
-
-    <!-- 2. TELA DE OPERAÇÃO -->
-    <div id="screen-operacao" class="screen">
-      <div class="container-inner">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <button class="btn btn-blue" style="width:auto; padding:8px 16px; font-size:0.85rem;" onclick="voltarParaHome()">⬅ Voltar</button>
-          <div id="statusBadge" class="status-badge">
-            <span>⚠️</span> <span id="statusText">Modo Simulação</span>
-          </div>
+  <div class="container">
+    <!-- Caixa do Dia -->
+    <div class="card">
+      <div class="card-title">💰 Caixa do Dia</div>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-value red" id="diaCorridas">0</div>
+          <div class="stat-label">Corridas Hoje</div>
         </div>
-
-        <div class="toy-modern-card" style="box-shadow: none; cursor: default;">
-          <div class="toy-img-container" style="height: 130px;">
-            <img id="opToyImg" src="" alt="Kart">
-          </div>
-          <div class="toy-info-body" style="padding: 8px;">
-            <div id="opToyName" class="toy-card-name" style="font-size: 1rem;">Nome do Kart</div>
-          </div>
-        </div>
-
-        <div class="card-white" id="operationCardBox">
-          <div class="timer-display">
-            <div class="timer-label" id="timerStateLabel">Pronto para a Aventura!</div>
-            <div class="timer-time" id="timeDisplay">05:00</div>
-            <div class="progress-bar-container">
-              <div class="progress-bar" id="progressBar"></div>
-            </div>
-          </div>
-
-          <div id="setupArea">
-            <div class="form-group" style="margin-bottom: 10px;">
-              <label>Nome da Criança (Piloto):</label>
-              <input type="text" id="inputChildName" class="form-input" placeholder="Ex: Joãozinho">
-            </div>
-
-            <label style="font-size: 0.85rem; color: #334155; font-weight: 700; display: block; margin-bottom: 4px;">Selecione ou Digite o Tempo (Min):</label>
-            <!-- 4 caixas lado a lado com exato mesmo formato -->
-            <div class="time-selector">
-              <button class="time-btn selected" onclick="selecionarTempo(5, 5.00, this)">5 Min</button>
-              <button class="time-btn" onclick="selecionarTempo(10, 10.00, this)">10 Min</button>
-              <button class="time-btn" onclick="selecionarTempo(15, 15.00, this)">15 Min</button>
-              <input type="number" id="inputCustomMinutes" class="time-input-custom" placeholder="Outro" min="1" onclick="limparSelecaoBotoes()" oninput="definirTempoPersonalizado(this.value)">
-            </div>
-
-            <div class="price-tag" id="priceTag">Valor: R$ 5,00</div>
-            <button class="btn btn-green" onclick="iniciarCorrida()">🚀 INICIAR CORRIDA</button>
-          </div>
-
-          <div id="controlArea" style="display:none; display: flex; flex-direction: column; gap: 8px;">
-            <button class="btn btn-blue" onclick="adicionarMaisUmMinuto()" style="background: var(--accent-cyan); color: #0b2545;">⏱️ +1 Minuto</button>
-            <div class="btn-grid">
-              <button class="btn btn-yellow" id="btnPause" onclick="pausarOuRetomar()">⏸️ PAUSAR</button>
-              <button class="btn btn-red" onclick="pararEmergencia()">🛑 PARAR AGORA</button>
-            </div>
-          </div>
+        <div class="stat-box">
+          <div class="stat-value green" id="diaFaturamento">R$ 0,00</div>
+          <div class="stat-label">Faturamento Hoje</div>
         </div>
       </div>
+      <button class="btn-reset-day" onclick="zerarCaixaDia()">Zerar Apenas Caixa do Dia 🔄</button>
     </div>
 
-    <!-- 3. TELA DE GERENCIAR KARTS -->
-    <div id="screen-cadastrar" class="screen">
-      <div class="container-inner">
-        <div class="card-white">
-          <h3 style="font-size:1.1rem; margin-bottom:12px; color:var(--header-blue);">🎨 Cadastrar Novo Brinquedo</h3>
-          <div class="form-group">
-            <label>Nome / Identificação (Digite DRIFT para ver opções)</label>
-            <input type="text" id="inputToyName" class="form-input" placeholder="Ex: DRIFT AZUL 002" oninput="sugerirModelosDrift(this.value)">
-          </div>
+    <!-- Lista de Carrinhos -->
+    <div class="karts-list" id="kartsContainer"></div>
 
-          <div id="driftSuggestions" style="display: none; display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; background: #f1f5f9; padding: 8px; border-radius: 10px; border: 1px solid #cbd5e1;">
-            <span style="font-size: 0.75rem; font-weight: 800; color: var(--header-blue);">💡 Escolha um modelo Drift da lista:</span>
-            <div id="driftListContainer" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;"></div>
-          </div>
+    <!-- Relatório Vitalício -->
+    <div class="card" style="margin-top: 18px;">
+      <div class="card-title">📈 Relatório Vitalício (Retorno / ROI)</div>
+      <p style="text-align:center; font-size:0.8rem; color:var(--muted); margin-bottom:12px;">
+        Faturamento histórico acumulado de cada carrinho:
+      </p>
+      <div id="roiContainer"></div>
+    </div>
 
-          <div class="form-group">
-            <label>Ou Envie Foto do Telemóvel</label>
-            <input type="file" id="inputToyPhoto" accept="image/*" class="form-input" onchange="selecionarFotoManual(this)">
-          </div>
-          
-          <div id="previewContainer" style="display: none; margin-bottom: 10px; text-align: center;">
-            <span style="font-size: 0.75rem; font-weight: bold; color: var(--text-muted);">Pré-visualização (4x2):</span>
-            <img id="imgPreview" style="width: 100%; aspect-ratio: 4/2; object-fit: contain; background: #0a192f; border-radius: 8px; margin-top: 4px;">
-          </div>
+    <!-- Histórico & Auditoria de Operação -->
+    <div class="card">
+      <div class="card-title">🛡️ Auditoria & Histórico de Corridas</div>
+      <p style="text-align:center; font-size:0.78rem; color:var(--muted); margin-bottom:12px;">
+        Registro inviolável de corridas iniciadas, valores e motivos de parada:
+      </p>
+      <div class="audit-list" id="auditContainer"></div>
+    </div>
+  </div>
 
-          <button class="btn btn-blue" onclick="salvarKart()">Salvar Carrinho 🏎️</button>
-        </div>
+  <!-- Modal de Parada Obrigatória -->
+  <div class="modal-backdrop" id="stopModal">
+    <div class="modal">
+      <h3>⚠️ Encerrar Corrida Antes do Tempo</h3>
+      <p id="stopModalDesc">Informe obrigatoriamente o motivo para interromper esta corrida.</p>
 
-        <div class="card-white">
-          <h3 style="font-size:1.1rem; margin-bottom:10px; color:var(--header-blue);">📋 Carrinhos Cadastrados</h3>
-          <div id="toysManageList"></div>
-        </div>
+      <div class="modal-group">
+        <label>Motivo Padrão:</label>
+        <select id="stopReasonSelect" onchange="atualizarMotivoTexto()">
+          <option value="">-- Selecione um motivo --</option>
+          <option value="Criança desistiu / chorou">Criança desistiu / chorou</option>
+          <option value="Bateria do carrinho acabou">Bateria do carrinho acabou</option>
+          <option value="Problema técnico / mecânico">Problema técnico / mecânico</option>
+          <option value="Solicitação dos pais / responsável">Solicitação dos pais / responsável</option>
+          <option value="Outro motivo">Outro motivo (descrever abaixo)</option>
+        </select>
+      </div>
+
+      <div class="modal-group">
+        <label>Detalhes / Observação Obrigatória:</label>
+        <textarea id="stopReasonText" rows="2" placeholder="Descreva o que aconteceu..."></textarea>
+      </div>
+
+      <div class="modal-group">
+        <label>Regra de Cobrança desta Parada:</label>
+        <select id="stopBillingMode" onchange="atualizarPreviewParada()">
+          <option value="proporcional">Proporcional aos minutos rodados (Mín. R$ 1,00)</option>
+          <option value="integral">Manter valor integral cobrado no início</option>
+        </select>
+      </div>
+
+      <div class="preview-calc" id="stopCalcPreview"></div>
+
+      <div class="modal-actions">
+        <button class="btn btn-cancel" onclick="fecharModalParada()">Voltar</button>
+        <button class="btn btn-stop" onclick="confirmarParada()">Confirmar Parada</button>
       </div>
     </div>
+  </div>
 
-    <!-- 4. TELA BLUETOOTH -->
-    <div id="screen-bluetooth" class="screen">
-      <div class="container-inner">
-        <div class="card-white" style="text-align: center; padding: 24px;">
-          <h3 style="color:var(--header-blue); margin-bottom:8px;">Conexão Bluetooth ESP32</h3>
-          <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:20px;">Pareie com o hardware ESP32 do carrinho via Web Bluetooth (BLE).</p>
-          <button class="btn btn-blue" onclick="conectarBluetooth()">Conectar ao ESP32 📡</button>
-        </div>
+  <!-- Modal de Configurações -->
+  <div class="modal-backdrop" id="configModal">
+    <div class="modal">
+      <h3>⚙️ Configurações do Sistema</h3>
+      <div class="modal-group">
+        <label>Valor padrão por minuto (R$):</label>
+        <input type="number" id="cfgPrecoMinuto" step="0.50" min="0.50" />
+      </div>
+      <div class="modal-group">
+        <label>Senha do Proprietário (para zerar caixa / editar):</label>
+        <input type="password" id="cfgSenha" placeholder="Padrão: 1234" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-cancel" onclick="fecharConfig()">Cancelar</button>
+        <button class="btn btn-start" style="grid-column: span 1;" onclick="salvarConfig()">Salvar</button>
       </div>
     </div>
-
-    <!-- 5. TELA CAIXA DO DIA -->
-    <div id="screen-caixa" class="screen">
-      <div class="container-inner">
-        <div class="card-white" style="text-align: center;">
-          <h3 style="color:var(--header-blue); margin-bottom:14px;">💰 Caixa do Dia</h3>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
-            <div style="background:#f8fafc; padding:14px; border-radius:14px; border:2px solid #e2e8f0;">
-              <div id="statRides" style="font-size:1.6rem; font-weight:900; color:#ff6b6b;">0</div>
-              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Corridas Hoje</div>
-            </div>
-            <div style="background:#f8fafc; padding:14px; border-radius:14px; border:2px solid #e2e8f0;">
-              <div id="statTotal" style="font-size:1.6rem; font-weight:900; color:#16a34a;">R$ 0,00</div>
-              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Faturamento Hoje</div>
-            </div>
-          </div>
-
-          <button class="btn btn-red" style="font-size:0.85rem; padding:10px; margin-bottom: 16px;" onclick="zerarCaixaDiario()">Zerar Apenas Caixa do Dia 🔄</button>
-
-          <h3 style="color:var(--header-blue); margin-bottom:8px; border-top: 2px dashed #cbd5e1; padding-top: 14px;">📈 Relatório Vitalício (Retorno / ROI)</h3>
-          <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">Faturamento histórico acumulado de cada carrinho:</p>
-          
-          <div id="lifetimeReportList" style="max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;"></div>
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <script>
-    const SERVICE_UUID = "4fa1c201-222d-4b93-9fb6-52c1e7f32d88";
-    const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
+    // Configurações BLE ESP32
+    const BLE_SERVICE_UUID = '4fa1c201-222d-4b93-9fb6-52c1e7f32d88';
+    const BLE_CHAR_UUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
-    let bluetoothDevice;
-    let caracteristicaBLE;
-    let globalLoopInterval = null;
-
-    let tempoSelecionadoMinutos = 5;
-    let valorSelecionado = 5.00;
-    let kartAtualObj = null;
-    let fotoBase64Temporaria = "";
-
-    const galeriaDrift = [
-      { name: "DRIFT PRETO 001", color: "#0a192f", accent: "#ffd000" },
-      { name: "DRIFT AZUL 002", color: "#0b2545", accent: "#00b4d8" },
-      { name: "DRIFT VERDE 003", color: "#14532d", accent: "#4ade80" },
-      { name: "DRIFT VERMELHO 004", color: "#7f1d1d", accent: "#f87171" },
-      { name: "DRIFT GRAFITE 005", color: "#334155", accent: "#cbd5e1" },
-      { name: "DRIFT ROSA 006", color: "#831843", accent: "#f472b6" },
-      { name: "DRIFT AMARELO 007", color: "#78350f", accent: "#facc15" }
+    // Lista inicial de carrinhos
+    const DEFAULT_KARTS = [
+      { id: 'kart1', name: 'DRIF COLORIDO' },
+      { id: 'kart2', name: 'DRIF VERDE' },
+      { id: 'kart3', name: 'DRIFT FOGO E GELO' },
+      { id: 'kart4', name: 'DRIF PRETO' }
     ];
 
-    window.onload = function() {
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      if (toys.length === 0) {
-        toys.push({ id: 'drift_001', name: 'DRIFT PRETO 001', photo: gerarSvgDrift('#0a192f', '#ffd000', 'DRIFT PRETO 001') });
-        toys.push({ id: 'drift_002', name: 'DRIFT AZUL 002', photo: gerarSvgDrift('#0b2545', '#00b4d8', 'DRIFT AZUL 002') });
-        localStorage.setItem('drift_toys', JSON.stringify(toys));
-      }
-
-      carregarKartsHome();
-      atualizarCaixaUI();
-
-      if (globalLoopInterval) clearInterval(globalLoopInterval);
-      globalLoopInterval = setInterval(cicloGlobalAtualizacao, 500);
+    // Estado persistente
+    let state = JSON.parse(localStorage.getItem('cia_brinquedos_v2')) || {
+      precoMinuto: 1.00,
+      senhaProprietario: '1234',
+      diaCorridas: 0,
+      diaFaturamento: 0,
+      roi: {
+        kart1: { rides: 0, total: 0 },
+        kart2: { rides: 0, total: 0 },
+        kart3: { rides: 0, total: 0 },
+        kart4: { rides: 0, total: 0 }
+      },
+      activeRides: {},
+      auditLog: []
     };
 
-    function gerarSvgDrift(bgCor, textoCor, nomeKart) {
-      return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect width="400" height="200" fill="${bgCor}"/><circle cx="200" cy="100" r="70" fill="${textoCor}" opacity="0.15"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="${textoCor}" font-size="24" font-weight="900" font-family="sans-serif">🏎️ DRIFT</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" fill="%23ffffff" font-size="16" font-weight="bold" font-family="sans-serif">${nomeKart}</text></svg>`;
+    // Conexões Bluetooth em memória
+    const bleConnections = {};
+    let kartParandoAtual = null;
+
+    function salvarEstado() {
+      localStorage.setItem('cia_brinquedos_v2', JSON.stringify(state));
     }
 
-    function toggleMenu() {
-      const menu = document.getElementById('menuOverlay');
-      menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+    function formatarMoeda(valor) {
+      return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
-    function navegarPara(screenId) {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById(screenId).classList.add('active');
-      document.getElementById('menuOverlay').style.display = 'none';
-
-      if (screenId === 'screen-home') {
-        carregarKartsHome();
-      } else if (screenId === 'screen-cadastrar') {
-        carregarKartsGerenciador();
-      } else if (screenId === 'screen-caixa') {
-        atualizarCaixaUI();
-      } else if (screenId === 'screen-operacao' && kartAtualObj) {
-        renderizarInterfaceKart(kartAtualObj.id);
-      }
+    function formatarTempo(segundos) {
+      const m = Math.floor(segundos / 60);
+      const s = segundos % 60;
+      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
     }
 
-    function voltarParaHome() {
-      kartAtualObj = null;
-      navegarPara('screen-home');
-    }
-
-    function tocarAlarmeFim() {
+    // Som de alerta ao finalizar tempo
+    function tocarAlarme() {
       try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let beepCount = 0;
-        const interval = setInterval(() => {
-          if (beepCount >= 6) {
-            clearInterval(interval);
-            return;
-          }
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'square';
-          osc.frequency.setValueAtTime(950, audioCtx.currentTime);
-          gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start();
-          osc.stop(audioCtx.currentTime + 0.25);
-          beepCount++;
-        }, 300);
-      } catch (e) {
-        console.log("Áudio aguardando interação.");
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        setTimeout(() => osc.stop(), 600);
+      } catch (e) {}
+    }
+
+    // Bluetooth BLE
+    async function conectarBLE(kartId, kartName) {
+      if (!navigator.bluetooth) {
+        alert('Este navegador não suporta Web Bluetooth. Use o Google Chrome no Android.');
+        return;
+      }
+      try {
+        const device = await navigator.bluetooth.requestDevice({
+          filters: [{ namePrefix: 'ESP32' }, { namePrefix: 'DRIFT' }, { namePrefix: 'CIA' }],
+          optionalServices: [BLE_SERVICE_UUID]
+        });
+        const server = await device.gatt.connect();
+        const service = await server.getPrimaryService(BLE_SERVICE_UUID);
+        const characteristic = await service.getCharacteristic(BLE_CHAR_UUID);
+
+        bleConnections[kartId] = { device, characteristic };
+        device.addEventListener('gattserverdisconnected', () => {
+          delete bleConnections[kartId];
+          renderizarKarts();
+        });
+
+        renderizarKarts();
+      } catch (err) {
+        console.warn('Conexão BLE cancelada ou falhou:', err);
       }
     }
 
-    function carregarKartsHome() {
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      const grid = document.getElementById('toysGrid');
-      grid.innerHTML = '';
+    async function enviarComandoBLE(kartId, comando) {
+      const conn = bleConnections[kartId];
+      if (conn && conn.characteristic) {
+        try {
+          const encoder = new TextEncoder();
+          await conn.characteristic.writeValue(encoder.encode(comando));
+        } catch (err) {
+          console.error('Erro ao enviar comando BLE:', err);
+        }
+      }
+    }
 
-      if (toys.length === 0) {
-        grid.innerHTML = '<p style="grid-column: span 2; text-align:center; color:var(--text-muted); padding:20px;">Nenhum brinquedo cadastrado.</p>';
+    // Atualizar valor sugerido conforme minutos digitados
+    function atualizarValorSugerido(kartId) {
+      const minInput = document.getElementById(`min_${kartId}`);
+      const valInput = document.getElementById(`val_${kartId}`);
+      const mins = parseFloat(minInput.value) || 0;
+      if (mins > 0) {
+        valInput.value = (mins * state.precoMinuto).toFixed(2);
+      }
+    }
+
+    function aplicarPreset(kartId, minutos) {
+      document.getElementById(`min_${kartId}`).value = minutos;
+      document.getElementById(`val_${kartId}`).value = (minutos * state.precoMinuto).toFixed(2);
+    }
+
+    // INICIAR CORRIDA (Regra 1 e 2: Bloqueia valor zero e já registra no caixa)
+    async function iniciarCorrida(kartId) {
+      const kart = DEFAULT_KARTS.find(k => k.id === kartId);
+      const cliente = document.getElementById(`cli_${kartId}`).value.trim() || 'Cliente';
+      const minutos = parseInt(document.getElementById(`min_${kartId}`).value, 10);
+      const valor = parseFloat(document.getElementById(`val_${kartId}`).value);
+
+      if (!minutos || minutos <= 0) {
+        alert('⚠️ Informe um tempo válido em minutos para iniciar!');
         return;
       }
 
-      toys.forEach((toy) => {
-        const rideData = getCorridaKart(toy.id);
-        let activeTagHTML = '';
+      if (isNaN(valor) || valor <= 0) {
+        alert('🚫 BLOQUEADO: Toda corrida precisa iniciar com um valor maior que R$ 0,00!');
+        return;
+      }
 
-        if (rideData && rideData.status === 'RUNNING') {
-          const tempoRestanteSec = Math.max(0, Math.floor((rideData.endTime - Date.now()) / 1000));
-          if (tempoRestanteSec > 0) {
-            const min = Math.floor(tempoRestanteSec / 60);
-            const seg = tempoRestanteSec % 60;
-            const tempoStr = `${String(min).padStart(2,'0')}:${String(seg).padStart(2,'0')}`;
-            const nomePiloto = rideData.childName ? `👤 ${rideData.childName}` : '⏱️';
-            activeTagHTML = `<div class="active-tag">${nomePiloto} (${tempoStr})</div>`;
-          }
-        } else if (rideData && rideData.status === 'PAUSED') {
-          const nomePiloto = rideData.childName ? `👤 ${rideData.childName}` : '';
-          activeTagHTML = `<div class="active-tag" style="background:#ffd000; color:#000;">⏸️ ${nomePiloto} PAUSADO</div>`;
-        } else if (rideData && rideData.status === 'FINISHED') {
-          const nomeAlerta = rideData.childName ? rideData.childName : toy.name;
-          activeTagHTML = `<div class="active-tag alarm-blinking">🚨 ${nomeAlerta}</div>`;
-        }
+      const agora = Date.now();
+      const totalSegundos = minutos * 60;
+      const auditId = 'AUD-' + agora;
 
-        const card = document.createElement('div');
-        card.className = 'toy-modern-card';
-        card.onclick = () => abrirOperacaoKart(toy);
-        card.innerHTML = `
-          ${activeTagHTML}
-          <div class="toy-img-container">
-            <img src="${toy.photo || gerarSvgDrift('#0a192f', '#ffd000', toy.name)}" alt="${toy.name}">
-          </div>
-          <div class="toy-info-body">
-            <div class="toy-card-name">${toy.name}</div>
-            <button class="btn-select-toy">
-              <span>🔲</span> Selecionar ➔
-            </button>
-          </div>
-        `;
-        grid.appendChild(card);
+      // Contabiliza imediatamente no caixa e no ROI (nunca fica zero!)
+      state.diaCorridas += 1;
+      state.diaFaturamento += valor;
+      if (!state.roi[kartId]) state.roi[kartId] = { rides: 0, total: 0 };
+      state.roi[kartId].rides += 1;
+      state.roi[kartId].total += valor;
+
+      // Cria registro de auditoria inicial
+      state.auditLog.unshift({
+        id: auditId,
+        kartId,
+        kartName: kart.name,
+        cliente,
+        dataHora: new Date().toLocaleString('pt-BR'),
+        minutosContratados: minutos,
+        minutosRodados: minutos,
+        valorInicial: valor,
+        valorFinal: valor,
+        status: 'Em andamento',
+        motivoParada: ''
       });
+
+      state.activeRides[kartId] = {
+        auditId,
+        cliente,
+        minutosContratados: minutos,
+        valorInicial: valor,
+        startTime: agora,
+        endTime: agora + (totalSegundos * 1000)
+      };
+
+      salvarEstado();
+      await enviarComandoBLE(kartId, 'INICIAR');
+      renderizarTudo();
     }
 
-    function abrirOperacaoKart(toy) {
-      kartAtualObj = toy;
-      document.getElementById('opToyName').innerText = toy.name;
-      document.getElementById('opToyImg').src = toy.photo || gerarSvgDrift('#0a192f', '#ffd000', toy.name);
-      
-      renderizarInterfaceKart(toy.id);
-      navegarPara('screen-operacao');
+    // Adicionar +1 Minuto
+    function adicionarMinuto(kartId) {
+      const ride = state.activeRides[kartId];
+      if (!ride) return;
+
+      const valorExtra = state.precoMinuto;
+      ride.endTime += 60 * 1000;
+      ride.minutosContratados += 1;
+      ride.valorInicial += valorExtra;
+
+      state.diaFaturamento += valorExtra;
+      state.roi[kartId].total += valorExtra;
+
+      const logItem = state.auditLog.find(a => a.id === ride.auditId);
+      if (logItem) {
+        logItem.minutosContratados += 1;
+        logItem.minutosRodados += 1;
+        logItem.valorInicial += valorExtra;
+        logItem.valorFinal += valorExtra;
+      }
+
+      salvarEstado();
+      renderizarTudo();
     }
 
-    function selecionarTempo(minutos, valor, btn) {
-      document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
-      if (btn) btn.classList.add('selected');
-      document.getElementById('inputCustomMinutes').value = '';
+    // Abrir Modal de Parada Obrigatória
+    function abrirModalParada(kartId) {
+      const ride = state.activeRides[kartId];
+      if (!ride) return;
 
-      tempoSelecionadoMinutos = minutos;
-      valorSelecionado = valor;
+      kartParandoAtual = kartId;
+      document.getElementById('stopReasonSelect').value = '';
+      document.getElementById('stopReasonText').value = '';
+      document.getElementById('stopBillingMode').value = 'proporcional';
 
-      document.getElementById('priceTag').innerText = `Valor: R$ ${valor.toFixed(2).replace('.', ',')}`;
-      document.getElementById('timeDisplay').innerText = `${String(minutos).padStart(2, '0')}:00`;
+      atualizarPreviewParada();
+      document.getElementById('stopModal').classList.add('open');
     }
 
-    function limparSelecaoBotoes() {
-      document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+    function fecharModalParada() {
+      kartParandoAtual = null;
+      document.getElementById('stopModal').classList.remove('open');
     }
 
-    function definirTempoPersonalizado(val) {
-      limparSelecaoBotoes();
-      const min = parseInt(val);
-      if (!isNaN(min) && min > 0) {
-        tempoSelecionadoMinutos = min;
-        valorSelecionado = min * 1.00; 
-
-        document.getElementById('priceTag').innerText = `Valor: R$ ${valorSelecionado.toFixed(2).replace('.', ',')}`;
-        document.getElementById('timeDisplay').innerText = `${String(min).padStart(2, '0')}:00`;
+    function atualizarMotivoTexto() {
+      const sel = document.getElementById('stopReasonSelect').value;
+      const txt = document.getElementById('stopReasonText');
+      if (sel && sel !== 'Outro motivo') {
+        txt.value = sel;
+      } else if (sel === 'Outro motivo') {
+        txt.value = '';
+        txt.focus();
       }
     }
 
-    function getCorridaKart(toyId) {
-      const data = localStorage.getItem('drift_ride_' + toyId);
-      return data ? JSON.parse(data) : null;
+    function calcularDadosParada(ride) {
+      const agora = Date.now();
+      const segundosDecorridos = Math.max(1, Math.floor((agora - ride.startTime) / 1000));
+      // Arredonda para cima os minutos iniciados (ex: 2m10s = 3 minutos usados)
+      const minutosUsados = Math.min(
+        ride.minutosContratados,
+        Math.max(1, Math.ceil(segundosDecorridos / 60))
+      );
+
+      const valorPorMinuto = ride.valorInicial / ride.minutosContratados;
+      const valorProporcional = Math.max(1.00, Number((minutosUsados * valorPorMinuto).toFixed(2)));
+
+      return {
+        minutosUsados,
+        valorProporcional
+      };
     }
 
-    function setCorridaKart(toyId, rideObj) {
-      if (rideObj === null) {
-        localStorage.removeItem('drift_ride_' + toyId);
-      } else {
-        localStorage.setItem('drift_ride_' + toyId, JSON.stringify(rideObj));
-      }
+    function atualizarPreviewParada() {
+      if (!kartParandoAtual) return;
+      const ride = state.activeRides[kartParandoAtual];
+      const modo = document.getElementById('stopBillingMode').value;
+      const { minutosUsados, valorProporcional } = calcularDadosParada(ride);
+
+      const valorFinal = modo === 'proporcional' ? valorProporcional : ride.valorInicial;
+
+      document.getElementById('stopCalcPreview').innerHTML = `
+        ⏱️ Tempo contratado: ${ride.minutosContratados} min | Tempo rodado: ${minutosUsados} min<br>
+        💵 Valor inicial: ${formatarMoeda(ride.valorInicial)} ➔ <strong>Valor contabilizado: ${formatarMoeda(valorFinal)}</strong>
+      `;
     }
 
-    function renderizarInterfaceKart(toyId) {
-      const ride = getCorridaKart(toyId);
-      const cardWhiteBox = document.getElementById('operationCardBox');
-      cardWhiteBox.classList.remove('alarm-blinking');
+    // CONFIRMAR PARADA COM JUSTIFICATIVA E REAJUSTE PROPORCIONAL
+    async function confirmarParada() {
+      if (!kartParandoAtual) return;
+      const ride = state.activeRides[kartParandoAtual];
+      const motivo = document.getElementById('stopReasonText').value.trim();
+      const modo = document.getElementById('stopBillingMode').value;
 
-      if (!ride || ride.status === 'STOPPED') {
-        document.getElementById('setupArea').style.display = 'block';
-        document.getElementById('controlArea').style.display = 'none';
-        document.getElementById('timerStateLabel').innerText = "Pronto para a Aventura!";
-        document.getElementById('inputChildName').value = '';
-        document.getElementById('inputCustomMinutes').value = '';
-        document.getElementById('timeDisplay').innerText = `${String(tempoSelecionadoMinutos).padStart(2, '0')}:00`;
-        document.getElementById('progressBar').style.width = '0%';
+      if (motivo.length < 4) {
+        alert('🚫 OBRIGATÓRIO: Informe detalhadamente o motivo da parada antes de encerrar a corrida!');
         return;
       }
 
-      document.getElementById('setupArea').style.display = 'none';
-      document.getElementById('controlArea').style.display = 'flex';
-      document.getElementById('inputChildName').value = ride.childName || '';
+      const { minutosUsados, valorProporcional } = calcularDadosParada(ride);
+      const valorFinal = modo === 'proporcional' ? valorProporcional : ride.valorInicial;
+      const diferenca = ride.valorInicial - valorFinal;
 
-      atualizarCronometroKartUI(toyId);
-    }
-
-    function atualizarCronometroKartUI(toyId) {
-      const ride = getCorridaKart(toyId);
-      if (!ride) return;
-
-      let restanteSec = 0;
-      const cardWhiteBox = document.getElementById('operationCardBox');
-
-      if (ride.status === 'RUNNING') {
-        restanteSec = Math.max(0, Math.floor((ride.endTime - Date.now()) / 1000));
-        cardWhiteBox.classList.remove('alarm-blinking');
-        
-        const labelText = ride.childName ? `🏁 PILOTO: ${ride.childName}` : "🏁 CORRIDA A DECORRER!";
-        document.getElementById('timerStateLabel').innerText = labelText;
-        
-        const btnPause = document.getElementById('btnPause');
-        btnPause.innerText = "⏸️ PAUSAR";
-        btnPause.className = "btn btn-yellow";
-
-        if (restanteSec <= 0) {
-          ativarTerminoCorrida(toyId);
-          return;
-        }
-      } else if (ride.status === 'PAUSED') {
-        restanteSec = ride.remainingSecOnPause;
-        cardWhiteBox.classList.remove('alarm-blinking');
-        document.getElementById('timerStateLabel').innerText = "⏸️ PAUSADO";
-        
-        const btnPause = document.getElementById('btnPause');
-        btnPause.innerText = "▶️ RETOMAR";
-        btnPause.className = "btn btn-green";
-      } else if (ride.status === 'FINISHED') {
-        restanteSec = 0;
-        cardWhiteBox.classList.add('alarm-blinking');
-        const nomeAlerta = ride.childName ? ride.childName : "TEMPO ESGOTADO";
-        document.getElementById('timerStateLabel').innerText = `🚨 FINALIZADO: ${nomeAlerta} 🚨`;
-        
-        if (Date.now() > ride.finishedUntil) {
-          setCorridaKart(toyId, null);
-          renderizarInterfaceKart(toyId);
-          return;
-        }
+      // Ajusta o caixa e o ROI caso seja proporcional (nunca zera!)
+      if (diferenca > 0) {
+        state.diaFaturamento = Math.max(0, Number((state.diaFaturamento - diferenca).toFixed(2)));
+        state.roi[kartParandoAtual].total = Math.max(0, Number((state.roi[kartParandoAtual].total - diferenca).toFixed(2)));
       }
 
-      const min = Math.floor(restanteSec / 60);
-      const seg = restanteSec % 60;
-      document.getElementById('timeDisplay').innerText = `${String(min).padStart(2, '0')}:${String(seg).padStart(2, '0')}`;
-
-      const totalSec = ride.totalDurationSec;
-      const pct = totalSec > 0 ? ((totalSec - restanteSec) / totalSec) * 100 : 0;
-      document.getElementById('progressBar').style.width = `${Math.min(100, pct)}%`;
-    }
-
-    async function iniciarCorrida() {
-      if (!kartAtualObj) return;
-      const childName = document.getElementById('inputChildName').value.trim();
-
-      if (await enviarComando("INICIAR")) {
-        const durationSec = tempoSelecionadoMinutos * 60;
-        const ride = {
-          toyId: kartAtualObj.id,
-          status: 'RUNNING',
-          endTime: Date.now() + (durationSec * 1000),
-          totalDurationSec: durationSec,
-          remainingSecOnPause: 0,
-          childName: childName
-        };
-
-        setCorridaKart(kartAtualObj.id, ride);
-        registarVenda(kartAtualObj.id, valorSelecionado);
-        renderizarInterfaceKart(kartAtualObj.id);
+      // Atualiza o registro de auditoria
+      const logItem = state.auditLog.find(a => a.id === ride.auditId);
+      if (logItem) {
+        logItem.minutosRodados = minutosUsados;
+        logItem.valorFinal = valorFinal;
+        logItem.status = 'Interrompida';
+        logItem.motivoParada = `${motivo} (Rodou ${minutosUsados}/${ride.minutosContratados} min)`;
       }
+
+      const kartIdParaParar = kartParandoAtual;
+      delete state.activeRides[kartIdParaParar];
+
+      salvarEstado();
+      fecharModalParada();
+      await enviarComandoBLE(kartIdParaParar, 'PARAR');
+      renderizarTudo();
     }
 
-    function adicionarMaisUmMinuto() {
-      if (!kartAtualObj) return;
-      const ride = getCorridaKart(kartAtualObj.id);
-      if (!ride) return;
+    // Loop do Cronômetro
+    setInterval(async () => {
+      const agora = Date.now();
+      let precisouAtualizar = false;
 
-      if (ride.status === 'RUNNING') {
-        ride.endTime += 60 * 1000;
-        ride.totalDurationSec += 60;
-        setCorridaKart(kartAtualObj.id, ride);
-        atualizarCronometroKartUI(kartAtualObj.id);
-      } else if (ride.status === 'PAUSED') {
-        ride.remainingSecOnPause += 60;
-        ride.totalDurationSec += 60;
-        setCorridaKart(kartAtualObj.id, ride);
-        atualizarCronometroKartUI(kartAtualObj.id);
-      }
-    }
-
-    async function pausarOuRetomar() {
-      if (!kartAtualObj) return;
-      const toyId = kartAtualObj.id;
-      const ride = getCorridaKart(toyId);
-      if (!ride) return;
-
-      if (ride.status === 'RUNNING') {
-        if (await enviarComando("PARAR")) {
-          const restanteSec = Math.max(0, Math.floor((ride.endTime - Date.now()) / 1000));
-          ride.status = 'PAUSED';
-          ride.remainingSecOnPause = restanteSec;
-          setCorridaKart(toyId, ride);
-          renderizarInterfaceKart(toyId);
-        }
-      } else if (ride.status === 'PAUSED') {
-        if (await enviarComando("INICIAR")) {
-          ride.status = 'RUNNING';
-          ride.endTime = Date.now() + (ride.remainingSecOnPause * 1000);
-          setCorridaKart(toyId, ride);
-          renderizarInterfaceKart(toyId);
-        }
-      }
-    }
-
-    async function pararEmergencia() {
-      if (!kartAtualObj) return;
-      await enviarComando("PARAR");
-      setCorridaKart(kartAtualObj.id, null);
-      renderizarInterfaceKart(kartAtualObj.id);
-    }
-
-    function ativarTerminoCorrida(toyId) {
-      tocarAlarmeFim();
-      const ride = getCorridaKart(toyId);
-      if (ride) {
-        ride.status = 'FINISHED';
-        ride.finishedUntil = Date.now() + (10 * 1000);
-        setCorridaKart(toyId, ride);
-      }
-      if (kartAtualObj && kartAtualObj.id === toyId) {
-        renderizarInterfaceKart(toyId);
-      }
-    }
-
-    function cicloGlobalAtualizacao() {
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      toys.forEach(toy => {
-        const ride = getCorridaKart(toy.id);
+      for (const kart of DEFAULT_KARTS) {
+        const ride = state.activeRides[kart.id];
         if (ride) {
-          if (ride.status === 'RUNNING') {
-            const restante = Math.floor((ride.endTime - Date.now()) / 1000);
-            if (restante <= 0) {
-              ativarTerminoCorrida(toy.id);
+          const restante = Math.max(0, Math.ceil((ride.endTime - agora) / 1000));
+          const timerEl = document.getElementById(`timer_${kart.id}`);
+          if (timerEl) {
+            timerEl.textContent = formatarTempo(restante);
+          }
+
+          if (restante === 0) {
+            // Tempo concluído normalmente
+            const logItem = state.auditLog.find(a => a.id === ride.auditId);
+            if (logItem) {
+              logItem.status = 'Concluída';
             }
-          } else if (ride.status === 'FINISHED') {
-            if (Date.now() > ride.finishedUntil) {
-              setCorridaKart(toy.id, null);
-            }
+            delete state.activeRides[kart.id];
+            salvarEstado();
+            tocarAlarme();
+            await enviarComandoBLE(kart.id, 'PARAR');
+            precisouAtualizar = true;
           }
         }
-      });
-
-      const currentScreen = document.querySelector('.screen.active');
-      if (currentScreen && currentScreen.id === 'screen-home') {
-        carregarKartsHome();
-      } else if (currentScreen && currentScreen.id === 'screen-operacao' && kartAtualObj) {
-        atualizarCronometroKartUI(kartAtualObj.id);
       }
+
+      if (precisouAtualizar) {
+        renderizarTudo();
+      }
+    }, 1000);
+
+    // Zerar Caixa do Dia (Protegido por senha)
+    function zerarCaixaDia() {
+      const senha = prompt('Digite a senha do proprietário para zerar o Caixa do Dia:');
+      if (senha !== state.senhaProprietario) {
+        alert('❌ Senha incorreta! O caixa não foi alterado.');
+        return;
+      }
+      state.diaCorridas = 0;
+      state.diaFaturamento = 0;
+      salvarEstado();
+      renderizarTudo();
     }
 
-    function sugerirModelosDrift(val) {
-      const box = document.getElementById('driftSuggestions');
-      const container = document.getElementById('driftListContainer');
-      container.innerHTML = '';
+    // Configurações
+    function abrirConfig() {
+      const senha = prompt('Digite a senha do proprietário para acessar configurações:');
+      if (senha !== state.senhaProprietario) {
+        alert('❌ Senha incorreta!');
+        return;
+      }
+      document.getElementById('cfgPrecoMinuto').value = state.precoMinuto.toFixed(2);
+      document.getElementById('cfgSenha').value = state.senhaProprietario;
+      document.getElementById('configModal').classList.add('open');
+    }
 
-      if (val.toUpperCase().includes('DRIFT')) {
-        box.style.display = 'flex';
-        galeriaDrift.forEach(item => {
-          const svgData = gerarSvgDrift(item.color, item.accent, item.name);
-          const thumb = document.createElement('div');
-          thumb.style.cssText = "min-width: 70px; cursor: pointer; text-align: center;";
-          thumb.onclick = () => selecionarModeloSugerido(item.name, svgData);
-          thumb.innerHTML = `
-            <img src="${svgData}" style="width: 70px; aspect-ratio: 4/2; object-fit: contain; border-radius: 4px; background: #0a192f; border: 1px solid #cbd5e1;">
-            <div style="font-size: 0.65rem; font-weight: bold; color: var(--header-blue); white-space: nowrap;">${item.name.replace('DRIFT ', '')}</div>
-          `;
-          container.appendChild(thumb);
-        });
+    function fecharConfig() {
+      document.getElementById('configModal').classList.remove('open');
+    }
+
+    function salvarConfig() {
+      const novoPreco = parseFloat(document.getElementById('cfgPrecoMinuto').value);
+      const novaSenha = document.getElementById('cfgSenha').value.trim();
+
+      if (novoPreco > 0) state.precoMinuto = novoPreco;
+      if (novaSenha.length >= 4) state.senhaProprietario = novaSenha;
+
+      salvarEstado();
+      fecharConfig();
+      renderizarTudo();
+    }
+
+    // Renderização da Tela
+    function renderizarKarts() {
+      const container = document.getElementById('kartsContainer');
+      const agora = Date.now();
+
+      container.innerHTML = DEFAULT_KARTS.map(kart => {
+        const ride = state.activeRides[kart.id];
+        const conectado = !!bleConnections[kart.id];
+        const restante = ride ? Math.max(0, Math.ceil((ride.endTime - agora) / 1000)) : 0;
+
+        return `
+          <div class="kart-card ${ride ? 'running' : ''}">
+            <div class="kart-header">
+              <div class="kart-name">🏎️ ${kart.name}</div>
+              <button class="ble-badge ${conectado ? 'ble-connected' : 'ble-disconnected'}"
+                      onclick="conectarBLE('${kart.id}', '${kart.name}')">
+                ${conectado ? '🔵 Conectado' : '⚪ Conectar BLE'}
+              </button>
+            </div>
+
+            <div class="timer-display" id="timer_${kart.id}">
+              ${ride ? formatarTempo(restante) : '00:00'}
+            </div>
+
+            ${ride ? `
+              <div class="active-info">
+                <span>👤 <strong>${ride.cliente}</strong> (${ride.minutosContratados} min)</span>
+                <span>💵 <strong>${formatarMoeda(ride.valorInicial)}</strong></span>
+              </div>
+              <div class="action-btns">
+                <button class="btn btn-add-min" onclick="adicionarMinuto('${kart.id}')">+1 Minuto</button>
+                <button class="btn btn-stop" onclick="abrirModalParada('${kart.id}')">🛑 Parar (Justificar)</button>
+              </div>
+            ` : `
+              <div class="setup-controls">
+                <div class="preset-btns">
+                  <button class="btn-preset" onclick="aplicarPreset('${kart.id}', 5)">5 min (${formatarMoeda(5 * state.precoMinuto)})</button>
+                  <button class="btn-preset" onclick="aplicarPreset('${kart.id}', 10)">10 min (${formatarMoeda(10 * state.precoMinuto)})</button>
+                  <button class="btn-preset" onclick="aplicarPreset('${kart.id}', 15)">15 min (${formatarMoeda(15 * state.precoMinuto)})</button>
+                </div>
+                <div class="input-row">
+                  <input type="text" id="cli_${kart.id}" placeholder="Nome da criança" />
+                  <input type="number" id="min_${kart.id}" placeholder="Min" min="1" value="5" oninput="atualizarValorSugerido('${kart.id}')" />
+                  <input type="number" id="val_${kart.id}" placeholder="R$" step="0.50" min="1" value="${(5 * state.precoMinuto).toFixed(2)}" />
+                </div>
+                <button class="btn btn-start" onclick="iniciarCorrida('${kart.id}')">▶️ INICIAR CORRIDA</button>
+              </div>
+            `}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderizarResumo() {
+      document.getElementById('diaCorridas').textContent = state.diaCorridas;
+      document.getElementById('diaFaturamento').textContent = formatarMoeda(state.diaFaturamento);
+
+      const roiContainer = document.getElementById('roiContainer');
+      roiContainer.innerHTML = DEFAULT_KARTS.map(kart => {
+        const dados = state.roi[kart.id] || { rides: 0, total: 0 };
+        return `
+          <div class="roi-item">
+            <div class="roi-name">${kart.name}</div>
+            <div class="roi-stats">
+              ${dados.rides} total <strong>${formatarMoeda(dados.total)}</strong>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const auditContainer = document.getElementById('auditContainer');
+      if (state.auditLog.length === 0) {
+        auditContainer.innerHTML = `<p style="text-align:center; color:var(--muted); font-size:0.85rem;">Nenhuma corrida registrada ainda.</p>`;
       } else {
-        box.style.display = 'none';
-      }
-    }
-
-    function selecionarModeloSugerido(nome, svgData) {
-      document.getElementById('inputToyName').value = nome;
-      fotoBase64Temporaria = svgData;
-      document.getElementById('imgPreview').src = svgData;
-      document.getElementById('previewContainer').style.display = 'block';
-      document.getElementById('driftSuggestions').style.display = 'none';
-    }
-
-    function selecionarFotoManual(input) {
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          fotoBase64Temporaria = e.target.result;
-          document.getElementById('imgPreview').src = e.target.result;
-          document.getElementById('previewContainer').style.display = 'block';
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-
-    function salvarKart() {
-      const name = document.getElementById('inputToyName').value.trim();
-      if (!name) return alert("Digite o nome do carrinho!");
-
-      const photo = fotoBase64Temporaria || gerarSvgDrift('#0a192f', '#ffd000', name);
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      toys.push({ id: 'drift_' + Date.now(), name: name, photo: photo });
-      localStorage.setItem('drift_toys', JSON.stringify(toys));
-
-      document.getElementById('inputToyName').value = '';
-      document.getElementById('inputToyPhoto').value = '';
-      fotoBase64Temporaria = "";
-      document.getElementById('previewContainer').style.display = 'none';
-      document.getElementById('driftSuggestions').style.display = 'none';
-
-      carregarKartsGerenciador();
-      alert("Carrinho cadastrado com sucesso! 🎉");
-      navegarPara('screen-home');
-    }
-
-    function carregarKartsGerenciador() {
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      const container = document.getElementById('toysManageList');
-      container.innerHTML = '';
-
-      if (toys.length === 0) {
-        container.innerHTML = '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum carrinho cadastrado.</p>';
-        return;
-      }
-
-      toys.forEach(toy => {
-        const item = document.createElement('div');
-        item.className = 'toy-manage-item';
-        item.innerHTML = `
-          <div style="display:flex; align-items:center; gap:10px;">
-            <img src="${toy.photo || gerarSvgDrift('#0a192f', '#ffd000', toy.name)}" class="toy-thumb">
-            <span style="font-size:0.9rem; font-weight:800; color:#0b2545;">${toy.name}</span>
+        auditContainer.innerHTML = state.auditLog.slice(0, 50).map(item => `
+          <div class="audit-item ${item.status === 'Interrompida' ? 'interrupted' : ''}">
+            <div class="audit-top">
+              <span>${item.kartName} • ${item.cliente}</span>
+              <span style="color:${item.status === 'Interrompida' ? 'var(--danger)' : 'var(--success)'}">
+                ${formatarMoeda(item.valorFinal)} (${item.status})
+              </span>
+            </div>
+            <div style="color:var(--muted); font-size:0.78rem;">
+              🕒 ${item.dataHora} • Tempo: ${item.minutosRodados}/${item.minutosContratados} min
+            </div>
+            ${item.motivoParada ? `
+              <div class="audit-reason">⚠️ Motivo: ${item.motivoParada}</div>
+            ` : ''}
           </div>
-          <button class="btn btn-red" style="padding:6px 10px; font-size:0.75rem; border-radius:8px; width:auto;" onclick="excluirKart('${toy.id}')">Excluir</button>
-        `;
-        container.appendChild(item);
-      });
-    }
-
-    function excluirKart(id) {
-      if (confirm("Deseja apagar este carrinho?")) {
-        let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-        toys = toys.filter(t => t.id !== id);
-        localStorage.setItem('drift_toys', JSON.stringify(toys));
-        setCorridaKart(id, null);
-        carregarKartsGerenciador();
+        `).join('');
       }
     }
 
-    function registarVenda(toyId, valor) {
-      let rides = parseInt(localStorage.getItem('drift_rides') || '0') + 1;
-      let total = parseFloat(localStorage.getItem('drift_total') || '0.0') + valor;
-      localStorage.setItem('drift_rides', rides);
-      localStorage.setItem('drift_total', total);
-
-      let statsToy = JSON.parse(localStorage.getItem('drift_stat_' + toyId) || '{"rides":0, "total":0}');
-      statsToy.rides += 1;
-      statsToy.total += valor;
-      localStorage.setItem('drift_stat_' + toyId, JSON.stringify(statsToy));
-
-      let lifeToy = JSON.parse(localStorage.getItem('drift_life_' + toyId) || '{"rides":0, "total":0}');
-      lifeToy.rides += 1;
-      lifeToy.total += valor;
-      localStorage.setItem('drift_life_' + toyId, JSON.stringify(lifeToy));
-
-      atualizarCaixaUI();
+    function renderizarTudo() {
+      renderizarKarts();
+      renderizarResumo();
     }
 
-    function atualizarCaixaUI() {
-      let rides = localStorage.getItem('drift_rides') || '0';
-      let total = parseFloat(localStorage.getItem('drift_total') || '0.0');
-      document.getElementById('statRides').innerText = rides;
-      document.getElementById('statTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-
-      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-      const lifetimeContainer = document.getElementById('lifetimeReportList');
-      lifetimeContainer.innerHTML = '';
-
-      if (toys.length === 0) {
-        lifetimeContainer.innerHTML = '<p style="font-size:0.8rem; color:var(--text-muted); text-align:center;">Nenhum brinquedo registado.</p>';
-        return;
-      }
-
-      toys.forEach(toy => {
-        let lifeStats = JSON.parse(localStorage.getItem('drift_life_' + toy.id) || '{"rides":0, "total":0}');
-        const item = document.createElement('div');
-        item.className = 'report-item';
-        item.innerHTML = `
-          <div style="font-weight: 800; color: var(--header-blue);">${toy.name}</div>
-          <div style="text-align: right; font-weight: 700; color: var(--text-dark);">
-            ${lifeStats.rides} total <span style="color: #16a34a; margin-left: 6px;">R$ ${lifeStats.total.toFixed(2).replace('.', ',')}</span>
-          </div>
-        `;
-        lifetimeContainer.appendChild(item);
-      });
-    }
-
-    function zerarCaixaDiario() {
-      if (confirm("Deseja zerar apenas o caixa e as estatísticas do dia atual? O histórico vitalício de retorno dos karts será mantido.")) {
-        localStorage.setItem('drift_rides', '0');
-        localStorage.setItem('drift_total', '0');
-        
-        let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
-        toys.forEach(toy => {
-          localStorage.removeItem('drift_stat_' + toy.id);
-        });
-
-        atualizarCaixaUI();
-        alert("Caixa do dia reiniciado com sucesso!");
-      }
-    }
-
-    async function conectarBluetooth() {
-      try {
-        actualizarStatusBLE("Procurando ESP32...", false);
-        bluetoothDevice = await navigator.bluetooth.requestDevice({
-          filters: [{ namePrefix: 'Drift' }],
-          optionalServices: [SERVICE_UUID]
-        });
-
-        const server = await bluetoothDevice.gatt.connect();
-        const service = await server.getPrimaryService(SERVICE_UUID);
-        caracteristicaBLE = await service.getCharacteristic(CHARACTERISTIC_UUID);
-
-        actualizarStatusBLE("Conectado ao ESP32!", true);
-        alert("Bluetooth conectado com sucesso!");
-        navegarPara('screen-home');
-      } catch (error) {
-        console.error(error);
-        actualizarStatusBLE("Modo Simulação", false);
-        alert("Modo Simulação ativo! Funciona 100% offline.");
-      }
-    }
-
-    function actualizarStatusBLE(texto, conectado) {
-      const badge = document.getElementById('statusBadge');
-      const statusText = document.getElementById('statusText');
-      if (statusText) statusText.innerText = texto;
-      if (badge) {
-        if (conectado) {
-          badge.className = "status-badge connected";
-          badge.innerHTML = '<span>🟢</span> <span id="statusText">' + texto + '</span>';
-        } else {
-          badge.className = "status-badge";
-          badge.innerHTML = '<span>⚠️</span> <span id="statusText">' + texto + '</span>';
-        }
-      }
-    }
-
-    async function enviarComando(comando) {
-      if (!caracteristicaBLE) return true;
-      try {
-        const encoder = new TextEncoder();
-        await caracteristicaBLE.writeValue(encoder.encode(comando));
-        return true;
-      } catch (error) {
-        console.error("Erro BLE:", error);
-        return false;
-      }
-    }
+    renderizarTudo();
   </script>
 </body>
 </html>
