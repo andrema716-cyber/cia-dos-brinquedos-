@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Cia dos Brinquedos - v6.0</title>
+  <title>Cia dos Brinquedos - v6.1</title>
   <style>
     :root {
       --navy: #0a2447;
@@ -36,14 +36,14 @@
       background-color: var(--cream);
       color: var(--text);
       min-height: 100vh;
-      padding-bottom: 80px;
+      padding-bottom: 78px;
       overflow-x: hidden;
     }
 
     /* Topo Curvo Azul */
     .top-banner {
       background: linear-gradient(180deg, #092244 0%, #123666 100%);
-      padding: 12px 16px 22px;
+      padding: 12px 16px 20px;
       position: relative;
       border-bottom-left-radius: 50% 20px;
       border-bottom-right-radius: 50% 20px;
@@ -71,7 +71,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-weight: 900;
-      font-size: 1.2rem;
+      font-size: 1.18rem;
       letter-spacing: 0.4px;
       filter: drop-shadow(0 2px 0 #05162e) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
       line-height: 1.05;
@@ -86,7 +86,7 @@
 
     .logo-sub {
       color: #ffffff;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 700;
       font-style: italic;
       border-bottom: 2px solid var(--yellow);
@@ -101,7 +101,6 @@
       padding: 1px 6px;
       font-size: 0.68rem;
       font-weight: 900;
-      letter-spacing: 0.3px;
     }
 
     .btn-gear {
@@ -127,7 +126,7 @@
     /* Cabeçalho */
     .section-header {
       max-width: 760px;
-      margin: 12px auto 10px;
+      margin: 10px auto 8px;
       padding: 0 14px;
       display: flex;
       align-items: center;
@@ -135,25 +134,25 @@
     }
 
     .section-icon {
-      font-size: 1.55rem;
+      font-size: 1.5rem;
       line-height: 1;
     }
 
     .section-title {
-      font-size: 1.22rem;
+      font-size: 1.18rem;
       font-weight: 900;
       color: var(--navy);
       line-height: 1.15;
     }
 
     .section-subtitle {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       color: var(--muted);
       font-weight: 600;
       margin-top: 1px;
     }
 
-    /* Grade Compacta de Brinquedos */
+    /* Grade de Brinquedos */
     .karts-grid {
       max-width: 760px;
       margin: 0 auto;
@@ -187,8 +186,8 @@
 
     .kart-photo-box {
       width: 100%;
-      height: 100px;
-      border-radius: 13px;
+      height: 92px;
+      border-radius: 12px;
       overflow: hidden;
       background: linear-gradient(135deg, #facc15 0%, #f97316 100%);
       position: relative;
@@ -234,14 +233,14 @@
     }
 
     .kart-badge-name {
-      margin-top: 7px;
+      margin-top: 6px;
       background: var(--navy);
       color: #ffffff;
       text-align: center;
       padding: 5px 8px;
       border-radius: 10px;
       font-weight: 900;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       letter-spacing: 0.4px;
       text-transform: uppercase;
     }
@@ -263,7 +262,7 @@
 
     .timer-box {
       text-align: center;
-      font-size: 1.75rem;
+      font-size: 1.65rem;
       font-weight: 900;
       font-variant-numeric: tabular-nums;
       color: var(--navy);
@@ -275,48 +274,44 @@
       color: var(--green-dark);
     }
 
-    /* 4 Quadros Menores Lado a Lado (2x2 Ultra Compacto) */
-    .mini-boxes-row {
+    /* 2 Quadros Menores Lado a Lado (1 linha horizontal bem baixa) */
+    .two-boxes-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 4px;
-      margin-bottom: 6px;
+      gap: 6px;
+      margin-bottom: 7px;
     }
 
-    .mini-box-item {
+    .compact-box {
       background: #ffffff;
-      border: 1.5px solid #86efac;
-      border-radius: 8px;
-      padding: 4px 6px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      border: 1.5px solid #4ade80;
+      border-radius: 9px;
+      padding: 5px 7px;
       min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
-    .mini-box-label {
-      font-size: 0.65rem;
+    .compact-box-top {
+      font-size: 0.64rem;
       font-weight: 700;
       color: var(--muted);
-      white-space: nowrap;
-      margin-right: 4px;
+      line-height: 1.1;
     }
 
-    .mini-box-value {
-      font-size: 0.75rem;
+    .compact-box-main {
+      font-size: 0.8rem;
       font-weight: 900;
-      color: var(--navy);
+      color: #14532d;
+      line-height: 1.2;
+      margin-top: 2px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .mini-box-value.client {
-      color: #14532d;
-      max-width: 90px;
-    }
-
-    .mini-box-value.money {
+    .compact-box-main.money-time {
       color: var(--green-dark);
     }
 
@@ -757,7 +752,7 @@
       <div class="logo-main">CIA DOS<br>BRINQUEDOS</div>
       <div class="logo-sub-row">
         <span class="logo-sub">Aluguel de Brinquedos 🎈</span>
-        <span class="version-badge" id="appVersionBadge">v6.0</span>
+        <span class="version-badge" id="appVersionBadge">v6.1</span>
       </div>
     </div>
     <button class="btn-gear" onclick="abrirPainelEngrenagem()" title="Caixa, Relatórios e Gerenciar Brinquedos">⚙️</button>
@@ -778,7 +773,7 @@
   <!-- Rodapé com Versão -->
   <footer class="bottom-wave">
     <span>😊</span>
-    <span>Aqui a diversão não tem hora! • v6.0</span>
+    <span>Aqui a diversão não tem hora! • v6.1</span>
     <span>🎮</span>
   </footer>
 
@@ -832,7 +827,7 @@
   <div class="modal-overlay" id="gearModal">
     <div class="modal-box">
       <div class="modal-header">
-        <div class="modal-title">⚙️ Gestão, Caixa & Frota <span style="font-size:0.75rem; color:#64748b;">(v6.0)</span></div>
+        <div class="modal-title">⚙️ Gestão, Caixa & Frota <span style="font-size:0.75rem; color:#64748b;">(v6.1)</span></div>
         <button class="btn-close-modal" onclick="fecharPainelEngrenagem()">✕</button>
       </div>
 
@@ -912,7 +907,7 @@
   </div>
 
   <script>
-    const APP_VERSION = 'v6.0';
+    const APP_VERSION = 'v6.1';
     const BLE_SERVICE_UUID = '4fa1c201-222d-4b93-9fb6-52c1e7f32d88';
     const BLE_CHAR_UUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
@@ -1490,22 +1485,14 @@
 
             ${ride ? `
               <div>
-                <div class="mini-boxes-row">
-                  <div class="mini-box-item">
-                    <span class="mini-box-label">👤</span>
-                    <span class="mini-box-value client">${ride.cliente}</span>
+                <div class="two-boxes-row">
+                  <div class="compact-box">
+                    <span class="compact-box-top">👤 CLIENTE</span>
+                    <span class="compact-box-main">${ride.cliente}</span>
                   </div>
-                  <div class="mini-box-item">
-                    <span class="mini-box-label">💰</span>
-                    <span class="mini-box-value money">${fmtMoeda(ride.valorInicial)}</span>
-                  </div>
-                  <div class="mini-box-item">
-                    <span class="mini-box-label">⏱️</span>
-                    <span class="mini-box-value">${ride.minutosContratados} min</span>
-                  </div>
-                  <div class="mini-box-item">
-                    <span class="mini-box-label">🟢</span>
-                    <span class="mini-box-value money">Ativo</span>
+                  <div class="compact-box">
+                    <span class="compact-box-top">💰 TEMPO • 🟢 ATIVO</span>
+                    <span class="compact-box-main money-time">${fmtMoeda(ride.valorInicial)} • ${ride.minutosContratados}m</span>
                   </div>
                 </div>
 
