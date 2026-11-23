@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Cia dos Brinquedos - v6.1</title>
+  <title>Cia dos Brinquedos - v6.2</title>
   <style>
     :root {
       --navy: #0a2447;
@@ -36,18 +36,18 @@
       background-color: var(--cream);
       color: var(--text);
       min-height: 100vh;
-      padding-bottom: 78px;
+      padding-bottom: 42px;
       overflow-x: hidden;
     }
 
-    /* Topo Curvo Azul */
+    /* Topo Ultra-Compacto */
     .top-banner {
       background: linear-gradient(180deg, #092244 0%, #123666 100%);
-      padding: 12px 16px 20px;
+      padding: 6px 12px 10px;
       position: relative;
-      border-bottom-left-radius: 50% 20px;
-      border-bottom-right-radius: 50% 20px;
-      box-shadow: 0 5px 14px rgba(9, 34, 68, 0.2);
+      border-bottom-left-radius: 50% 10px;
+      border-bottom-right-radius: 50% 10px;
+      box-shadow: 0 3px 8px rgba(9, 34, 68, 0.18);
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -58,11 +58,11 @@
       position: absolute;
       left: 0;
       right: 0;
-      bottom: -4px;
-      height: 8px;
+      bottom: -2px;
+      height: 4px;
       background: var(--yellow);
-      border-bottom-left-radius: 50% 8px;
-      border-bottom-right-radius: 50% 8px;
+      border-bottom-left-radius: 50% 4px;
+      border-bottom-right-radius: 50% 4px;
       z-index: -1;
     }
 
@@ -71,103 +71,109 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-weight: 900;
-      font-size: 1.18rem;
-      letter-spacing: 0.4px;
-      filter: drop-shadow(0 2px 0 #05162e) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+      font-size: 0.92rem;
+      letter-spacing: 0.3px;
+      filter: drop-shadow(0 1px 0 #05162e);
       line-height: 1.05;
     }
 
     .logo-sub-row {
       display: flex;
       align-items: center;
-      gap: 7px;
-      margin-top: 3px;
+      gap: 5px;
+      margin-top: 1px;
     }
 
     .logo-sub {
       color: #ffffff;
-      font-size: 0.76rem;
+      font-size: 0.65rem;
       font-weight: 700;
       font-style: italic;
-      border-bottom: 2px solid var(--yellow);
-      padding-bottom: 1px;
     }
 
     .version-badge {
-      background: rgba(255, 204, 0, 0.22);
+      background: rgba(255, 204, 0, 0.24);
       color: var(--yellow);
       border: 1px solid var(--yellow);
-      border-radius: 6px;
-      padding: 1px 6px;
-      font-size: 0.68rem;
+      border-radius: 5px;
+      padding: 0 4px;
+      font-size: 0.58rem;
       font-weight: 900;
     }
 
     .btn-gear {
-      width: 42px;
-      height: 42px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #ffe66d, var(--yellow));
-      border: 3px solid #ffffff;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.28);
-      font-size: 1.3rem;
+      border: 2px solid #ffffff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+      font-size: 0.95rem;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.12s ease;
       flex-shrink: 0;
     }
 
-    .btn-gear:active {
-      transform: scale(0.92);
-    }
-
-    /* Cabeçalho */
+    /* Cabeçalho Compacto */
     .section-header {
-      max-width: 760px;
-      margin: 10px auto 8px;
-      padding: 0 14px;
+      max-width: 1100px;
+      margin: 5px auto 5px;
+      padding: 0 8px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .section-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .section-icon {
-      font-size: 1.5rem;
+      font-size: 1.05rem;
       line-height: 1;
     }
 
     .section-title {
-      font-size: 1.18rem;
+      font-size: 0.88rem;
       font-weight: 900;
       color: var(--navy);
-      line-height: 1.15;
+      line-height: 1.1;
     }
 
     .section-subtitle {
-      font-size: 0.8rem;
+      font-size: 0.66rem;
       color: var(--muted);
       font-weight: 600;
-      margin-top: 1px;
     }
 
-    /* Grade de Brinquedos */
+    /* Grade 2 Colunas para Caber 6+ Quadros na Tela */
     .karts-grid {
-      max-width: 760px;
+      max-width: 1100px;
       margin: 0 auto;
-      padding: 0 14px;
+      padding: 0 8px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(265px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    @media (min-width: 720px) {
+      .karts-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
     }
 
     .kart-card {
       background: var(--card-bg);
-      border-radius: 18px;
-      padding: 10px;
-      border: 2.5px solid var(--navy);
-      box-shadow: 0 5px 0 var(--navy), 0 8px 14px rgba(10, 36, 71, 0.1);
+      border-radius: 12px;
+      padding: 5px;
+      border: 2px solid var(--navy);
+      box-shadow: 0 2.5px 0 var(--navy);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -175,26 +181,25 @@
 
     .kart-card.theme-cyan {
       border-color: var(--cyan-dark);
-      box-shadow: 0 5px 0 var(--cyan-dark), 0 8px 14px rgba(0, 155, 196, 0.12);
+      box-shadow: 0 2.5px 0 var(--cyan-dark);
     }
 
     .kart-card.running {
       border-color: var(--green);
-      box-shadow: 0 5px 0 var(--green-dark), 0 8px 14px rgba(22, 163, 74, 0.16);
-      background: #f4fdf7;
+      box-shadow: 0 2.5px 0 var(--green-dark);
+      background: #f2fdf5;
     }
 
     .kart-photo-box {
       width: 100%;
-      height: 92px;
-      border-radius: 12px;
+      height: 46px;
+      border-radius: 8px;
       overflow: hidden;
       background: linear-gradient(135deg, #facc15 0%, #f97316 100%);
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1.5px solid rgba(10, 36, 71, 0.12);
     }
 
     .kart-card.theme-cyan .kart-photo-box {
@@ -210,20 +215,17 @@
 
     .ble-pill {
       position: absolute;
-      top: 6px;
-      right: 6px;
-      background: rgba(255, 255, 255, 0.95);
+      top: 3px;
+      right: 3px;
+      background: rgba(255, 255, 255, 0.94);
       color: var(--navy);
-      border: 1.5px solid var(--navy);
+      border: 1px solid var(--navy);
       border-radius: 999px;
-      padding: 3px 8px;
-      font-size: 0.68rem;
+      padding: 1px 5px;
+      font-size: 0.54rem;
       font-weight: 800;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      line-height: 1.25;
     }
 
     .ble-pill.connected {
@@ -232,154 +234,151 @@
       border-color: var(--green);
     }
 
+    .status-tag-pill {
+      position: absolute;
+      bottom: 3px;
+      left: 3px;
+      background: rgba(255, 255, 255, 0.94);
+      color: var(--navy);
+      border-radius: 999px;
+      padding: 1px 5px;
+      font-size: 0.52rem;
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .running .status-tag-pill {
+      background: #dcfce7;
+      color: var(--green-dark);
+    }
+
     .kart-badge-name {
-      margin-top: 6px;
+      margin-top: 4px;
       background: var(--navy);
       color: #ffffff;
       text-align: center;
-      padding: 5px 8px;
-      border-radius: 10px;
+      padding: 3px 5px;
+      border-radius: 7px;
       font-weight: 900;
-      font-size: 0.88rem;
-      letter-spacing: 0.4px;
+      font-size: 0.68rem;
+      letter-spacing: 0.2px;
       text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .kart-card.theme-cyan .kart-badge-name {
       background: #073b66;
     }
 
-    .kart-tagline {
-      text-align: center;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #334155;
-      margin: 4px 0 1px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
     .timer-box {
       text-align: center;
-      font-size: 1.65rem;
+      font-size: 1.05rem;
       font-weight: 900;
       font-variant-numeric: tabular-nums;
       color: var(--navy);
       line-height: 1.1;
-      margin: 2px 0 6px;
+      margin: 2px 0 3px;
     }
 
     .running .timer-box {
       color: var(--green-dark);
     }
 
-    /* 2 Quadros Menores Lado a Lado (1 linha horizontal bem baixa) */
+    /* 2 Quadros Menores Lado a Lado */
     .two-boxes-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      margin-bottom: 7px;
+      gap: 3px;
+      margin-bottom: 4px;
     }
 
     .compact-box {
       background: #ffffff;
-      border: 1.5px solid #4ade80;
-      border-radius: 9px;
-      padding: 5px 7px;
+      border: 1px solid #4ade80;
+      border-radius: 6px;
+      padding: 2px 4px;
       min-width: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
     }
 
     .compact-box-top {
-      font-size: 0.64rem;
+      font-size: 0.5rem;
       font-weight: 700;
       color: var(--muted);
-      line-height: 1.1;
+      display: block;
+      line-height: 1;
     }
 
     .compact-box-main {
-      font-size: 0.8rem;
+      font-size: 0.64rem;
       font-weight: 900;
       color: #14532d;
-      line-height: 1.2;
-      margin-top: 2px;
+      display: block;
+      line-height: 1.15;
+      margin-top: 1px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .compact-box-main.money-time {
-      color: var(--green-dark);
-    }
-
     .presets-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 5px;
-      margin-bottom: 6px;
+      gap: 3px;
+      margin-bottom: 3px;
     }
 
     .preset-btn {
       background: #f1f5f9;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
-      padding: 5px 3px;
-      font-size: 0.7rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 3px 1px;
+      font-size: 0.56rem;
       font-weight: 800;
       color: var(--navy);
       cursor: pointer;
-    }
-
-    .preset-btn:active {
-      background: #e2e8f0;
+      line-height: 1.1;
     }
 
     .inputs-row {
       display: grid;
-      grid-template-columns: 1.45fr 0.72fr 0.83fr;
-      gap: 5px;
-      margin-bottom: 7px;
+      grid-template-columns: 1.35fr 0.72fr 0.88fr;
+      gap: 3px;
+      margin-bottom: 4px;
     }
 
     .input-field {
       width: 100%;
-      padding: 6px 5px;
-      border-radius: 9px;
-      border: 1.5px solid #cbd5e1;
-      font-size: 0.82rem;
+      padding: 3px 3px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+      font-size: 0.64rem;
       font-weight: 700;
       color: var(--text);
       background: #ffffff;
       text-align: center;
+      min-width: 0;
     }
 
     .input-field.name-input {
       text-align: left;
-      padding-left: 7px;
+      padding-left: 4px;
     }
 
     .btn-primary-action {
       width: 100%;
-      border: 2px solid var(--navy);
-      border-radius: 13px;
-      padding: 9px 10px;
-      font-size: 0.92rem;
+      border: 1.5px solid var(--navy);
+      border-radius: 8px;
+      padding: 5px 4px;
+      font-size: 0.68rem;
       font-weight: 900;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      box-shadow: 0 3px 0 var(--navy);
-      transition: transform 0.1s ease;
-    }
-
-    .btn-primary-action:active {
-      transform: translateY(2px);
-      box-shadow: 0 1px 0 var(--navy);
+      gap: 3px;
+      box-shadow: 0 2px 0 var(--navy);
     }
 
     .btn-start-yellow {
@@ -391,23 +390,23 @@
       background: linear-gradient(180deg, #38e2ff 0%, #00b4e6 100%);
       color: #052238;
       border-color: #052238;
-      box-shadow: 0 3px 0 #052238;
+      box-shadow: 0 2px 0 #052238;
     }
 
     .running-btns {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 6px;
+      gap: 3px;
     }
 
     .btn-plus1 {
       background: #0284c7;
       color: #ffffff;
       border: none;
-      border-radius: 10px;
-      padding: 8px 6px;
+      border-radius: 7px;
+      padding: 5px 2px;
       font-weight: 800;
-      font-size: 0.8rem;
+      font-size: 0.62rem;
       cursor: pointer;
     }
 
@@ -415,14 +414,14 @@
       background: var(--red);
       color: #ffffff;
       border: none;
-      border-radius: 10px;
-      padding: 8px 6px;
+      border-radius: 7px;
+      padding: 5px 2px;
       font-weight: 800;
-      font-size: 0.8rem;
+      font-size: 0.62rem;
       cursor: pointer;
     }
 
-    /* Rodapé */
+    /* Rodapé Compacto */
     .bottom-wave {
       position: fixed;
       left: 0;
@@ -430,18 +429,17 @@
       bottom: 0;
       background: var(--navy);
       color: var(--yellow);
-      padding: 8px 16px;
-      border-top-left-radius: 50% 15px;
-      border-top-right-radius: 50% 15px;
-      border-top: 3px solid var(--yellow);
+      padding: 5px 12px;
+      border-top-left-radius: 50% 8px;
+      border-top-right-radius: 50% 8px;
+      border-top: 2px solid var(--yellow);
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-weight: 900;
       font-style: italic;
-      font-size: 0.86rem;
+      font-size: 0.7rem;
       z-index: 40;
-      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.16);
     }
 
     /* Modais */
@@ -560,7 +558,6 @@
       cursor: pointer;
     }
 
-    /* Abas da Engrenagem */
     .gear-tabs {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -746,49 +743,45 @@
 </head>
 <body>
 
-  <!-- Topo com Identificador de Versão -->
   <header class="top-banner">
     <div>
-      <div class="logo-main">CIA DOS<br>BRINQUEDOS</div>
+      <div class="logo-main">CIA DOS BRINQUEDOS</div>
       <div class="logo-sub-row">
         <span class="logo-sub">Aluguel de Brinquedos 🎈</span>
-        <span class="version-badge" id="appVersionBadge">v6.1</span>
+        <span class="version-badge" id="appVersionBadge">v6.2</span>
       </div>
     </div>
     <button class="btn-gear" onclick="abrirPainelEngrenagem()" title="Caixa, Relatórios e Gerenciar Brinquedos">⚙️</button>
   </header>
 
-  <!-- Cabeçalho -->
   <div class="section-header">
-    <div class="section-icon">🏎️</div>
-    <div>
-      <div class="section-title">Selecione um Brinquedo</div>
-      <div class="section-subtitle">Escolha o brinquedo e inicie a corrida</div>
+    <div class="section-left">
+      <div class="section-icon">🏎️</div>
+      <div>
+        <div class="section-title">Selecione um Brinquedo</div>
+        <div class="section-subtitle">Grade compacta • 6+ quadros na tela</div>
+      </div>
     </div>
   </div>
 
-  <!-- Grade de Brinquedos -->
   <main class="karts-grid" id="kartsGrid"></main>
 
-  <!-- Rodapé com Versão -->
   <footer class="bottom-wave">
     <span>😊</span>
-    <span>Aqui a diversão não tem hora! • v6.1</span>
+    <span>Aqui a diversão não tem hora! • v6.2</span>
     <span>🎮</span>
   </footer>
 
-  <!-- Modal Obrigatório de Parada Antes do Tempo -->
+  <!-- Modal Parada -->
   <div class="modal-overlay" id="stopModal">
     <div class="modal-box">
       <div class="modal-header">
         <div class="modal-title">🛑 Parar Corrida Antes do Tempo</div>
         <button class="btn-close-modal" onclick="fecharModalParada()">✕</button>
       </div>
-
       <p style="font-size:0.82rem; color:#475569; margin-bottom:10px; font-weight:600;">
         Motivo obrigatório para parada antecipada. O valor não será zerado.
       </p>
-
       <div class="form-group">
         <label class="form-label">Motivo da Parada:</label>
         <select class="form-control" id="stopReasonPreset" onchange="sincronizarMotivo()">
@@ -800,22 +793,18 @@
           <option value="Outro">Outro motivo (escrever abaixo)</option>
         </select>
       </div>
-
       <div class="form-group">
         <label class="form-label">Descrição Obrigatória do Motivo:</label>
         <textarea class="form-control" id="stopReasonDetail" rows="2" placeholder="Explique o motivo da parada..."></textarea>
       </div>
-
       <div class="form-group">
         <label class="form-label">Contabilização do valor:</label>
         <select class="form-control" id="stopBillingRule" onchange="atualizarCalculoParada()">
-          <option value="proporcional">Proporcional aos minutos rodados (Mín. R$ 1,00)</option>
+          <option value="proporcional">Proporcional aos minutos rodados (Mín. R\$ 1,00)</option>
           <option value="integral">Valor integral cobrado no início</option>
         </select>
       </div>
-
       <div class="calc-box" id="stopCalcBox"></div>
-
       <div class="modal-footer-btns">
         <button class="btn-gray" onclick="fecharModalParada()">Continuar</button>
         <button class="btn-confirm-red" onclick="confirmarParadaCorrida()">Confirmar Parada</button>
@@ -823,21 +812,18 @@
     </div>
   </div>
 
-  <!-- Modal da Engrenagem (Sem senha nesta etapa) -->
+  <!-- Modal Engrenagem -->
   <div class="modal-overlay" id="gearModal">
     <div class="modal-box">
       <div class="modal-header">
-        <div class="modal-title">⚙️ Gestão, Caixa & Frota <span style="font-size:0.75rem; color:#64748b;">(v6.1)</span></div>
+        <div class="modal-title">⚙️ Gestão, Caixa & Frota <span style="font-size:0.75rem; color:#64748b;">(v6.2)</span></div>
         <button class="btn-close-modal" onclick="fecharPainelEngrenagem()">✕</button>
       </div>
-
       <div class="gear-tabs">
         <button class="gear-tab-btn active" id="tabBtnCaixa" onclick="trocarAbaGear('caixa')">💰 Caixa & ROI</button>
         <button class="gear-tab-btn" id="tabBtnAuditoria" onclick="trocarAbaGear('auditoria')">🛡️ Auditoria</button>
         <button class="gear-tab-btn" id="tabBtnConfig" onclick="trocarAbaGear('config')">🏎️ Brinquedos</button>
       </div>
-
-      <!-- Aba Caixa & ROI -->
       <div class="gear-panel active" id="panelCaixa">
         <div class="caixa-grid">
           <div class="caixa-card">
@@ -845,46 +831,35 @@
             <div class="caixa-lbl">Corridas Hoje</div>
           </div>
           <div class="caixa-card">
-            <div class="caixa-val green" id="gearFaturamentoHoje">R$ 0,00</div>
+            <div class="caixa-val green" id="gearFaturamentoHoje">R\$ 0,00</div>
             <div class="caixa-lbl">Faturamento Hoje</div>
           </div>
         </div>
-
         <button class="btn-zerar-caixa" onclick="zerarCaixaDia()">Zerar Apenas Caixa do Dia 🔄</button>
-
         <div class="form-label" style="margin-bottom:6px;">📈 Relatório Vitalício (Retorno / ROI)</div>
         <div id="gearRoiList"></div>
       </div>
-
-      <!-- Aba Auditoria -->
       <div class="gear-panel" id="panelAuditoria">
         <div id="gearAuditList"></div>
       </div>
-
-      <!-- Aba Brinquedos e Preço -->
       <div class="gear-panel" id="panelConfig">
         <div class="form-group">
-          <label class="form-label">Valor Padrão por Minuto (R$):</label>
+          <label class="form-label">Valor Padrão por Minuto (R\$):</label>
           <input type="number" class="form-control" id="cfgPrecoMin" step="0.50" min="0.50" onchange="salvarPrecoPadrao()" />
         </div>
-
         <div class="form-label" style="margin-top:8px;">📋 Brinquedos Cadastrados (Editar ou Remover):</div>
         <div id="fleetListContainer"></div>
-
         <div class="fleet-box">
           <div class="form-label" id="formKartTitle">➕ Adicionar Novo Brinquedo</div>
           <input type="hidden" id="editKartId" value="" />
-
           <div class="form-group">
             <label class="form-label">Nome do Brinquedo:</label>
             <input type="text" class="form-control" id="kartNomeInput" placeholder="Ex: DRIFT VERMELHO 005" />
           </div>
-
           <div class="form-group">
             <label class="form-label">Frase Curta:</label>
             <input type="text" class="form-control" id="kartTagInput" placeholder="⚡ Diversão sobre rodas! Sinta a adrenalina do drift!" />
           </div>
-
           <div class="form-group">
             <label class="form-label">Cor do Card:</label>
             <select class="form-control" id="kartThemeInput">
@@ -892,13 +867,11 @@
               <option value="cyan">Azul Ciano</option>
             </select>
           </div>
-
           <div class="form-group">
             <label class="form-label">Foto do Brinquedo (Link/URL ou Galeria):</label>
             <input type="text" class="form-control" id="kartFotoUrlInput" placeholder="https://... ou escolha foto abaixo" style="margin-bottom:6px;" />
             <input type="file" class="form-control" id="kartFotoFileInput" accept="image/*" onchange="carregarArquivoFoto(event)" />
           </div>
-
           <button class="btn-add-kart" id="btnSalvarKartForm" onclick="salvarBrinquedoForm()">+ Adicionar Brinquedo</button>
           <button class="btn-gray" style="width:100%; margin-top:6px; padding:8px; font-size:0.78rem;" onclick="limparFormKart()">Limpar Campos</button>
         </div>
@@ -907,44 +880,33 @@
   </div>
 
   <script>
-    const APP_VERSION = 'v6.1';
     const BLE_SERVICE_UUID = '4fa1c201-222d-4b93-9fb6-52c1e7f32d88';
     const BLE_CHAR_UUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
 
     function criarSvgKart(corFundo, corDetalhe, rotulo) {
       const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 140">
-          <rect width="320" height="140" fill="${corFundo}"/>
-          <polygon points="0,140 105,0 175,0 70,140" fill="${corDetalhe}" opacity="0.4"/>
-          <path d="M100 102 L162 48 L228 54 L240 72 L154 105 Z" fill="#111827" stroke="#ffffff" stroke-width="3"/>
-          <path d="M165 54 L216 59 L208 75 L159 72 Z" fill="#38bdf8"/>
-          <circle cx="118" cy="110" r="20" fill="#0f172a" stroke="#e2e8f0" stroke-width="3.5"/>
-          <circle cx="118" cy="110" r="8" fill="#94a3b8"/>
-          <circle cx="216" cy="108" r="17" fill="#0f172a" stroke="#e2e8f0" stroke-width="3.5"/>
-          <circle cx="216" cy="108" r="7" fill="#94a3b8"/>
-          <text x="160" y="24" font-family="Arial, sans-serif" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">${rotulo}</text>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120">
+          <rect width="320" height="120" fill="${corFundo}"/>
+          <polygon points="0,120 95,0 160,0 65,120" fill="${corDetalhe}" opacity="0.35"/>
+          <path d="M95 88 L155 40 L220 46 L232 62 L150 92 Z" fill="#111827" stroke="#ffffff" stroke-width="3"/>
+          <path d="M158 46 L208 50 L200 65 L154 62 Z" fill="#38bdf8"/>
+          <circle cx="114" cy="94" r="17" fill="#0f172a" stroke="#e2e8f0" stroke-width="3"/>
+          <circle cx="210" cy="92" r="15" fill="#0f172a" stroke="#e2e8f0" stroke-width="3"/>
+          <text x="160" y="20" font-family="Arial, sans-serif" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">${rotulo}</text>
         </svg>`;
       return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg.trim());
     }
 
     const INITIAL_KARTS = [
-      {
-        id: 'kart_preto',
-        name: 'DRIFT PRETO 001',
-        tagline: '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!',
-        theme: 'yellow',
-        photo: criarSvgKart('#f59e0b', '#0f172a', 'DRIFT PRETO 001')
-      },
-      {
-        id: 'kart_azul',
-        name: 'DRIFT AZUL 002',
-        tagline: '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!',
-        theme: 'cyan',
-        photo: criarSvgKart('#0284c7', '#38bdf8', 'DRIFT AZUL 002')
-      }
+      { id: 'kart_001', name: 'DRIFT PRETO 001', tagline: '⚡ Adrenalina do drift!', theme: 'yellow', photo: criarSvgKart('#f59e0b', '#0f172a', 'DRIFT 001') },
+      { id: 'kart_002', name: 'DRIFT AZUL 002', tagline: '⚡ Adrenalina do drift!', theme: 'cyan', photo: criarSvgKart('#0284c7', '#38bdf8', 'DRIFT 002') },
+      { id: 'kart_003', name: 'DRIFT VERDE 003', tagline: '⚡ Adrenalina do drift!', theme: 'yellow', photo: criarSvgKart('#eab308', '#15803d', 'DRIFT 003') },
+      { id: 'kart_004', name: 'DRIFT FOGO 004', tagline: '⚡ Adrenalina do drift!', theme: 'cyan', photo: criarSvgKart('#f59e0b', '#dc2626', 'DRIFT 004') },
+      { id: 'kart_005', name: 'DRIFT TURBO 005', tagline: '⚡ Adrenalina do drift!', theme: 'yellow', photo: criarSvgKart('#f97316', '#0a2447', 'DRIFT 005') },
+      { id: 'kart_006', name: 'DRIFT SONIC 006', tagline: '⚡ Adrenalina do drift!', theme: 'cyan', photo: criarSvgKart('#0ea5e9', '#1e3a8a', 'DRIFT 006') }
     ];
 
-    let appState = JSON.parse(localStorage.getItem('cia_brinquedos_app_v6')) || {
+    let appState = JSON.parse(localStorage.getItem('cia_brinquedos_app_v62')) || {
       precoMinuto: 1.00,
       diaCorridas: 0,
       diaFaturamento: 0,
@@ -968,7 +930,7 @@
     let fotoBase64Temporaria = '';
 
     function salvarState() {
-      localStorage.setItem('cia_brinquedos_app_v6', JSON.stringify(appState));
+      localStorage.setItem('cia_brinquedos_app_v62', JSON.stringify(appState));
     }
 
     function fmtMoeda(v) {
@@ -1000,14 +962,12 @@
         alert('Web Bluetooth não disponível neste navegador. Use o Chrome no Android.');
         return;
       }
-
       if (bleDevices[kartId]?.device?.gatt?.connected) {
         bleDevices[kartId].device.gatt.disconnect();
         delete bleDevices[kartId];
         renderizarKarts();
         return;
       }
-
       try {
         const device = await navigator.bluetooth.requestDevice({
           filters: [{ namePrefix: 'ESP32' }, { namePrefix: 'DRIFT' }, { namePrefix: 'CIA' }],
@@ -1016,13 +976,11 @@
         const server = await device.gatt.connect();
         const service = await server.getPrimaryService(BLE_SERVICE_UUID);
         const characteristic = await service.getCharacteristic(BLE_CHAR_UUID);
-
         bleDevices[kartId] = { device, characteristic };
         device.addEventListener('gattserverdisconnected', () => {
           delete bleDevices[kartId];
           renderizarKarts();
         });
-
         renderizarKarts();
       } catch (err) {
         console.warn('BLE não conectado:', err);
@@ -1070,14 +1028,12 @@
         alert('⚠️ Informe quantos minutos terá a corrida.');
         return;
       }
-
       if (isNaN(valor) || valor <= 0) {
-        alert('🚫 Toda corrida precisa iniciar com valor maior que R$ 0,00!');
+        alert('🚫 Toda corrida precisa iniciar com valor maior que R\$ 0,00!');
         return;
       }
 
       if (!appState.roi[kartId]) appState.roi[kartId] = { rides: 0, total: 0 };
-
       const agora = Date.now();
       const auditId = 'RUN-' + agora;
 
@@ -1268,7 +1224,6 @@
     function trocarAbaGear(aba) {
       document.querySelectorAll('.gear-tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.gear-panel').forEach(p => p.classList.remove('active'));
-
       if (aba === 'caixa') {
         document.getElementById('tabBtnCaixa').classList.add('active');
         document.getElementById('panelCaixa').classList.add('active');
@@ -1304,228 +1259,4 @@
     function carregarArquivoFoto(event) {
       const file = event.target.files?.[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        fotoBase64Temporaria = e.target.result;
-        document.getElementById('kartFotoUrlInput').value = '[Imagem selecionada do dispositivo]';
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function limparFormKart() {
-      document.getElementById('editKartId').value = '';
-      document.getElementById('formKartTitle').textContent = '➕ Adicionar Novo Brinquedo';
-      document.getElementById('btnSalvarKartForm').textContent = '+ Adicionar Brinquedo';
-      document.getElementById('kartNomeInput').value = '';
-      document.getElementById('kartTagInput').value = '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!';
-      document.getElementById('kartThemeInput').value = 'yellow';
-      document.getElementById('kartFotoUrlInput').value = '';
-      document.getElementById('kartFotoFileInput').value = '';
-      fotoBase64Temporaria = '';
-    }
-
-    function editarBrinquedo(kartId) {
-      const kart = appState.karts.find(k => k.id === kartId);
-      if (!kart) return;
-
-      document.getElementById('editKartId').value = kart.id;
-      document.getElementById('formKartTitle').textContent = '✏️ Editar Brinquedo';
-      document.getElementById('btnSalvarKartForm').textContent = '💾 Salvar Alterações do Brinquedo';
-      document.getElementById('kartNomeInput').value = kart.name;
-      document.getElementById('kartTagInput').value = kart.tagline || '';
-      document.getElementById('kartThemeInput').value = kart.theme || 'yellow';
-      document.getElementById('kartFotoUrlInput').value = kart.photo.startsWith('data:image/') ? '' : kart.photo;
-      document.getElementById('kartFotoFileInput').value = '';
-      fotoBase64Temporaria = '';
-    }
-
-    function salvarBrinquedoForm() {
-      const editId = document.getElementById('editKartId').value.trim();
-      const nome = document.getElementById('kartNomeInput').value.trim().toUpperCase();
-      const tagline = document.getElementById('kartTagInput').value.trim() || '⚡ Diversão sobre rodas! Sinta a adrenalina do drift!';
-      const theme = document.getElementById('kartThemeInput').value;
-      const fotoUrl = document.getElementById('kartFotoUrlInput').value.trim();
-
-      if (!nome) {
-        alert('⚠️ Digite o nome do brinquedo.');
-        return;
-      }
-
-      if (editId) {
-        const kart = appState.karts.find(k => k.id === editId);
-        if (kart) {
-          kart.name = nome;
-          kart.tagline = tagline;
-          kart.theme = theme;
-          if (fotoBase64Temporaria) {
-            kart.photo = fotoBase64Temporaria;
-          } else if (fotoUrl && !fotoUrl.startsWith('[Imagem selecionada')) {
-            kart.photo = fotoUrl;
-          }
-        }
-      } else {
-        const newId = 'kart_' + Date.now();
-        const corFundo = theme === 'cyan' ? '#0284c7' : '#f59e0b';
-        const corDetalhe = theme === 'cyan' ? '#38bdf8' : '#0f172a';
-        const fotoFinal = fotoBase64Temporaria || (fotoUrl && !fotoUrl.startsWith('[Imagem selecionada') ? fotoUrl : criarSvgKart(corFundo, corDetalhe, nome));
-
-        appState.karts.push({
-          id: newId,
-          name: nome,
-          tagline,
-          theme,
-          photo: fotoFinal
-        });
-        appState.roi[newId] = { rides: 0, total: 0 };
-      }
-
-      salvarState();
-      limparFormKart();
-      renderizarGearBrinquedos();
-      renderizarKarts();
-    }
-
-    function removerBrinquedo(kartId) {
-      if (appState.activeRides[kartId]) {
-        alert('🚫 Não é possível remover um brinquedo com corrida em andamento.');
-        return;
-      }
-      if (appState.karts.length <= 1) {
-        alert('⚠️ Mantenha ao menos 1 brinquedo cadastrado.');
-        return;
-      }
-      const kart = appState.karts.find(k => k.id === kartId);
-      if (!confirm(`Deseja realmente remover "${kart?.name || 'este brinquedo'}"?`)) return;
-
-      appState.karts = appState.karts.filter(k => k.id !== kartId);
-      salvarState();
-      renderizarGearBrinquedos();
-      renderizarKarts();
-    }
-
-    function renderizarGearCaixa() {
-      document.getElementById('gearCorridasHoje').textContent = appState.diaCorridas;
-      document.getElementById('gearFaturamentoHoje').textContent = fmtMoeda(appState.diaFaturamento);
-
-      const roiEl = document.getElementById('gearRoiList');
-      roiEl.innerHTML = appState.karts.map(k => {
-        const d = appState.roi[k.id] || { rides: 0, total: 0 };
-        return `
-          <div class="roi-row">
-            <strong>${k.name}</strong>
-            <span>${d.rides} corridas • <strong style="color:var(--green);">${fmtMoeda(d.total)}</strong></span>
-          </div>`;
-      }).join('');
-    }
-
-    function renderizarGearAuditoria() {
-      const audEl = document.getElementById('gearAuditList');
-      if (!appState.auditLog.length) {
-        audEl.innerHTML = `<p style="text-align:center; color:#64748b; font-size:0.84rem;">Nenhuma corrida registrada.</p>`;
-        return;
-      }
-
-      audEl.innerHTML = appState.auditLog.slice(0, 60).map(item => {
-        const isStopped = item.status === 'Parada Antecipada';
-        return `
-          <div class="audit-card ${isStopped ? 'stopped' : ''}">
-            <div style="display:flex; justify-content:space-between; font-weight:800;">
-              <span>${item.kartName} — ${item.cliente}</span>
-              <span style="color:${isStopped ? 'var(--red)' : 'var(--green)'};">${fmtMoeda(item.valorFinal)}</span>
-            </div>
-            <div style="color:#64748b; margin-top:2px;">
-              🕒 ${item.hora} • ${item.minutosRodados}/${item.minutosContratados} min • ${item.status}
-            </div>
-            ${item.motivo ? `<div class="audit-reason-tag">⚠️ Motivo: ${item.motivo}</div>` : ''}
-          </div>`;
-      }).join('');
-    }
-
-    function renderizarGearBrinquedos() {
-      document.getElementById('cfgPrecoMin').value = appState.precoMinuto.toFixed(2);
-      const listEl = document.getElementById('fleetListContainer');
-      listEl.innerHTML = appState.karts.map(k => `
-        <div class="fleet-item">
-          <div style="display:flex; align-items:center; gap:8px; min-width:0;">
-            <img src="${k.photo}" alt="${k.name}" class="fleet-thumb" />
-            <strong style="font-size:0.82rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${k.name}</strong>
-          </div>
-          <div class="fleet-actions">
-            <button class="btn-mini-edit" onclick="editarBrinquedo('${k.id}')">Editar</button>
-            <button class="btn-mini-del" onclick="removerBrinquedo('${k.id}')">Remover</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderizarKarts() {
-      const grid = document.getElementById('kartsGrid');
-      const agora = Date.now();
-      const precoPadrao = appState.precoMinuto;
-
-      grid.innerHTML = appState.karts.map(kart => {
-        const ride = appState.activeRides[kart.id];
-        const isConnected = !!bleDevices[kart.id]?.device?.gatt?.connected;
-        const restante = ride ? Math.max(0, Math.ceil((ride.endTime - agora) / 1000)) : 0;
-
-        return `
-          <article class="kart-card ${kart.theme === 'cyan' ? 'theme-cyan' : ''} ${ride ? 'running' : ''}">
-            <div>
-              <div class="kart-photo-box">
-                <img src="${kart.photo}" alt="${kart.name}" />
-                <button class="ble-pill ${isConnected ? 'connected' : ''}" onclick="alternarBLE('${kart.id}')">
-                  ${isConnected ? '🔵 BLE Ligado' : '⚪ Conectar BLE'}
-                </button>
-              </div>
-
-              <div class="kart-badge-name">${kart.name}</div>
-              <div class="kart-tagline">${kart.tagline}</div>
-              <div class="timer-box" id="timer_${kart.id}">${ride ? fmtTempo(restante) : '00:00'}</div>
-            </div>
-
-            ${ride ? `
-              <div>
-                <div class="two-boxes-row">
-                  <div class="compact-box">
-                    <span class="compact-box-top">👤 CLIENTE</span>
-                    <span class="compact-box-main">${ride.cliente}</span>
-                  </div>
-                  <div class="compact-box">
-                    <span class="compact-box-top">💰 TEMPO • 🟢 ATIVO</span>
-                    <span class="compact-box-main money-time">${fmtMoeda(ride.valorInicial)} • ${ride.minutosContratados}m</span>
-                  </div>
-                </div>
-
-                <div class="running-btns">
-                  <button class="btn-plus1" onclick="adicionarMaisUmMinuto('${kart.id}')">+1 Minuto</button>
-                  <button class="btn-stop-ride" onclick="abrirModalParada('${kart.id}')">🛑 Parar</button>
-                </div>
-              </div>
-            ` : `
-              <div>
-                <div class="presets-row">
-                  <button class="preset-btn" onclick="selecionarPreset('${kart.id}', 5)">5m (${fmtMoeda(5 * precoPadrao)})</button>
-                  <button class="preset-btn" onclick="selecionarPreset('${kart.id}', 10)">10m (${fmtMoeda(10 * precoPadrao)})</button>
-                  <button class="preset-btn" onclick="selecionarPreset('${kart.id}', 15)">15m (${fmtMoeda(15 * precoPadrao)})</button>
-                </div>
-
-                <div class="inputs-row">
-                  <input type="text" class="input-field name-input" id="cli_${kart.id}" placeholder="Nome cliente" />
-                  <input type="number" class="input-field" id="min_${kart.id}" min="1" value="5" oninput="aoDigitarMinutos('${kart.id}')" title="Minutos" />
-                  <input type="number" class="input-field" id="val_${kart.id}" step="0.50" min="1" value="${(5 * precoPadrao).toFixed(2)}" title="Valor R$" />
-                </div>
-
-                <button class="btn-primary-action btn-start-yellow" onclick="iniciarCorrida('${kart.id}')">
-                  ▶️ Iniciar Corrida
-                </button>
-              </div>
-            `}
-          </article>
-        `;
-      }).join('');
-    }
-
-    renderizarKarts();
-  </script>
-</body>
-</html>
+      const reader
