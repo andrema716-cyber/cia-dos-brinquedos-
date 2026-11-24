@@ -1,1262 +1,328 @@
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  <title>Cia dos Brinquedos - v6.2</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Cia dos Brinquedos - Aluguel de Brinquedos</title>
   <style>
     :root {
-      --navy: #0a2447;
-      --navy-dark: #061830;
-      --yellow: #ffcc00;
-      --cyan: #00c4f4;
-      --cyan-dark: #009bc4;
-      --green: #16a34a;
-      --green-dark: #15803d;
-      --red: #dc2626;
-      --red-dark: #b91c1c;
-      --cream: #fffdf5;
-      --card-bg: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      background-color: var(--cream);
-      color: var(--text);
-      min-height: 100vh;
-      padding-bottom: 42px;
-      overflow-x: hidden;
-    }
-
-    /* Topo Ultra-Compacto */
-    .top-banner {
-      background: linear-gradient(180deg, #092244 0%, #123666 100%);
-      padding: 6px 12px 10px;
-      position: relative;
-      border-bottom-left-radius: 50% 10px;
-      border-bottom-right-radius: 50% 10px;
-      box-shadow: 0 3px 8px rgba(9, 34, 68, 0.18);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .top-banner::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -2px;
-      height: 4px;
-      background: var(--yellow);
-      border-bottom-left-radius: 50% 4px;
-      border-bottom-right-radius: 50% 4px;
-      z-index: -1;
-    }
-
-    .logo-main {
-      background: linear-gradient(180deg, #ffe24a 0%, #ff9900 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: 900;
-      font-size: 0.92rem;
-      letter-spacing: 0.3px;
-      filter: drop-shadow(0 1px 0 #05162e);
-      line-height: 1.05;
-    }
-
-    .logo-sub-row {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-top: 1px;
-    }
-
-    .logo-sub {
-      color: #ffffff;
-      font-size: 0.65rem;
-      font-weight: 700;
-      font-style: italic;
-    }
-
-    .version-badge {
-      background: rgba(255, 204, 0, 0.24);
-      color: var(--yellow);
-      border: 1px solid var(--yellow);
-      border-radius: 5px;
-      padding: 0 4px;
-      font-size: 0.58rem;
-      font-weight: 900;
-    }
-
-    .btn-gear {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #ffe66d, var(--yellow));
-      border: 2px solid #ffffff;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
-      font-size: 0.95rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    /* Cabeçalho Compacto */
-    .section-header {
-      max-width: 1100px;
-      margin: 5px auto 5px;
-      padding: 0 8px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-    }
-
-    .section-left {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .section-icon {
-      font-size: 1.05rem;
-      line-height: 1;
-    }
-
-    .section-title {
-      font-size: 0.88rem;
-      font-weight: 900;
-      color: var(--navy);
-      line-height: 1.1;
-    }
-
-    .section-subtitle {
-      font-size: 0.66rem;
-      color: var(--muted);
-      font-weight: 600;
-    }
-
-    /* Grade 2 Colunas para Caber 6+ Quadros na Tela */
-    .karts-grid {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 8px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
-    }
-
-    @media (min-width: 720px) {
-      .karts-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-      }
-    }
-
-    .kart-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 5px;
-      border: 2px solid var(--navy);
-      box-shadow: 0 2.5px 0 var(--navy);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .kart-card.theme-cyan {
-      border-color: var(--cyan-dark);
-      box-shadow: 0 2.5px 0 var(--cyan-dark);
-    }
-
-    .kart-card.running {
-      border-color: var(--green);
-      box-shadow: 0 2.5px 0 var(--green-dark);
-      background: #f2fdf5;
-    }
-
-    .kart-photo-box {
-      width: 100%;
-      height: 46px;
-      border-radius: 8px;
-      overflow: hidden;
-      background: linear-gradient(135deg, #facc15 0%, #f97316 100%);
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .kart-card.theme-cyan .kart-photo-box {
-      background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
-    }
-
-    .kart-photo-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .ble-pill {
-      position: absolute;
-      top: 3px;
-      right: 3px;
-      background: rgba(255, 255, 255, 0.94);
-      color: var(--navy);
-      border: 1px solid var(--navy);
-      border-radius: 999px;
-      padding: 1px 5px;
-      font-size: 0.54rem;
-      font-weight: 800;
-      cursor: pointer;
-      line-height: 1.25;
-    }
-
-    .ble-pill.connected {
-      background: #dcfce7;
-      color: #166534;
-      border-color: var(--green);
-    }
-
-    .status-tag-pill {
-      position: absolute;
-      bottom: 3px;
-      left: 3px;
-      background: rgba(255, 255, 255, 0.94);
-      color: var(--navy);
-      border-radius: 999px;
-      padding: 1px 5px;
-      font-size: 0.52rem;
-      font-weight: 900;
-      line-height: 1.2;
-    }
-
-    .running .status-tag-pill {
-      background: #dcfce7;
-      color: var(--green-dark);
-    }
-
-    .kart-badge-name {
-      margin-top: 4px;
-      background: var(--navy);
-      color: #ffffff;
-      text-align: center;
-      padding: 3px 5px;
-      border-radius: 7px;
-      font-weight: 900;
-      font-size: 0.68rem;
-      letter-spacing: 0.2px;
-      text-transform: uppercase;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .kart-card.theme-cyan .kart-badge-name {
-      background: #073b66;
-    }
-
-    .timer-box {
-      text-align: center;
-      font-size: 1.05rem;
-      font-weight: 900;
-      font-variant-numeric: tabular-nums;
-      color: var(--navy);
-      line-height: 1.1;
-      margin: 2px 0 3px;
-    }
-
-    .running .timer-box {
-      color: var(--green-dark);
-    }
-
-    /* 2 Quadros Menores Lado a Lado */
-    .two-boxes-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3px;
-      margin-bottom: 4px;
-    }
-
-    .compact-box {
-      background: #ffffff;
-      border: 1px solid #4ade80;
-      border-radius: 6px;
-      padding: 2px 4px;
-      min-width: 0;
-    }
-
-    .compact-box-top {
-      font-size: 0.5rem;
-      font-weight: 700;
-      color: var(--muted);
-      display: block;
-      line-height: 1;
-    }
-
-    .compact-box-main {
-      font-size: 0.64rem;
-      font-weight: 900;
-      color: #14532d;
-      display: block;
-      line-height: 1.15;
-      margin-top: 1px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .presets-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 3px;
-      margin-bottom: 3px;
-    }
-
-    .preset-btn {
-      background: #f1f5f9;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      padding: 3px 1px;
-      font-size: 0.56rem;
-      font-weight: 800;
-      color: var(--navy);
-      cursor: pointer;
-      line-height: 1.1;
-    }
-
-    .inputs-row {
-      display: grid;
-      grid-template-columns: 1.35fr 0.72fr 0.88fr;
-      gap: 3px;
-      margin-bottom: 4px;
-    }
-
-    .input-field {
-      width: 100%;
-      padding: 3px 3px;
-      border-radius: 6px;
-      border: 1px solid #cbd5e1;
-      font-size: 0.64rem;
-      font-weight: 700;
-      color: var(--text);
-      background: #ffffff;
-      text-align: center;
-      min-width: 0;
-    }
-
-    .input-field.name-input {
-      text-align: left;
-      padding-left: 4px;
-    }
-
-    .btn-primary-action {
-      width: 100%;
-      border: 1.5px solid var(--navy);
-      border-radius: 8px;
-      padding: 5px 4px;
-      font-size: 0.68rem;
-      font-weight: 900;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      box-shadow: 0 2px 0 var(--navy);
-    }
-
-    .btn-start-yellow {
-      background: linear-gradient(180deg, #ffe033 0%, #ffb700 100%);
-      color: var(--navy);
-    }
-
-    .kart-card.theme-cyan .btn-start-yellow {
-      background: linear-gradient(180deg, #38e2ff 0%, #00b4e6 100%);
-      color: #052238;
-      border-color: #052238;
-      box-shadow: 0 2px 0 #052238;
-    }
-
-    .running-btns {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3px;
-    }
-
-    .btn-plus1 {
-      background: #0284c7;
-      color: #ffffff;
-      border: none;
-      border-radius: 7px;
-      padding: 5px 2px;
-      font-weight: 800;
-      font-size: 0.62rem;
-      cursor: pointer;
-    }
-
-    .btn-stop-ride {
-      background: var(--red);
-      color: #ffffff;
-      border: none;
-      border-radius: 7px;
-      padding: 5px 2px;
-      font-weight: 800;
-      font-size: 0.62rem;
-      cursor: pointer;
-    }
-
-    /* Rodapé Compacto */
-    .bottom-wave {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--navy);
-      color: var(--yellow);
-      padding: 5px 12px;
-      border-top-left-radius: 50% 8px;
-      border-top-right-radius: 50% 8px;
-      border-top: 2px solid var(--yellow);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-weight: 900;
-      font-style: italic;
-      font-size: 0.7rem;
-      z-index: 40;
-    }
-
-    /* Modais */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(6, 24, 48, 0.72);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 12px;
-      z-index: 200;
-      overflow-y: auto;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal-box {
-      background: #ffffff;
-      width: 100%;
-      max-width: 560px;
-      max-height: 90vh;
-      overflow-y: auto;
-      border-radius: 20px;
-      padding: 18px;
-      border: 3px solid var(--navy);
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      padding-bottom: 9px;
-      border-bottom: 2px solid #e2e8f0;
-    }
-
-    .modal-title {
-      font-size: 1.1rem;
-      font-weight: 900;
-      color: var(--navy);
-    }
-
-    .btn-close-modal {
-      background: #e2e8f0;
-      color: var(--navy);
-      border: none;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      font-weight: 900;
-      font-size: 0.95rem;
-      cursor: pointer;
-    }
-
-    .form-group {
-      margin-bottom: 10px;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 800;
-      color: var(--navy);
-      margin-bottom: 4px;
-    }
-
-    .form-control {
-      width: 100%;
-      padding: 9px 10px;
-      border-radius: 10px;
-      border: 1.5px solid #cbd5e1;
-      font-size: 0.86rem;
-      font-weight: 600;
-    }
-
-    .calc-box {
-      background: #f0fdf4;
-      border: 1.5px solid #86efac;
-      color: #14532d;
-      padding: 9px 11px;
-      border-radius: 11px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      line-height: 1.4;
-      margin-top: 8px;
-    }
-
-    .modal-footer-btns {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .btn-gray {
-      background: #94a3b8;
-      color: #ffffff;
-      border: none;
-      border-radius: 11px;
-      padding: 10px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .btn-confirm-red {
-      background: var(--red);
-      color: #ffffff;
-      border: none;
-      border-radius: 11px;
-      padding: 10px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .gear-tabs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-
-    .gear-tab-btn {
-      padding: 8px 5px;
-      border-radius: 10px;
-      border: 1.5px solid #cbd5e1;
-      background: #f8fafc;
-      color: var(--navy);
-      font-weight: 800;
-      font-size: 0.78rem;
-      cursor: pointer;
-    }
-
-    .gear-tab-btn.active {
-      background: var(--navy);
-      color: var(--yellow);
-      border-color: var(--navy);
-    }
-
-    .gear-panel {
-      display: none;
-    }
-
-    .gear-panel.active {
-      display: block;
-    }
-
-    .caixa-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .caixa-card {
-      background: #f8fafc;
-      border: 1.5px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 10px;
-      text-align: center;
-    }
-
-    .caixa-val {
-      font-size: 1.35rem;
-      font-weight: 900;
-    }
-
-    .caixa-val.red { color: var(--red); }
-    .caixa-val.green { color: var(--green); }
-
-    .caixa-lbl {
-      font-size: 0.74rem;
-      color: var(--muted);
-      font-weight: 700;
-      margin-top: 2px;
-    }
-
-    .btn-zerar-caixa {
-      width: 100%;
-      background: #ef4444;
-      color: #ffffff;
-      border: none;
-      border-radius: 11px;
-      padding: 10px;
-      font-weight: 800;
-      font-size: 0.84rem;
-      cursor: pointer;
-      margin-bottom: 12px;
-    }
-
-    .roi-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      padding: 9px 11px;
-      border-radius: 10px;
-      margin-bottom: 6px;
-      font-size: 0.83rem;
-    }
-
-    .audit-card {
-      background: #f8fafc;
-      border-left: 4px solid var(--green);
-      border-top: 1px solid #e2e8f0;
-      border-right: 1px solid #e2e8f0;
-      border-bottom: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 9px 11px;
-      margin-bottom: 7px;
-      font-size: 0.78rem;
-    }
-
-    .audit-card.stopped {
-      border-left-color: var(--red);
-      background: #fff9f9;
-    }
-
-    .audit-reason-tag {
-      margin-top: 4px;
-      background: #fee2e2;
-      color: #991b1b;
-      padding: 4px 7px;
-      border-radius: 6px;
-      font-weight: 700;
-    }
-
-    .fleet-box {
-      background: #f8fafc;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 13px;
-      padding: 11px;
-      margin-top: 10px;
-    }
-
-    .fleet-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 10px;
-      padding: 7px 9px;
-      margin-bottom: 7px;
-    }
-
-    .fleet-thumb {
-      width: 44px;
-      height: 32px;
-      border-radius: 6px;
-      object-fit: cover;
-      border: 1px solid #cbd5e1;
-      flex-shrink: 0;
-    }
-
-    .fleet-actions {
-      display: flex;
-      gap: 5px;
-    }
-
-    .btn-mini-edit {
-      background: #0284c7;
-      color: #ffffff;
-      border: none;
-      border-radius: 7px;
-      padding: 5px 8px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .btn-mini-del {
-      background: var(--red);
-      color: #ffffff;
-      border: none;
-      border-radius: 7px;
-      padding: 5px 8px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .btn-add-kart {
-      width: 100%;
-      background: var(--navy);
-      color: var(--yellow);
-      border: none;
-      border-radius: 10px;
-      padding: 9px;
-      font-size: 0.82rem;
-      font-weight: 900;
-      cursor: pointer;
-      margin-top: 6px;
-    }
+      --bg-cream: #fffdf5;
+      --header-blue: #0b2545;
+      --card-dark: #0a192f;
+      --accent-yellow: #ffd000;
+      --accent-cyan: #00b4d8;
+      --accent-orange: #ff6b6b;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, Helvetica, sans-serif; }
+    body { background-color: var(--bg-cream); color: var(--text-dark); min-height: 100vh; display: flex; justify-content: center; padding: 0 0 40px 0; }
+
+    .app-container { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: 16px; position: relative; }
+
+    /* Topo Moderno Temático */
+    .header-banner { background: linear-gradient(135deg, #0b2545 0%, #134074 100%); padding: 20px 16px; border-bottom-left-radius: 28px; border-bottom-right-radius: 28px; box-shadow: 0 10px 25px rgba(11,37,69,0.25); display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 10; }
+    .header-logo-area { display: flex; flex-direction: column; gap: 2px; }
+    .header-title { font-size: 1.4rem; font-weight: 900; color: #ffd000; text-transform: uppercase; text-shadow: 2px 2px 0px #ff6b6b; letter-spacing: 0.5px; }
+    .header-subtitle { font-size: 0.8rem; color: #90e0ef; font-weight: 700; letter-spacing: 1px; }
+    
+    .btn-settings { background: #ffd000; border: none; color: #0b2545; font-size: 1.2rem; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(255,208,0,0.4); transition: transform 0.1s; }
+    .btn-settings:active { transform: scale(0.92); }
+
+    /* Seção Título de Seleção */
+    .section-header { text-align: center; padding: 8px 16px 0 16px; }
+    .section-title { font-size: 1.35rem; font-weight: 900; color: var(--header-blue); }
+    .section-desc { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+
+    /* Telas / Views */
+    .screen { display: none; flex-direction: column; gap: 16px; }
+    .screen.active { display: flex; }
+
+    /* Grelha Compacta Lado a Lado */
+    .toys-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; }
+    .toy-modern-card { background: var(--card-dark); border-radius: 18px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 8px 20px rgba(10,25,47,0.25); display: flex; flex-direction: column; position: relative; cursor: pointer; transition: transform 0.1s; }
+    .toy-modern-card:active { transform: scale(0.96); }
+    
+    .toy-img-container { width: 100%; aspect-ratio: 4 / 2; background: radial-gradient(circle, #1e293b 0%, #0a192f 100%); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 4px; }
+    .toy-img-container img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.3)); }
+
+    .toy-info-body { padding: 8px 10px 10px 10px; display: flex; flex-direction: column; gap: 6px; background: #0a192f; }
+    .toy-card-name { font-size: 0.85rem; font-weight: 900; color: #ffffff; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .btn-select-toy { background: linear-gradient(90deg, #ffd000 0%, #ffaa00 100%); border: none; border-radius: 99px; padding: 5px; font-size: 0.72rem; font-weight: 900; color: #0b2545; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 2px 8px rgba(255,208,0,0.3); }
+
+    .active-tag { position: absolute; top: 8px; right: 8px; background: #ff6b6b; color: white; font-size: 0.65rem; font-weight: 900; padding: 4px 8px; border-radius: 99px; box-shadow: 0 2px 8px rgba(255,107,107,0.4); z-index: 5; text-align: center; max-width: 85%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .alarm-blinking { animation: alertaPiscar 0.6s infinite alternate; background-color: #ef4444 !important; color: #ffffff !important; }
+    @keyframes alertaPiscar {
+      0% { opacity: 1; transform: scale(1); }
+      100% { opacity: 0.4; transform: scale(1.03); }
+    }
+
+    /* Tela de Operação */
+    .container-inner { padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
+    .card-white { background: #ffffff; border-radius: 20px; padding: 16px; border: 2px solid #e2e8f0; box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 99px; font-weight: 800; font-size: 0.75rem; background: #e2e8f0; color: #475569; }
+    .status-badge.connected { background: #dcfce7; color: #16a34a; border: 1px solid #16a34a; }
+
+    .timer-display { text-align: center; margin: 4px 0 10px 0; }
+    .timer-time { font-size: 3.5rem; font-weight: 900; font-family: monospace; color: #0b2545; letter-spacing: -2px; }
+    .timer-label { font-size: 0.8rem; color: #ff6b6b; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+
+    .progress-bar-container { width: 100%; height: 10px; background: #e2e8f0; border-radius: 99px; overflow: hidden; margin-top: 8px; }
+    .progress-bar { height: 100%; width: 0%; background: #16a34a; transition: width 0.3s ease; }
+
+    /* 4 colunas exatas para os botões de tempo, incluindo a caixa personalizada */
+    .time-selector { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 10px 0; }
+    .time-btn { background: #f1f5f9; border: 2px solid #cbd5e1; color: #334155; padding: 10px 4px; border-radius: 12px; font-weight: 800; font-size: 0.78rem; cursor: pointer; text-align: center; white-space: nowrap; }
+    .time-btn.selected { background: #0b2545; border-color: #0b2545; color: #ffd000; }
+    
+    /* Caixa em branco com mesmo formato que abre teclado numérico */
+    .time-input-custom { background: #f1f5f9; border: 2px solid #cbd5e1; color: #334155; padding: 10px 2px; border-radius: 12px; font-weight: 800; font-size: 0.78rem; text-align: center; width: 100%; outline: none; }
+    .time-input-custom:focus { border-color: #0b2545; background: #ffffff; color: #0b2545; }
+
+    .price-tag { text-align: center; font-size: 1.25rem; font-weight: 900; color: #16a34a; margin-bottom: 12px; }
+
+    /* Botões Gerais */
+    .btn { border: none; border-radius: 14px; padding: 14px; font-size: 1rem; font-weight: 900; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: #fff; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-blue { background: #0b2545; }
+    .btn-green { background: #16a34a; }
+    .btn-yellow { background: #ffd000; color: #0b2545; }
+    .btn-red { background: #ff6b6b; }
+    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* Formulários e Listas */
+    .form-group { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
+    .form-group label { font-size: 0.85rem; color: #334155; font-weight: 700; }
+    .form-input { background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 10px; padding: 10px; color: #1e293b; font-size: 0.9rem; font-weight: bold; }
+
+    .toy-manage-item { display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 8px 12px; border-radius: 12px; border: 2px solid #e2e8f0; margin-bottom: 8px; }
+    .toy-thumb { width: 50px; aspect-ratio: 4 / 2; border-radius: 6px; object-fit: contain; background: #0a192f; }
+
+    .footer-banner { text-align: center; padding: 16px; font-size: 0.85rem; font-weight: 800; color: #0b2545; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+    .report-item { display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 10px 12px; border-radius: 10px; border: 1px solid #e2e8f0; margin-bottom: 6px; font-size: 0.82rem; }
+
+    /* Menu Dropdown */
+    .menu-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
+    .menu-box { position: absolute; top: 75px; right: 16px; background: #ffffff; border-radius: 20px; padding: 10px; width: 230px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); border: 2px solid #e2e8f0; z-index: 1000; }
+    .menu-item { background: #f8fafc; border: 1px solid #e2e8f0; color: #0b2545; padding: 12px; font-size: 0.88rem; text-align: left; cursor: pointer; border-radius: 12px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+    .menu-item:hover { background: #eff6ff; }
   </style>
 </head>
 <body>
 
-  <header class="top-banner">
-    <div>
-      <div class="logo-main">CIA DOS BRINQUEDOS</div>
-      <div class="logo-sub-row">
-        <span class="logo-sub">Aluguel de Brinquedos 🎈</span>
-        <span class="version-badge" id="appVersionBadge">v6.2</span>
+  <div class="app-container">
+    
+    <div class="header-banner">
+      <div class="header-logo-area">
+        <div class="header-title">Cia dos Brinquedos</div>
+        <div class="header-subtitle">Aluguel de Brinquedos 🎈</div>
+      </div>
+      <button class="btn-settings" onclick="toggleMenu()">⚙️</button>
+    </div>
+
+    <div id="menuOverlay" class="menu-overlay" onclick="toggleMenu()">
+      <div class="menu-box" onclick="event.stopPropagation()">
+        <button class="menu-item" onclick="navegarPara('screen-home')">🏠 Início (Karts)</button>
+        <button class="menu-item" onclick="navegarPara('screen-cadastrar')">🎨 Cadastrar Karts</button>
+        <button class="menu-item" onclick="navegarPara('screen-bluetooth')">📡 Conectar Bluetooth</button>
+        <button class="menu-item" onclick="navegarPara('screen-caixa')">💰 Caixa e Relatório ROI</button>
       </div>
     </div>
-    <button class="btn-gear" onclick="abrirPainelEngrenagem()" title="Caixa, Relatórios e Gerenciar Brinquedos">⚙️</button>
-  </header>
 
-  <div class="section-header">
-    <div class="section-left">
-      <div class="section-icon">🏎️</div>
-      <div>
+    <!-- 1. TELA INICIAL -->
+    <div id="screen-home" class="screen active">
+      <div class="section-header">
         <div class="section-title">Selecione um Brinquedo</div>
-        <div class="section-subtitle">Grade compacta • 6+ quadros na tela</div>
+        <div class="section-desc">Escolha o brinquedo que deseja alugar</div>
+      </div>
+      <div id="toysGrid" class="toys-grid"></div>
+      
+      <div class="footer-banner">
+        <span>⚡ Aqui a diversão não tem hora! 🎮</span>
       </div>
     </div>
-  </div>
 
-  <main class="karts-grid" id="kartsGrid"></main>
-
-  <footer class="bottom-wave">
-    <span>😊</span>
-    <span>Aqui a diversão não tem hora! • v6.2</span>
-    <span>🎮</span>
-  </footer>
-
-  <!-- Modal Parada -->
-  <div class="modal-overlay" id="stopModal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <div class="modal-title">🛑 Parar Corrida Antes do Tempo</div>
-        <button class="btn-close-modal" onclick="fecharModalParada()">✕</button>
-      </div>
-      <p style="font-size:0.82rem; color:#475569; margin-bottom:10px; font-weight:600;">
-        Motivo obrigatório para parada antecipada. O valor não será zerado.
-      </p>
-      <div class="form-group">
-        <label class="form-label">Motivo da Parada:</label>
-        <select class="form-control" id="stopReasonPreset" onchange="sincronizarMotivo()">
-          <option value="">-- Escolha um motivo --</option>
-          <option value="Criança desistiu / chorou">Criança desistiu / chorou</option>
-          <option value="Bateria do carrinho acabou">Bateria do carrinho acabou</option>
-          <option value="Problema técnico / mecânico">Problema técnico / mecânico</option>
-          <option value="Pais solicitaram encerrar">Pais solicitaram encerrar</option>
-          <option value="Outro">Outro motivo (escrever abaixo)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Descrição Obrigatória do Motivo:</label>
-        <textarea class="form-control" id="stopReasonDetail" rows="2" placeholder="Explique o motivo da parada..."></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Contabilização do valor:</label>
-        <select class="form-control" id="stopBillingRule" onchange="atualizarCalculoParada()">
-          <option value="proporcional">Proporcional aos minutos rodados (Mín. R\$ 1,00)</option>
-          <option value="integral">Valor integral cobrado no início</option>
-        </select>
-      </div>
-      <div class="calc-box" id="stopCalcBox"></div>
-      <div class="modal-footer-btns">
-        <button class="btn-gray" onclick="fecharModalParada()">Continuar</button>
-        <button class="btn-confirm-red" onclick="confirmarParadaCorrida()">Confirmar Parada</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal Engrenagem -->
-  <div class="modal-overlay" id="gearModal">
-    <div class="modal-box">
-      <div class="modal-header">
-        <div class="modal-title">⚙️ Gestão, Caixa & Frota <span style="font-size:0.75rem; color:#64748b;">(v6.2)</span></div>
-        <button class="btn-close-modal" onclick="fecharPainelEngrenagem()">✕</button>
-      </div>
-      <div class="gear-tabs">
-        <button class="gear-tab-btn active" id="tabBtnCaixa" onclick="trocarAbaGear('caixa')">💰 Caixa & ROI</button>
-        <button class="gear-tab-btn" id="tabBtnAuditoria" onclick="trocarAbaGear('auditoria')">🛡️ Auditoria</button>
-        <button class="gear-tab-btn" id="tabBtnConfig" onclick="trocarAbaGear('config')">🏎️ Brinquedos</button>
-      </div>
-      <div class="gear-panel active" id="panelCaixa">
-        <div class="caixa-grid">
-          <div class="caixa-card">
-            <div class="caixa-val red" id="gearCorridasHoje">0</div>
-            <div class="caixa-lbl">Corridas Hoje</div>
-          </div>
-          <div class="caixa-card">
-            <div class="caixa-val green" id="gearFaturamentoHoje">R\$ 0,00</div>
-            <div class="caixa-lbl">Faturamento Hoje</div>
+    <!-- 2. TELA DE OPERAÇÃO -->
+    <div id="screen-operacao" class="screen">
+      <div class="container-inner">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <button class="btn btn-blue" style="width:auto; padding:8px 16px; font-size:0.85rem;" onclick="voltarParaHome()">⬅ Voltar</button>
+          <div id="statusBadge" class="status-badge">
+            <span>⚠️</span> <span id="statusText">Modo Simulação</span>
           </div>
         </div>
-        <button class="btn-zerar-caixa" onclick="zerarCaixaDia()">Zerar Apenas Caixa do Dia 🔄</button>
-        <div class="form-label" style="margin-bottom:6px;">📈 Relatório Vitalício (Retorno / ROI)</div>
-        <div id="gearRoiList"></div>
-      </div>
-      <div class="gear-panel" id="panelAuditoria">
-        <div id="gearAuditList"></div>
-      </div>
-      <div class="gear-panel" id="panelConfig">
-        <div class="form-group">
-          <label class="form-label">Valor Padrão por Minuto (R\$):</label>
-          <input type="number" class="form-control" id="cfgPrecoMin" step="0.50" min="0.50" onchange="salvarPrecoPadrao()" />
+
+        <div class="toy-modern-card" style="box-shadow: none; cursor: default;">
+          <div class="toy-img-container" style="height: 130px;">
+            <img id="opToyImg" src="" alt="Kart">
+          </div>
+          <div class="toy-info-body" style="padding: 8px;">
+            <div id="opToyName" class="toy-card-name" style="font-size: 1rem;">Nome do Kart</div>
+          </div>
         </div>
-        <div class="form-label" style="margin-top:8px;">📋 Brinquedos Cadastrados (Editar ou Remover):</div>
-        <div id="fleetListContainer"></div>
-        <div class="fleet-box">
-          <div class="form-label" id="formKartTitle">➕ Adicionar Novo Brinquedo</div>
-          <input type="hidden" id="editKartId" value="" />
-          <div class="form-group">
-            <label class="form-label">Nome do Brinquedo:</label>
-            <input type="text" class="form-control" id="kartNomeInput" placeholder="Ex: DRIFT VERMELHO 005" />
+
+        <div class="card-white" id="operationCardBox">
+          <div class="timer-display">
+            <div class="timer-label" id="timerStateLabel">Pronto para a Aventura!</div>
+            <div class="timer-time" id="timeDisplay">05:00</div>
+            <div class="progress-bar-container">
+              <div class="progress-bar" id="progressBar"></div>
+            </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">Frase Curta:</label>
-            <input type="text" class="form-control" id="kartTagInput" placeholder="⚡ Diversão sobre rodas! Sinta a adrenalina do drift!" />
+
+          <div id="setupArea">
+            <div class="form-group" style="margin-bottom: 10px;">
+              <label>Nome da Criança (Piloto):</label>
+              <input type="text" id="inputChildName" class="form-input" placeholder="Ex: Joãozinho">
+            </div>
+
+            <label style="font-size: 0.85rem; color: #334155; font-weight: 700; display: block; margin-bottom: 4px;">Selecione ou Digite o Tempo (Min):</label>
+            <!-- 4 caixas lado a lado com exato mesmo formato -->
+            <div class="time-selector">
+              <button class="time-btn selected" onclick="selecionarTempo(5, 5.00, this)">5 Min</button>
+              <button class="time-btn" onclick="selecionarTempo(10, 10.00, this)">10 Min</button>
+              <button class="time-btn" onclick="selecionarTempo(15, 15.00, this)">15 Min</button>
+              <input type="number" id="inputCustomMinutes" class="time-input-custom" placeholder="Outro" min="1" onclick="limparSelecaoBotoes()" oninput="definirTempoPersonalizado(this.value)">
+            </div>
+
+            <div class="price-tag" id="priceTag">Valor: R$ 5,00</div>
+            <button class="btn btn-green" onclick="iniciarCorrida()">🚀 INICIAR CORRIDA</button>
           </div>
-          <div class="form-group">
-            <label class="form-label">Cor do Card:</label>
-            <select class="form-control" id="kartThemeInput">
-              <option value="yellow">Amarelo / Azul Marinho</option>
-              <option value="cyan">Azul Ciano</option>
-            </select>
+
+          <div id="controlArea" style="display:none; display: flex; flex-direction: column; gap: 8px;">
+            <button class="btn btn-blue" onclick="adicionarMaisUmMinuto()" style="background: var(--accent-cyan); color: #0b2545;">⏱️ +1 Minuto</button>
+            <div class="btn-grid">
+              <button class="btn btn-yellow" id="btnPause" onclick="pausarOuRetomar()">⏸️ PAUSAR</button>
+              <button class="btn btn-red" onclick="pararEmergencia()">🛑 PARAR AGORA</button>
+            </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">Foto do Brinquedo (Link/URL ou Galeria):</label>
-            <input type="text" class="form-control" id="kartFotoUrlInput" placeholder="https://... ou escolha foto abaixo" style="margin-bottom:6px;" />
-            <input type="file" class="form-control" id="kartFotoFileInput" accept="image/*" onchange="carregarArquivoFoto(event)" />
-          </div>
-          <button class="btn-add-kart" id="btnSalvarKartForm" onclick="salvarBrinquedoForm()">+ Adicionar Brinquedo</button>
-          <button class="btn-gray" style="width:100%; margin-top:6px; padding:8px; font-size:0.78rem;" onclick="limparFormKart()">Limpar Campos</button>
         </div>
       </div>
     </div>
+
+    <!-- 3. TELA DE GERENCIAR KARTS -->
+    <div id="screen-cadastrar" class="screen">
+      <div class="container-inner">
+        <div class="card-white">
+          <h3 style="font-size:1.1rem; margin-bottom:12px; color:var(--header-blue);">🎨 Cadastrar Novo Brinquedo</h3>
+          <div class="form-group">
+            <label>Nome / Identificação (Digite DRIFT para ver opções)</label>
+            <input type="text" id="inputToyName" class="form-input" placeholder="Ex: DRIFT AZUL 002" oninput="sugerirModelosDrift(this.value)">
+          </div>
+
+          <div id="driftSuggestions" style="display: none; display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; background: #f1f5f9; padding: 8px; border-radius: 10px; border: 1px solid #cbd5e1;">
+            <span style="font-size: 0.75rem; font-weight: 800; color: var(--header-blue);">💡 Escolha um modelo Drift da lista:</span>
+            <div id="driftListContainer" style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px;"></div>
+          </div>
+
+          <div class="form-group">
+            <label>Ou Envie Foto do Telemóvel</label>
+            <input type="file" id="inputToyPhoto" accept="image/*" class="form-input" onchange="selecionarFotoManual(this)">
+          </div>
+          
+          <div id="previewContainer" style="display: none; margin-bottom: 10px; text-align: center;">
+            <span style="font-size: 0.75rem; font-weight: bold; color: var(--text-muted);">Pré-visualização (4x2):</span>
+            <img id="imgPreview" style="width: 100%; aspect-ratio: 4/2; object-fit: contain; background: #0a192f; border-radius: 8px; margin-top: 4px;">
+          </div>
+
+          <button class="btn btn-blue" onclick="salvarKart()">Salvar Carrinho 🏎️</button>
+        </div>
+
+        <div class="card-white">
+          <h3 style="font-size:1.1rem; margin-bottom:10px; color:var(--header-blue);">📋 Carrinhos Cadastrados</h3>
+          <div id="toysManageList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. TELA BLUETOOTH -->
+    <div id="screen-bluetooth" class="screen">
+      <div class="container-inner">
+        <div class="card-white" style="text-align: center; padding: 24px;">
+          <h3 style="color:var(--header-blue); margin-bottom:8px;">Conexão Bluetooth ESP32</h3>
+          <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:20px;">Pareie com o hardware ESP32 do carrinho via Web Bluetooth (BLE).</p>
+          <button class="btn btn-blue" onclick="conectarBluetooth()">Conectar ao ESP32 📡</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. TELA CAIXA DO DIA -->
+    <div id="screen-caixa" class="screen">
+      <div class="container-inner">
+        <div class="card-white" style="text-align: center;">
+          <h3 style="color:var(--header-blue); margin-bottom:14px;">💰 Caixa do Dia</h3>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;">
+            <div style="background:#f8fafc; padding:14px; border-radius:14px; border:2px solid #e2e8f0;">
+              <div id="statRides" style="font-size:1.6rem; font-weight:900; color:#ff6b6b;">0</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Corridas Hoje</div>
+            </div>
+            <div style="background:#f8fafc; padding:14px; border-radius:14px; border:2px solid #e2e8f0;">
+              <div id="statTotal" style="font-size:1.6rem; font-weight:900; color:#16a34a;">R$ 0,00</div>
+              <div style="font-size:0.75rem; color:var(--text-muted); font-weight:bold;">Faturamento Hoje</div>
+            </div>
+          </div>
+
+          <button class="btn btn-red" style="font-size:0.85rem; padding:10px; margin-bottom: 16px;" onclick="zerarCaixaDiario()">Zerar Apenas Caixa do Dia 🔄</button>
+
+          <h3 style="color:var(--header-blue); margin-bottom:8px; border-top: 2px dashed #cbd5e1; padding-top: 14px;">📈 Relatório Vitalício (Retorno / ROI)</h3>
+          <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 10px;">Faturamento histórico acumulado de cada carrinho:</p>
+          
+          <div id="lifetimeReportList" style="max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px;"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    const BLE_SERVICE_UUID = '4fa1c201-222d-4b93-9fb6-52c1e7f32d88';
-    const BLE_CHAR_UUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
+    const SERVICE_UUID = "4fa1c201-222d-4b93-9fb6-52c1e7f32d88";
+    const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 
-    function criarSvgKart(corFundo, corDetalhe, rotulo) {
-      const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120">
-          <rect width="320" height="120" fill="${corFundo}"/>
-          <polygon points="0,120 95,0 160,0 65,120" fill="${corDetalhe}" opacity="0.35"/>
-          <path d="M95 88 L155 40 L220 46 L232 62 L150 92 Z" fill="#111827" stroke="#ffffff" stroke-width="3"/>
-          <path d="M158 46 L208 50 L200 65 L154 62 Z" fill="#38bdf8"/>
-          <circle cx="114" cy="94" r="17" fill="#0f172a" stroke="#e2e8f0" stroke-width="3"/>
-          <circle cx="210" cy="92" r="15" fill="#0f172a" stroke="#e2e8f0" stroke-width="3"/>
-          <text x="160" y="20" font-family="Arial, sans-serif" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">${rotulo}</text>
-        </svg>`;
-      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg.trim());
-    }
+    let bluetoothDevice;
+    let caracteristicaBLE;
+    let globalLoopInterval = null;
 
-    const INITIAL_KARTS = [
-      { id: 'kart_001', name: 'DRIFT PRETO 001', tagline: '⚡ Adrenalina do drift!', theme: 'yellow', photo: criarSvgKart('#f59e0b', '#0f172a', 'DRIFT 001') },
-      { id: 'kart_002', name: 'DRIFT AZUL 002', tagline: '⚡ Adrenalina do drift!', theme: 'cyan', photo: criarSvgKart('#0284c7', '#38bdf8', 'DRIFT 002') },
-      { id: 'kart_003', name: 'DRIFT VERDE 003', tagline: '⚡ Adrenalina do drift!', theme: 'yellow', photo: criarSvgKart('#eab308', '#15803d', 'DRIFT 003') },
-      { id: 'kart_004', name: 'DRIFT FOGO 004', tagline: '⚡ Adrenalina do drift!', theme: 'cyan', photo: criarSvgKart('#f59e0b', '#dc2626', 'DRIFT 004') },
-      { id: 'kart_005', name: 'DRIFT TURBO 005', tagline: '⚡ Adrenalina do drift!', theme: 'yellow', photo: criarSvgKart('#f97316', '#0a2447', 'DRIFT 005') },
-      { id: 'kart_006', name: 'DRIFT SONIC 006', tagline: '⚡ Adrenalina do drift!', theme: 'cyan', photo: criarSvgKart('#0ea5e9', '#1e3a8a', 'DRIFT 006') }
+    let tempoSelecionadoMinutos = 5;
+    let valorSelecionado = 5.00;
+    let kartAtualObj = null;
+    let fotoBase64Temporaria = "";
+
+    const galeriaDrift = [
+      { name: "DRIFT PRETO 001", color: "#0a192f", accent: "#ffd000" },
+      { name: "DRIFT AZUL 002", color: "#0b2545", accent: "#00b4d8" },
+      { name: "DRIFT VERDE 003", color: "#14532d", accent: "#4ade80" },
+      { name: "DRIFT VERMELHO 004", color: "#7f1d1d", accent: "#f87171" },
+      { name: "DRIFT GRAFITE 005", color: "#334155", accent: "#cbd5e1" },
+      { name: "DRIFT ROSA 006", color: "#831843", accent: "#f472b6" },
+      { name: "DRIFT AMARELO 007", color: "#78350f", accent: "#facc15" }
     ];
 
-    let appState = JSON.parse(localStorage.getItem('cia_brinquedos_app_v62')) || {
-      precoMinuto: 1.00,
-      diaCorridas: 0,
-      diaFaturamento: 0,
-      karts: INITIAL_KARTS,
-      roi: {},
-      activeRides: {},
-      auditLog: []
+    window.onload = function() {
+      let toys = JSON.parse(localStorage.getItem('drift_toys') || '[]');
+      if (toys.length === 0) {
+        toys.push({ id: 'drift_001', name: 'DRIFT PRETO 001', photo: gerarSvgDrift('#0a192f', '#ffd000', 'DRIFT PRETO 001') });
+        toys.push({ id: 'drift_002', name: 'DRIFT AZUL 002', photo: gerarSvgDrift('#0b2545', '#00b4d8', 'DRIFT AZUL 002') });
+        localStorage.setItem('drift_toys', JSON.stringify(toys));
+      }
+
+      carregarKartsHome();
+      atualizarCaixaUI();
+
+      if (globalLoopInterval) clearInterval(globalLoopInterval);
+      globalLoopInterval = setInterval(cicloGlobalAtualizacao, 500);
     };
 
-    if (!Array.isArray(appState.karts) || appState.karts.length === 0) {
-      appState.karts = INITIAL_KARTS;
+    function gerarSvgDrift(bgCor, textoCor, nomeKart) {
+      return `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect width="400" height="200" fill="${bgCor}"/><circle cx="200" cy="100" r="70" fill="${textoCor}" opacity="0.15"/><text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" fill="${textoCor}" font-size="24" font-weight="900" font-family="sans-serif">🏎️ DRIFT</text><text x="50%" y="68%" dominant-baseline="middle" text-anchor="middle" fill="%23ffffff" font-size="16" font-weight="bold" font-family="sans-serif">${nomeKart}</text></svg>`;
     }
 
-    appState.karts.forEach(k => {
-      if (!appState.roi[k.id]) appState.roi[k.id] = { rides: 0, total: 0 };
-      if (!k.photo) k.photo = criarSvgKart('#f59e0b', '#0f172a', k.name);
-    });
-
-    const bleDevices = {};
-    let kartEmParada = null;
-    let fotoBase64Temporaria = '';
-
-    function salvarState() {
-      localStorage.setItem('cia_brinquedos_app_v62', JSON.stringify(appState));
-    }
-
-    function fmtMoeda(v) {
-      return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    function fmtTempo(seg) {
-      const s = Math.max(0, Math.floor(seg));
-      const mm = String(Math.floor(s / 60)).padStart(2, '0');
-      const ss = String(s % 60).padStart(2, '0');
-      return `${mm}:${ss}`;
-    }
-
-    function tocarSomFim() {
-      try {
-        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AudioCtx();
-        const osc = ctx.createOscillator();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(920, ctx.currentTime);
-        osc.connect(ctx.destination);
-        osc.start();
-        setTimeout(() => osc.stop(), 650);
-      } catch (e) {}
-    }
-
-    async function alternarBLE(kartId) {
-      if (!navigator.bluetooth) {
-        alert('Web Bluetooth não disponível neste navegador. Use o Chrome no Android.');
-        return;
-      }
-      if (bleDevices[kartId]?.device?.gatt?.connected) {
-        bleDevices[kartId].device.gatt.disconnect();
-        delete bleDevices[kartId];
-        renderizarKarts();
-        return;
-      }
-      try {
-        const device = await navigator.bluetooth.requestDevice({
-          filters: [{ namePrefix: 'ESP32' }, { namePrefix: 'DRIFT' }, { namePrefix: 'CIA' }],
-          optionalServices: [BLE_SERVICE_UUID]
-        });
-        const server = await device.gatt.connect();
-        const service = await server.getPrimaryService(BLE_SERVICE_UUID);
-        const characteristic = await service.getCharacteristic(BLE_CHAR_UUID);
-        bleDevices[kartId] = { device, characteristic };
-        device.addEventListener('gattserverdisconnected', () => {
-          delete bleDevices[kartId];
-          renderizarKarts();
-        });
-        renderizarKarts();
-      } catch (err) {
-        console.warn('BLE não conectado:', err);
-      }
-    }
-
-    async function enviarBLE(kartId, comando) {
-      const item = bleDevices[kartId];
-      if (item && item.characteristic) {
-        try {
-          await item.characteristic.writeValue(new TextEncoder().encode(comando));
-        } catch (err) {
-          console.error('Falha ao enviar BLE:', err);
-        }
-      }
-    }
-
-    function selecionarPreset(kartId, minutos) {
-      const minEl = document.getElementById(`min_${kartId}`);
-      const valEl = document.getElementById(`val_${kartId}`);
-      if (minEl && valEl) {
-        minEl.value = minutos;
-        valEl.value = (minutos * appState.precoMinuto).toFixed(2);
-      }
-    }
-
-    function aoDigitarMinutos(kartId) {
-      const minEl = document.getElementById(`min_${kartId}`);
-      const valEl = document.getElementById(`val_${kartId}`);
-      const mins = parseFloat(minEl.value) || 0;
-      if (mins > 0) {
-        valEl.value = (mins * appState.precoMinuto).toFixed(2);
-      }
-    }
-
-    async function iniciarCorrida(kartId) {
-      const kart = appState.karts.find(k => k.id === kartId);
-      if (!kart) return;
-
-      const nomeCliente = document.getElementById(`cli_${kartId}`).value.trim() || 'Sem nome';
-      const minutos = parseInt(document.getElementById(`min_${kartId}`).value, 10);
-      const valor = parseFloat(document.getElementById(`val_${kartId}`).value);
-
-      if (!minutos || minutos <= 0) {
-        alert('⚠️ Informe quantos minutos terá a corrida.');
-        return;
-      }
-      if (isNaN(valor) || valor <= 0) {
-        alert('🚫 Toda corrida precisa iniciar com valor maior que R\$ 0,00!');
-        return;
-      }
-
-      if (!appState.roi[kartId]) appState.roi[kartId] = { rides: 0, total: 0 };
-      const agora = Date.now();
-      const auditId = 'RUN-' + agora;
-
-      appState.diaCorridas += 1;
-      appState.diaFaturamento = Number((appState.diaFaturamento + valor).toFixed(2));
-      appState.roi[kartId].rides += 1;
-      appState.roi[kartId].total = Number((appState.roi[kartId].total + valor).toFixed(2));
-
-      appState.auditLog.unshift({
-        id: auditId,
-        kartId,
-        kartName: kart.name,
-        cliente: nomeCliente,
-        hora: new Date().toLocaleString('pt-BR'),
-        minutosContratados: minutos,
-        minutosRodados: minutos,
-        valorInicial: valor,
-        valorFinal: valor,
-        status: 'Em andamento',
-        motivo: ''
-      });
-
-      appState.activeRides[kartId] = {
-        auditId,
-        cliente: nomeCliente,
-        minutosContratados: minutos,
-        valorInicial: valor,
-        startTime: agora,
-        endTime: agora + (minutos * 60 * 1000)
-      };
-
-      salvarState();
-      await enviarBLE(kartId, 'INICIAR');
-      renderizarKarts();
-    }
-
-    function adicionarMaisUmMinuto(kartId) {
-      const ride = appState.activeRides[kartId];
-      if (!ride) return;
-
-      const extra = Number(appState.precoMinuto.toFixed(2));
-      ride.endTime += 60 * 1000;
-      ride.minutosContratados += 1;
-      ride.valorInicial = Number((ride.valorInicial + extra).toFixed(2));
-
-      appState.diaFaturamento = Number((appState.diaFaturamento + extra).toFixed(2));
-      if (!appState.roi[kartId]) appState.roi[kartId] = { rides: 0, total: 0 };
-      appState.roi[kartId].total = Number((appState.roi[kartId].total + extra).toFixed(2));
-
-      const log = appState.auditLog.find(a => a.id === ride.auditId);
-      if (log) {
-        log.minutosContratados += 1;
-        log.minutosRodados += 1;
-        log.valorInicial = Number((log.valorInicial + extra).toFixed(2));
-        log.valorFinal = Number((log.valorFinal + extra).toFixed(2));
-      }
-
-      salvarState();
-      renderizarKarts();
-    }
-
-    function abrirModalParada(kartId) {
-      if (!appState.activeRides[kartId]) return;
-      kartEmParada = kartId;
-      document.getElementById('stopReasonPreset').value = '';
-      document.getElementById('stopReasonDetail').value = '';
-      document.getElementById('stopBillingRule').value = 'proporcional';
-      atualizarCalculoParada();
-      document.getElementById('stopModal').classList.add('active');
-    }
-
-    function fecharModalParada() {
-      kartEmParada = null;
-      document.getElementById('stopModal').classList.remove('active');
-    }
-
-    function sincronizarMotivo() {
-      const preset = document.getElementById('stopReasonPreset').value;
-      const detail = document.getElementById('stopReasonDetail');
-      if (preset && preset !== 'Outro') {
-        detail.value = preset;
-      } else if (preset === 'Outro') {
-        detail.value = '';
-        detail.focus();
-      }
-    }
-
-    function calcularProporcao(ride) {
-      const segDecorridos = Math.max(1, Math.floor((Date.now() - ride.startTime) / 1000));
-      const minUsados = Math.min(
-        ride.minutosContratados,
-        Math.max(1, Math.ceil(segDecorridos / 60))
-      );
-      const unitario = ride.valorInicial / ride.minutosContratados;
-      const valorProp = Math.max(1.00, Number((minUsados * unitario).toFixed(2)));
-      return { minUsados, valorProp };
-    }
-
-    function atualizarCalculoParada() {
-      if (!kartEmParada) return;
-      const ride = appState.activeRides[kartEmParada];
-      const regra = document.getElementById('stopBillingRule').value;
-      const { minUsados, valorProp } = calcularProporcao(ride);
-      const valorFinal = regra === 'proporcional' ? valorProp : ride.valorInicial;
-
-      document.getElementById('stopCalcBox').innerHTML = `
-        ⏱️ Contratado: <strong>${ride.minutosContratados} min</strong> | Rodou: <strong>${minUsados} min</strong><br>
-        💰 Inicial: ${fmtMoeda(ride.valorInicial)} ➔ <strong>Contabilizar: ${fmtMoeda(valorFinal)}</strong>
-      `;
-    }
-
-    async function confirmarParadaCorrida() {
-      if (!kartEmParada) return;
-      const ride = appState.activeRides[kartEmParada];
-      const motivo = document.getElementById('stopReasonDetail').value.trim();
-      const regra = document.getElementById('stopBillingRule').value;
-
-      if (motivo.length < 3) {
-        alert('🚫 É obrigatório informar o motivo da parada antes de encerrar.');
-        return;
-      }
-
-      const { minUsados, valorProp } = calcularProporcao(ride);
-      const valorFinal = regra === 'proporcional' ? valorProp : ride.valorInicial;
-      const diferenca = Number((ride.valorInicial - valorFinal).toFixed(2));
-
-      if (diferenca > 0) {
-        appState.diaFaturamento = Math.max(0, Number((appState.diaFaturamento - diferenca).toFixed(2)));
-        if (appState.roi[kartEmParada]) {
-          appState.roi[kartEmParada].total = Math.max(0, Number((appState.roi[kartEmParada].total - diferenca).toFixed(2)));
-        }
-      }
-
-      const log = appState.auditLog.find(a => a.id === ride.auditId);
-      if (log) {
-        log.minutosRodados = minUsados;
-        log.valorFinal = valorFinal;
-        log.status = 'Parada Antecipada';
-        log.motivo = motivo;
-      }
-
-      const idAlvo = kartEmParada;
-      delete appState.activeRides[idAlvo];
-
-      salvarState();
-      fecharModalParada();
-      await enviarBLE(idAlvo, 'PARAR');
-      renderizarKarts();
-    }
-
-    setInterval(async () => {
-      const agora = Date.now();
-      let mudou = false;
-
-      for (const kart of appState.karts) {
-        const ride = appState.activeRides[kart.id];
-        if (ride) {
-          const rest = Math.max(0, Math.ceil((ride.endTime - agora) / 1000));
-          const el = document.getElementById(`timer_${kart.id}`);
-          if (el) el.textContent = fmtTempo(rest);
-
-          if (rest <= 0) {
-            const log = appState.auditLog.find(a => a.id === ride.auditId);
-            if (log) log.status = 'Concluída';
-            delete appState.activeRides[kart.id];
-            salvarState();
-            tocarSomFim();
-            await enviarBLE(kart.id, 'PARAR');
-            mudou = true;
-          }
-        }
-      }
-
-      if (mudou) renderizarKarts();
-    }, 1000);
-
-    function abrirPainelEngrenagem() {
-      renderizarGearCaixa();
-      renderizarGearAuditoria();
-      renderizarGearBrinquedos();
-      document.getElementById('gearModal').classList.add('active');
-    }
-
-    function fecharPainelEngrenagem() {
-      document.getElementById('gearModal').classList.remove('active');
-    }
-
-    function trocarAbaGear(aba) {
-      document.querySelectorAll('.gear-tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.gear-panel').forEach(p => p.classList.remove('active'));
-      if (aba === 'caixa') {
-        document.getElementById('tabBtnCaixa').classList.add('active');
-        document.getElementById('panelCaixa').classList.add('active');
-        renderizarGearCaixa();
-      } else if (aba === 'auditoria') {
-        document.getElementById('tabBtnAuditoria').classList.add('active');
-        document.getElementById('panelAuditoria').classList.add('active');
-        renderizarGearAuditoria();
-      } else {
-        document.getElementById('tabBtnConfig').classList.add('active');
-        document.getElementById('panelConfig').classList.add('active');
-        renderizarGearBrinquedos();
-      }
-    }
-
-    function zerarCaixaDia() {
-      if (!confirm('Deseja zerar apenas o Caixa do Dia?')) return;
-      appState.diaCorridas = 0;
-      appState.diaFaturamento = 0;
-      salvarState();
-      renderizarGearCaixa();
-    }
-
-    function salvarPrecoPadrao() {
-      const novoPreco = parseFloat(document.getElementById('cfgPrecoMin').value);
-      if (!isNaN(novoPreco) && novoPreco > 0) {
-        appState.precoMinuto = novoPreco;
-        salvarState();
-        renderizarKarts();
-      }
-    }
-
-    function carregarArquivoFoto(event) {
-      const file = event.target.files?.[0];
-      if (!file) return;
-      const reader
+    function toggleMenu() {
+      const menu = document.getElementById('menuOverlay');
+      menu.style.display = (menu.style.display === 'block') ? 'none' : '
